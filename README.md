@@ -34,11 +34,17 @@ Para el recorrido real, el backend hermano debe estar compilado en **Debug**, co
 
 ```sh
 python3 scripts/verify-backend-journey.py
+# Opcional: grabar el recorrido del emulador como artefacto local
+TB1_RECORD_VIDEO=true python3 scripts/verify-backend-journey.py
 ```
 
-El harness crea una base nueva `terratech_android_<uuid>`, ejecuta los comandos explícitos de catálogo y lecturas en Development, inicia la API en localhost:55024, ejecuta la app contra ella y verifica un reinicio real sin red. Apaga temporalmente Wi-Fi/datos del emulador y los habilita al finalizar; detiene la API que creó y conserva la base aislada para diagnóstico. No usa Production ni borra bases existentes.
+El harness acepta únicamente un emulador (por defecto `emulator-5554`) y borra los datos de su app de prueba antes de cada recorrido. No usarlo para conservar datos personales del emulador. Crea una base nueva `terratech_android_<uuid>`, ejecuta los comandos explícitos de catálogo y lecturas en Development, inicia la API en localhost:55024, ejecuta la app contra ella y verifica un reinicio real sin red. Apaga temporalmente Wi-Fi/datos del emulador y los habilita al finalizar; detiene la API que creó y conserva la base aislada para diagnóstico. No usa Production ni borra bases existentes.
 
-Paths por defecto corresponden al runtime local de revisión. Personalizar `TB1_DOTNET`, `TB1_MYSQL_CLI`, `TB1_ADB`, `TB1_MYSQL_PORT` y `TB1_ANDROID_API_PORT` cuando haga falta. No hay credenciales de producción ni contraseñas sembradas; las cuentas se crean desde UI para la prueba.
+Paths por defecto corresponden al runtime local de revisión. Personalizar `TB1_DOTNET`, `TB1_MYSQL_CLI`, `TB1_ADB`, `TB1_MYSQL_PORT`, `TB1_ANDROID_API_PORT` y `TB1_ANDROID_SERIAL` cuando haga falta. No hay credenciales de producción ni contraseñas sembradas; las cuentas se crean desde UI para la prueba.
+
+## Empaquetar artefactos Android
+
+Después de generar el APK Debug, grabar el recorrido y guardar los cambios en Git, ejecutar `python3 scripts/package-tb1.py`. Crea `artifacts/TerraTech-TB1-android.zip` con el código versionado, evidencia, APK y video; verifica el hash del APK y guarda un manifiesto. No incluye `.git`, SDK, builds, configuración local ni credenciales. Este ZIP es la porción Android del entregable del equipo; la nomenclatura oficial requiere NRC y startup.
 
 ## Offline y seguridad de sesión
 

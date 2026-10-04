@@ -45,7 +45,7 @@ Subir al Aula Virtual; artefactos, software y exposición también al OneDrive q
 - Android ya implementa el recorrido; evidencia en ANDROID_VALIDATION.md. Falta validación en dispositivo físico.
 - Los capítulos III y IV del informe siguen pendientes según la revisión inicial.
 - Backend: propiedad y JWT corregidos y probados con dos cuentas; mantener esa protección al integrar Android.
-- Lecturas/histórico disponibles: datos de demostración identificados como SIMULATED; integrar pantallas y Room.
+- Lecturas/histórico integrados en pantallas y Room; datos de demostración identificados como SIMULATED. Falta ejecutar el recorrido en teléfono físico.
 - El backend tiene reportes de valores enviados por el cliente; no sustituye un motor de análisis desde sensores.
 - Alinear MySQL del backend con PostgreSQL mencionado en TS03 del informe.
 - Revisar alcance: comentarios sobre perfiles no equivalen a reseñas sobre productos.

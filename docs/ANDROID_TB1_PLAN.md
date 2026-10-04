@@ -28,7 +28,7 @@ La guía local exige explícitamente value objects para variables con reglas de 
 | WorkManager | Pospuesto: TB1 requiere lectura offline y actualización manual/al abrir, sin cola de escrituras |
 | Coil | Solo si incorporamos imágenes reales; no necesario para indicadores ni formularios |
 
-Las versiones se fijarán en `libs.versions.toml` al validar el toolchain. AGP 9.4.1, SDK 37, Kotlin 2.2.10 y JDK de daemon 25 son valores actuales declarados, todavía no comprobados. No copiar versiones del ejemplo ni cambiar todo el toolchain sin diagnosticar. Todas las compilaciones y pruebas Android serán **Debug**.
+Las versiones están fijadas y verificadas en `libs.versions.toml`: AGP 9.4.1, SDK 37, Kotlin Compose 2.4.20, Compose BOM 2026.09.00 y JDK de daemon 25. Los resultados Debug se registran en ANDROID_VALIDATION.md. Todas las compilaciones y pruebas Android serán **Debug**.
 
 ## Interfaz y navegación
 
@@ -93,7 +93,7 @@ Cierre TB1 Android: APK Debug ejecutable en dispositivo físico, pruebas aprobad
 
 IA, recomendaciones, electroválvulas, clima, mercado, push, correo verificado y recuperación de contraseña quedan fuera del flujo TB1. No mostrar botones funcionales de esos módulos. El recurso interno, servicio externo y feature de aprendizaje autónomo del proyecto completo deberán seleccionarse con evidencia de qué se enseñó en clase; no asumir que Hilt/Room acreditan ese requisito. Sus decisiones no bloquean este recorrido.
 
-La familia exacta de fuente requiere el archivo de diseño o metadatos originales: el ZIP contiene PNG, sin archivos de fuente. Validación del toolchain, fechas del Sprint y asignación de responsables quedan pendientes de la ejecución/organización del equipo.
+La familia exacta de fuente requiere el archivo de diseño o metadatos originales: el ZIP contiene PNG, sin archivos de fuente. El toolchain ya está validado; fechas del Sprint y asignación de responsables corresponden a la organización del equipo.
 
 ## Fuentes
 

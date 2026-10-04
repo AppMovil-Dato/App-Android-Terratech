@@ -22,6 +22,12 @@ Desde UI: confirmación inválida y registro correcto, correo duplicado, credenc
 
 Además se comprueban los límites de antigüedad, el orden de UTC con distinta precisión, errores HTTP, rechazo de estado visual de otra cuenta, conservación de caché al reautenticar al mismo usuario y purga al cambiar de usuario o cerrar sesión. No se inventa un umbral de humedad si todavía no existe una referencia descargada.
 
+## Artefactos locales de entrega
+
+`artifacts/TerraTech-TB1-debug.apk` contiene la compilación Debug configurada para el backend local en 55023. `artifacts/TerraTech-TB1-emulator.mp4` registra el recorrido automatizado en emulador; no acredita ejecución en teléfono físico ni sustituye la exposición del equipo. `artifacts/TerraTech-TB1-android.zip` empaqueta el código versionado, documentación, evidencia, APK y video para compartir. Estos binarios se mantienen fuera de Git. Los nombres oficiales de entrega todavía requieren NRC y nombre de startup.
+
+Para repetir el video, usar `TB1_RECORD_VIDEO=true python3 scripts/verify-backend-journey.py`.
+
 ## Repetir
 
 ```sh
