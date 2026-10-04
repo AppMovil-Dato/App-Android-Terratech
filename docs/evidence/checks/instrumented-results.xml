@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="14" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-04T06:12:32" hostname="localhost">
+  <testsuite name="com.novatech.terratech.ComposeScreensTest" tests="6" failures="0" errors="0" skipped="0" time="7.779" timestamp="2026-10-04T06:12:32" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="spanishResourcesAreRendered" classname="com.novatech.terratech.ComposeScreensTest" time="0.993" />
+    <testcase name="historySwitchesThirtyDaysWithoutFakeReadings" classname="com.novatech.terratech.ComposeScreensTest" time="1.009" />
+    <testcase name="emptyFieldsExplainsFirstStep" classname="com.novatech.terratech.ComposeScreensTest" time="1.960" />
+    <testcase name="sensorDoesNotInventThresholdWithoutDownloadedReference" classname="com.novatech.terratech.ComposeScreensTest" time="0.755" />
+    <testcase name="largeTextStillAllowsFieldSelection" classname="com.novatech.terratech.ComposeScreensTest" time="0.722" />
+    <testcase name="accountScreenSubmitsExactPassword" classname="com.novatech.terratech.ComposeScreensTest" time="2.340" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.RoomCacheTest" tests="5" failures="0" errors="0" skipped="0" time="0.262" timestamp="2026-10-04T06:12:32" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="userScopedIdsNeverLeakBetweenAccounts" classname="com.novatech.terratech.RoomCacheTest" time="0.196" />
+    <testcase name="chronologicalOrderHandlesMixedIsoUtcPrecision" classname="com.novatech.terratech.RoomCacheTest" time="0.030" />
+    <testcase name="logoutClearsAllPrivateTables" classname="com.novatech.terratech.RoomCacheTest" time="0.000" />
+    <testcase name="rangeDownloadMetadataIsSeparateForSevenAndThirty" classname="com.novatech.terratech.RoomCacheTest" time="0.000" />
+    <testcase name="readingsUpsertWithoutDuplicatesAndKeepLongerHistory" classname="com.novatech.terratech.RoomCacheTest" time="0.036" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.SessionAndPersistenceTest" tests="3" failures="0" errors="0" skipped="0" time="0.318" timestamp="2026-10-04T06:12:32" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="diskCacheSurvivesDatabaseReopen" classname="com.novatech.terratech.SessionAndPersistenceTest" time="0.060" />
+    <testcase name="encryptedSessionAndSelectionRestoreAndLogoutClear" classname="com.novatech.terratech.SessionAndPersistenceTest" time="0.099" />
+    <testcase name="reauthenticationKeepsOwnCacheButSwitchingAccountClearsIt" classname="com.novatech.terratech.SessionAndPersistenceTest" time="0.159" />
+  </testsuite>
+</testsuites>

@@ -1,12 +1,12 @@
 # Plan de desarrollo Android para TB1
 
-Fecha: 4 de octubre de 2026, America/Lima. Estado: plan inicial definido; aplicación todavía Empty Activity. Esta preparación registra el proyecto y el plan en Git, sin implementar pantallas ni instalar dependencias.
+Fecha: 4 de octubre de 2026, America/Lima. Estado: recorrido implementado. El cierre y sus evidencias se siguen en ANDROID_VALIDATION.md y ANDROID_TB1_MATRIX.md; validación física pendiente. Las fases originales se conservan como criterios de aceptación.
 
 ## Resultado que presentaremos
 
 Registro → login → completar perfil → crear/elegir parcela → asociar sensor por código → consultar indicadores → histórico 7/30 días → detalle de lectura → volver a consultar los datos descargados sin conexión.
 
-Historias: US06, US07, US09, US17, US11, US10, US12 y nueva HU de consulta sin conexión. El backend ya cubre el recorrido; ver [contrato](BACKEND_CONTRACT.md) y [OpenAPI](backend-openapi.snapshot.json). El almacenamiento y las pantallas Android todavía deben implementarse y probarse.
+Historias: US06, US07, US09, US17, US11, US10, US12 y nueva HU de consulta sin conexión. El backend ya cubre el recorrido; ver [contrato](BACKEND_CONTRACT.md) y [OpenAPI](backend-openapi.snapshot.json). Almacenamiento y pantallas implementados; verificar el alcance real con la matriz y resultados actuales.
 
 ## Decisiones de arquitectura
 

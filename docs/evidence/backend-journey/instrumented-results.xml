@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-04T06:16:47" hostname="localhost">
+  <testsuite name="com.novatech.terratech.BackendJourneyTest" tests="1" failures="0" errors="0" skipped="0" time="33.168" timestamp="2026-10-04T06:16:47" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="completeJourneyWithOfflineAndLogout" classname="com.novatech.terratech.BackendJourneyTest" time="33.168" />
+  </testsuite>
+</testsuites>

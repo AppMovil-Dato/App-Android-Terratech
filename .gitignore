@@ -23,3 +23,7 @@ local.properties
 !.env.example
 *.jks
 *.keystore
+
+# Generated validation logs and installable APKs
+/docs/evidence/**/*.log
+/artifacts/

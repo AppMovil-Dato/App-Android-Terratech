@@ -1,6 +1,6 @@
 # Guía de desarrollo Android de TerraTech
 
-Estado: preparación documental. El plan vigente está en [ANDROID_TB1_PLAN.md](ANDROID_TB1_PLAN.md); las librerías y funciones todavía no se implementaron.
+Estado: recorrido Android implementado y en validación. Consultar [ANDROID_VALIDATION.md](ANDROID_VALIDATION.md) y [matriz Android](ANDROID_TB1_MATRIX.md) para evidencia actual; las tablas originales de preparación se conservan como referencia histórica.
 
 ## 1. Estado inicial comprobado
 
@@ -8,16 +8,16 @@ Estado: preparación documental. El plan vigente está en [ANDROID_TB1_PLAN.md](
 |---|---|
 | Nombre | TerraTech |
 | Paquete y applicationId | com.novatech.terratech |
-| Interfaz inicial | Empty Activity, Compose, Greeting |
+| Interfaz inicial | Compose, recorrido TB1 implementado |
 | minSdk | 29 |
 | compileSdk / targetSdk | 37 / 37 |
 | AGP declarado | 9.4.1 |
-| Kotlin declarado para el plugin Compose | 2.2.10 |
-| Compose BOM declarado | 2026.02.01 |
+| Kotlin declarado para el plugin Compose | 2.4.20 |
+| Compose BOM declarado | 2026.09.00 |
 | Compatibilidad Java declarada | 11 |
 | Repositorio Git en esta carpeta | Inicializado el 4 de octubre; remoto AppMovil-Dato/App-Android-Terratech |
 
-Los valores son los del proyecto creado, no una validación de compatibilidad. No se ha ejecutado Gradle ni compilado la app durante esta preparación. Revisar SDK, JDK, Gradle, AGP, Kotlin y procesadores antes de instalar librerías. No copiar automáticamente las versiones de EasyStore, cuyo catálogo usa valores diferentes.
+Valores actuales del proyecto; la combinación está compilada y probada en Debug. La preparación inicial no compiló; la implementación posterior sí fue compilada y probada en Debug (ver validación). Revisar SDK, JDK, Gradle, AGP, Kotlin y procesadores antes de instalar librerías. No copiar automáticamente las versiones de EasyStore, cuyo catálogo usa valores diferentes.
 
 ## 2. Requisitos que condicionan las decisiones
 
@@ -41,21 +41,21 @@ Hay libertad para elegir librerías adicionales, siempre que se justifiquen y re
 |---|---|---|
 | Kotlin | Lenguaje Android | Requisito; proyecto creado |
 | Compose + Material 3 | Interfaz | Ya configurados; presentes en EasyStore |
-| ViewModel + StateFlow | Estado de presentación, patrón MVVM | Presentes en EasyStore; pendientes en TerraTech |
+| ViewModel + StateFlow | Estado de presentación, patrón MVVM | Implementados en TerraTech |
 | Coroutines / Flow | Trabajo asíncrono y datos reactivos | Ejemplo y diapositivas |
-| Dagger Hilt | Inyección de dependencias | Implementado en EasyStore; pendiente en TerraTech |
-| KSP | Procesamiento para Hilt/Room | Propuesto; validar compatibilidad de versiones |
-| Retrofit + OkHttp | Consumo del backend, interceptores y token | Propuesto; Retrofit presente en EasyStore |
-| Gson o Kotlin Serialization | JSON | Elegir una estrategia; EasyStore utiliza Gson |
-| Navigation Compose | Navegación | Presente en EasyStore; pendiente en TerraTech |
-| Room | Datos locales estructurados y caché | Aparece en guía y diapositivas; no está en EasyStore |
-| DataStore | Preferencias y estado ligero | Aparece en guía; definir tratamiento seguro de sesión aparte |
+| Dagger Hilt | Inyección de dependencias | Implementado en TerraTech |
+| KSP | Procesamiento para Hilt/Room | Implementado; versiones fijadas y compiladas |
+| Retrofit + OkHttp | Consumo del backend, interceptores y token | Implementado con el API TerraTech |
+| Gson o Kotlin Serialization | JSON | Gson, implementado |
+| Navigation Compose | Navegación | Implementado en TerraTech |
+| Room | Datos locales estructurados y caché | Implementado en TerraTech; no estaba en EasyStore |
+| DataStore | Preferencias y estado ligero | Implementado; JWT cifrado con Android Keystore |
 | Coil | Imágenes remotas | Presente en EasyStore; usar si las pantallas lo requieren |
 | WorkManager | Sincronización persistente en segundo plano | Aparece en diapositivas; incorporar cuando el alcance offline lo necesite |
 
 MVVM es un patrón de presentación, no una biblioteca. Hilt utiliza Dagger; no se propone configurar simultáneamente dos sistemas independientes de inyección.
 
-Las versiones de Hilt, KSP, Room, Navigation y Retrofit se seleccionarán al iniciar el desarrollo y comprobar la compatibilidad con el proyecto. No hay versiones nuevas instaladas por esta preparación.
+Las versiones de Hilt, KSP, Room, Navigation y Retrofit se seleccionarán al iniciar el desarrollo y comprobar la compatibilidad con el proyecto. La implementación posterior fijó dependencias en libs.versions.toml; las propuestas originales de esta guía no sustituyen ese catálogo.
 
 Referencias oficiales para consultar al implementar:
 
@@ -67,18 +67,13 @@ Referencias oficiales para consultar al implementar:
 
 La guía de arquitectura organiza los bounded contexts directamente bajo el paquete raíz, sin una carpeta genérica `features/`. Los contextos deben derivarse del negocio y del informe, no de los nombres de las pantallas.
 
-Estructura propuesta, pendiente de reconciliar los nombres de contextos del informe con los ocho módulos existentes en el backend:
+Estructura implementada para TB1; los otros contextos del backend no se crean hasta necesitarlos:
 
 ```text
 com.novatech.terratech
 ├── iam/
 ├── profile/
 ├── monitoring/
-├── analytics/
-├── notification/
-├── stock/
-├── commercial/
-├── community/
 └── core/                 # Red, base de datos, DI, navegación y diseño compartido
 ```
 
@@ -140,19 +135,19 @@ EasyStore fue revisado estáticamente; no se comprobó su compilación. No debe 
 - [x] Recorrido backend aprobado: registro, login, perfil, parcela, asociación de sensor y lecturas 7/30; Android añadirá Room. Confirmar con el equipo los IDs definitivos de las HU.
 - [ ] Alinear contextos, diagramas y nombres del informe con Android y backend.
 - [ ] Acordar wireframes, mockups, user flows y navegación en Figma.
-- [ ] Resolver qué datos se guardan en Room y qué comportamiento se ofrece sin red.
-- [ ] Definir caché, actualización, conflictos y sincronización según el alcance real.
+- [x] Room y lectura offline implementados; criterios en la matriz Android.
+- [x] Caché por usuario, actualización explícita y errores de servicio implementados; no hay escrituras offline.
 - [ ] Elegir recurso del dispositivo y servicio externo que aporten al negocio.
 - [ ] Elegir y justificar el feature de aprendizaje autónomo; registrar qué se enseñó en clase.
 - [x] Contrato backend actualizado en BACKEND_CONTRACT.md; JWT y propiedad validados.
 - [ ] Elegir URL de despliegue e integrar Android; servidor de revisión local disponible en localhost:55023.
-- [ ] Elegir estrategia de sesión, vencimiento, cierre y almacenamiento de tokens.
-- [ ] Verificar SDK/JDK/Gradle y compatibilidad de dependencias; trabajar solo con Debug.
+- [x] Sesión cifrada, expiración, reautenticación y logout implementados.
+- [x] SDK/JDK/Gradle y dependencias compilados y probados exclusivamente Debug.
 - [x] Inicializar Git y conectar el repositorio autorizado. Flujo main/develop/feature definido en el plan; asignación de responsables pendiente.
 
 ## 7. Verificación futura
 
-No se ejecutó ninguno de estos pasos en esta preparación:
+Comandos de verificación, ejecutados durante la implementación posterior según el informe de validación:
 
 - Compilación: `./gradlew :app:assembleDebug`.
 - Unit tests: `./gradlew :app:testDebugUnitTest`.

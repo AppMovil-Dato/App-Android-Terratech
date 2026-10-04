@@ -42,7 +42,7 @@ Subir al Aula Virtual; artefactos, software y exposición también al OneDrive q
 
 ## Bloqueos conocidos
 
-- Android solo contiene la pantalla de plantilla.
+- Android ya implementa el recorrido; evidencia en ANDROID_VALIDATION.md. Falta validación en dispositivo físico.
 - Los capítulos III y IV del informe siguen pendientes según la revisión inicial.
 - Backend: propiedad y JWT corregidos y probados con dos cuentas; mantener esa protección al integrar Android.
 - Lecturas/histórico disponibles: datos de demostración identificados como SIMULATED; integrar pantallas y Room.
@@ -57,14 +57,14 @@ Registro → login → perfil → parcela → asociación de sensor → última 
 
 | Historia / criterio | Endpoint | Backend | Android |
 |---|---|---|---|
-| US06 / TS05 Registro | POST /api/v1/authentication/sign-up | 201; confirmPassword obligatorio y exacto; validación; duplicado 409 | Pendiente |
-| US07 Login | POST /api/v1/authentication/sign-in; GET /api/v1/users/me | JWT 8 h y usuario existente | Pendiente |
-| US09 Perfil | GET/PUT /api/v1/profiles/me | Propio; ubicación y superficie m² | Pendiente |
-| Parcela nueva | CRUD /api/v1/fields | Propia; cropName | Pendiente |
-| US11 Selección | GET /api/v1/devices; /api/v1/fields/{fieldId}/devices | Solo propios | Pendiente |
-| US17 Asociación | POST /api/v1/devices/register | Registro por código disponible; sin duplicados concurrentes | Pendiente |
-| US10 / US12 Medición e histórico | GET /api/v1/devices/{id}/readings/latest y /readings?days=7\|30 | UTC, unidades, SIMULATED, antigüedad y estados vacíos | Pendiente |
-| US12 Detalle | GET /api/v1/devices/{deviceId}/readings/{readingId} | Propio, persistido; mismo DTO que histórico | Pendiente |
-| Offline nuevo | Room sobre el contrato identificado y fechado | Contrato preparado | Pendiente |
+| US06 / TS05 Registro | POST /api/v1/authentication/sign-up | 201; confirmPassword obligatorio y exacto; validación; duplicado 409 | Implementado; validar en teléfono |
+| US07 Login | POST /api/v1/authentication/sign-in; GET /api/v1/users/me | JWT 8 h y usuario existente | Implementado; validar en teléfono |
+| US09 Perfil | GET/PUT /api/v1/profiles/me | Propio; ubicación y superficie m² | Implementado; validar en teléfono |
+| Parcela nueva | CRUD /api/v1/fields | Propia; cropName | Implementado; validar en teléfono |
+| US11 Selección | GET /api/v1/devices; /api/v1/fields/{fieldId}/devices | Solo propios | Implementado; validar en teléfono |
+| US17 Asociación | POST /api/v1/devices/register | Registro por código disponible; sin duplicados concurrentes | Implementado; validar en teléfono |
+| US10 / US12 Medición e histórico | GET /api/v1/devices/{id}/readings/latest y /readings?days=7\|30 | UTC, unidades, SIMULATED, antigüedad y estados vacíos | Implementado; validar en teléfono |
+| US12 Detalle | GET /api/v1/devices/{deviceId}/readings/{readingId} | Propio, persistido; mismo DTO que histórico | Implementado; validar en teléfono |
+| Offline nuevo | Room sobre el contrato identificado y fechado | Contrato preparado | Implementado; validar en teléfono |
 
 Contrato actualizado: [BACKEND_CONTRACT.md](BACKEND_CONTRACT.md). Matriz detallada y evidencia de 49 pruebas disponibles en el backend, `docs/TB1_MATRIX.md` y `docs/VALIDATION.md`. No convertir la cobertura de líneas ni el número de operaciones en porcentaje funcional de la rúbrica. El despliegue permanece pendiente.
