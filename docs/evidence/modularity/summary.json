@@ -1,0 +1,16 @@
+{
+  "configuration": "Debug",
+  "unitTestsPassed": 32,
+  "instrumentedTestsPassed": 14,
+  "artemisAssertionsPassed": 35,
+  "artemisSteps": 112,
+  "coldProcessRestartOfflinePassed": true,
+  "kotlinFilesChecked": 125,
+  "csharpFilesChecked": 307,
+  "productionKotlinFingerprintSha256": "2822fd87b92a7a2ef9e996ca370d251091fb2373ab1d4a315badaf177bc31fba",
+  "oneNamedTypePerFile": true,
+  "oneTopLevelComposablePerFile": true,
+  "openApiUnchanged": true,
+  "roomSchemaUnchanged": true,
+  "measuredAtUtc": "2026-10-04T16:33:43.634557+00:00"
+}

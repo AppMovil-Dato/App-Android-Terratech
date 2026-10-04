@@ -2,26 +2,6 @@ package com.novatech.terratech.monitoring.domain.entity
 
 import java.time.Instant
 
-data class Field(
-  val id: Int,
-  val profileId: Int,
-  val name: String,
-  val sizeM2: Double,
-  val soilType: String,
-  val latitude: Double,
-  val longitude: Double,
-  val cropName: String?,
-)
-
-data class Sensor(
-  val id: Int,
-  val fieldId: Int,
-  val name: String?,
-  val sensorCode: String?,
-  val macAddress: String,
-  val status: String,
-)
-
 data class Reading(
   val id: Int,
   val deviceId: Int,
@@ -41,10 +21,3 @@ data class Reading(
     return !recordedAt.isBefore(now.minusSeconds(days * 86400L)) && !recordedAt.isAfter(now)
   }
 }
-
-data class DownloadState(
-  val downloadedAt: Instant?,
-  val fromUtc: Instant?,
-  val toUtc: Instant?,
-  val minimumMoisture: Double?,
-)

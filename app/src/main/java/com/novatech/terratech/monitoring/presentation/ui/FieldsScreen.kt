@@ -3,15 +3,18 @@ package com.novatech.terratech.monitoring.presentation.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.novatech.terratech.R
+import com.novatech.terratech.core.presentation.component.EmptyCard
+import com.novatech.terratech.core.presentation.component.FarmCard
+import com.novatech.terratech.core.presentation.component.PageTitle
+import com.novatech.terratech.core.presentation.component.Pill
+import com.novatech.terratech.core.presentation.component.PrimaryButton
+import com.novatech.terratech.core.presentation.format.areaNumber
 import com.novatech.terratech.core.presentation.ui.*
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.ui.theme.*
@@ -61,96 +64,3 @@ fun FieldsScreen(
     }
   }
 }
-
-@Composable
-fun SensorsScreen(state: MonitoringState, onChoose: (Int) -> Unit, onRegister: () -> Unit) {
-  LazyColumn(
-    Modifier.fillMaxSize(),
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    item {
-      PageTitle(
-        state.selectedField?.name ?: stringResource(R.string.fields),
-        stringResource(R.string.choose_sensor),
-      )
-    }
-    item { PrimaryButton(stringResource(R.string.associate), !state.busy, onRegister) }
-    if (state.fieldSensors.isEmpty()) item { EmptyCard(stringResource(R.string.no_sensors)) }
-    items(state.fieldSensors, key = { it.id }) { sensor ->
-      FarmCard {
-        Text(
-          sensor.name ?: stringResource(R.string.sensor),
-          style = MaterialTheme.typography.titleLarge,
-        )
-        Text(sensor.sensorCode ?: sensor.macAddress, color = Muted)
-        PrimaryButton(stringResource(R.string.view_sensor), !state.busy) { onChoose(sensor.id) }
-      }
-    }
-  }
-}
-
-@Composable
-fun CreateFieldScreen(
-  busy: Boolean,
-  onSave: (String, String, Double, String, Double, Double) -> Unit,
-) {
-  var name by rememberSaveable { mutableStateOf("") }
-  var crop by rememberSaveable { mutableStateOf("") }
-  var area by rememberSaveable { mutableStateOf("") }
-  var soil by rememberSaveable { mutableStateOf("") }
-  var lat by rememberSaveable { mutableStateOf("") }
-  var lon by rememberSaveable { mutableStateOf("") }
-  LazyColumn(
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    item { PageTitle(stringResource(R.string.new_field)) }
-    item {
-      FarmCard {
-        FormInput(name, { name = it }, R.string.field_name)
-        FormInput(crop, { crop = it }, R.string.crop)
-        FormInput(area, { area = it }, R.string.area_ha, KeyboardType.Decimal)
-        FormInput(soil, { soil = it }, R.string.soil)
-        FormInput(lat, { lat = it }, R.string.latitude, KeyboardType.Text)
-        FormInput(lon, { lon = it }, R.string.longitude, KeyboardType.Text)
-        PrimaryButton(stringResource(R.string.save), !busy) {
-          onSave(name, crop, area.decimal(), soil, lat.decimal(), lon.decimal())
-        }
-      }
-    }
-  }
-}
-
-@Composable
-fun RegisterSensorScreen(busy: Boolean, onSave: (String, String) -> Unit) {
-  var code by rememberSaveable { mutableStateOf("") }
-  var name by rememberSaveable { mutableStateOf("") }
-  Column(Modifier.padding(16.dp).imePadding(), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-    PageTitle(stringResource(R.string.associate))
-    FarmCard {
-      FormInput(code, { code = it }, R.string.sensor_code)
-      FormInput(name, { name = it }, R.string.sensor_name)
-      PrimaryButton(stringResource(R.string.associate), !busy) { onSave(code, name) }
-    }
-  }
-}
-
-@Composable
-private fun FormInput(
-  value: String,
-  change: (String) -> Unit,
-  label: Int,
-  type: KeyboardType = KeyboardType.Text,
-) {
-  OutlinedTextField(
-    value,
-    change,
-    label = { Text(stringResource(label)) },
-    modifier = Modifier.fillMaxWidth(),
-    singleLine = true,
-    keyboardOptions = KeyboardOptions(keyboardType = type),
-  )
-}
-
-private fun String.decimal() = replace(',', '.').toDoubleOrNull() ?: Double.NaN

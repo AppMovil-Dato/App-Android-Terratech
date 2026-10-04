@@ -1,16 +1,19 @@
 package com.novatech.terratech.iam.infrastructure.implementation
 
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
-import com.novatech.terratech.core.infrastructure.remote.*
+import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.iam.domain.repository.AccountRepository
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
+import com.novatech.terratech.iam.infrastructure.remote.AccountApi
+import com.novatech.terratech.iam.infrastructure.remote.dto.LoginDto
+import com.novatech.terratech.iam.infrastructure.remote.dto.RegisterDto
 import java.time.Instant
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class AccountRepositoryImpl(
-  private val api: TerraApi,
+  private val api: AccountApi,
   private val store: SessionStore,
   private val db: TerraDatabase,
   private val scope: CoroutineScope,

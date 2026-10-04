@@ -3,7 +3,11 @@ package com.novatech.terratech
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.novatech.terratech.core.infrastructure.local.*
+import com.novatech.terratech.core.infrastructure.local.TerraDatabase
+import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
+import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldRow
+import com.novatech.terratech.monitoring.infrastructure.local.entity.ReadingRow
+import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.*

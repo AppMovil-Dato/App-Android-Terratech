@@ -24,7 +24,7 @@ class ViewModelStateTest {
   @Test
   fun invalidConfirmationSetsErrorAndFinishesLoading() =
     runTest(dispatcher) {
-      val repo = ApplicationActionsTest.Accounts()
+      val repo = FakeAccountRepository()
       val vm = AccountViewModel(AccountActions(repo), repo)
       vm.register("Ana", "a@example.com", "secret", "Secret")
       advanceUntilIdle()
@@ -37,7 +37,7 @@ class ViewModelStateTest {
   @Test
   fun successClearsPreviousErrorAndReturnsToLogin() =
     runTest(dispatcher) {
-      val repo = ApplicationActionsTest.Accounts()
+      val repo = FakeAccountRepository()
       val vm = AccountViewModel(AccountActions(repo), repo)
       vm.register("A", "a@example.com", "secret", "secret")
       advanceUntilIdle()
@@ -54,7 +54,7 @@ class ViewModelStateTest {
   @Test
   fun repeatedTapOnlySendsOneRequest() =
     runTest(dispatcher) {
-      val repo = ApplicationActionsTest.Accounts()
+      val repo = FakeAccountRepository()
       val vm = AccountViewModel(AccountActions(repo), repo)
       vm.login("a@example.com", "secret")
       vm.login("a@example.com", "secret")

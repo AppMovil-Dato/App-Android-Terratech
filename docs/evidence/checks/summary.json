@@ -7,8 +7,9 @@
   "lintErrors": 0,
   "lintReportedIssues": 28,
   "apiBaseUrl": "http://10.0.2.2:55023/",
-  "apkSha256": "41827662abe53df891951186dfde56ea363981ea7b032127c52b29e3cf8d987f",
-  "apkBytes": 54883508,
+  "apkSha256": "4bca3bfbbeeeab3cbd6c944dfb520e816118572aab4fe86430d06996c7a60da2",
+  "apkBytes": 54883567,
   "physicalDeviceVerified": false,
-  "measuredAtUtc": "2026-10-04T06:15:48.807711+00:00"
+  "measuredAtUtc": "2026-10-04T16:33:43.634557+00:00",
+  "sourceRefactored": true
 }

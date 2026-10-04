@@ -155,3 +155,19 @@ Comandos de verificación, ejecutados durante la implementación posterior segú
 - Pruebas en dispositivo: `./gradlew :app:connectedDebugAndroidTest`, cuando exista una suite y un dispositivo configurado.
 
 Priorizar pruebas de validaciones, mappers, estados de ViewModel, sesión, aislamiento entre usuarios, persistencia y flujos core. No confundir tests de plantilla o respuestas exitosas del API con cobertura funcional del producto.
+
+## 8. Organización de archivos
+
+Cada clase, interfaz, data class y value object tiene un archivo con su nombre. Cada componente Compose de nivel superior tiene su propio archivo; las pantallas de cuenta y perfil separan el estado temporal (`AccountScreen`, `ProfileScreen`) de su contenido visual (`AccountContent`, `ProfileContent`). Los componentes reutilizables están en `presentation/component`; los formatos en `core/presentation/format`. Navegación, barra inferior y contenedor de sesión también están separados.
+
+Los DTOs viven en `iam`, `profile` o `monitoring`, dentro de `infrastructure/remote/dto`. Cada contexto tiene su interfaz Retrofit y DAO propios. `TerraApi` compone los contratos para Retrofit; `TerraDao` compone los DAOs para la limpieza transaccional de datos privados. `TerraDatabase` declara solamente la base Room. Las entidades están en `infrastructure/local/entity` de su contexto. Los mappers se separan por modelo y Hilt tiene módulos de red, persistencia, repositorios y casos de uso.
+
+Los dobles de prueba también tienen archivos propios. No crear contenedores como `Models.kt`, `Components.kt` o `ReadingScreens.kt` para agrupar tipos o pantallas. Comprobar esta regla con:
+
+```sh
+python3 scripts/check-modularity.py
+# Opcional, cuando el backend hermano está presente:
+python3 scripts/check-modularity.py --backend '../../BackEnd'
+```
+
+Esta regla no exige mover los miembros y companion objects fuera del tipo al que pertenecen ni separar cada constante de los tokens visuales.

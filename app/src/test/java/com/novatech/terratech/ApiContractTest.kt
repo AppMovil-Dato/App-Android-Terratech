@@ -1,8 +1,11 @@
 package com.novatech.terratech
 
 import com.novatech.terratech.core.domain.Failure
-import com.novatech.terratech.core.infrastructure.remote.*
+import com.novatech.terratech.core.infrastructure.remote.TerraApi
+import com.novatech.terratech.core.infrastructure.remote.apiCall
+import com.novatech.terratech.iam.infrastructure.remote.dto.RegisterDto
 import com.novatech.terratech.monitoring.infrastructure.mapper.*
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldDto
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer

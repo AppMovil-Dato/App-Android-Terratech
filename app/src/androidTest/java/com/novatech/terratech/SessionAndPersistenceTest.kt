@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.novatech.terratech.core.infrastructure.local.*
+import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
+import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldRow
 import java.time.Instant
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking

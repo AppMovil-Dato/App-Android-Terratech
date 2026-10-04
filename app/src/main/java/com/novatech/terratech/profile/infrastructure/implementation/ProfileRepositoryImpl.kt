@@ -2,12 +2,14 @@ package com.novatech.terratech.profile.infrastructure.implementation
 
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
-import com.novatech.terratech.core.infrastructure.remote.*
+import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.profile.domain.repository.ProfileRepository
 import com.novatech.terratech.profile.infrastructure.mapper.*
+import com.novatech.terratech.profile.infrastructure.remote.ProfileApi
+import com.novatech.terratech.profile.infrastructure.remote.dto.SaveProfileDto
 import kotlinx.coroutines.flow.map
 
-class ProfileRepositoryImpl(private val api: TerraApi, private val db: TerraDatabase) :
+class ProfileRepositoryImpl(private val api: ProfileApi, private val db: TerraDatabase) :
   ProfileRepository {
   override fun observe(userId: Int) = db.dao().profile(userId).map { it?.domain() }
 

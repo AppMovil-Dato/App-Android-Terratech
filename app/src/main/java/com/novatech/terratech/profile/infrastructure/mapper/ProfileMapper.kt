@@ -1,8 +1,8 @@
 package com.novatech.terratech.profile.infrastructure.mapper
 
-import com.novatech.terratech.core.infrastructure.local.ProfileRow
-import com.novatech.terratech.core.infrastructure.remote.ProfileDto
 import com.novatech.terratech.profile.domain.entity.FarmProfile
+import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
+import com.novatech.terratech.profile.infrastructure.remote.dto.ProfileDto
 
 fun ProfileDto.row(user: Int) =
   ProfileRow(

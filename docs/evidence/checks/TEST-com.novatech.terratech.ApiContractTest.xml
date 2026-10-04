@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.novatech.terratech.ApiContractTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-04T06:12:19.623Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.344">
+<testsuite name="com.novatech.terratech.ApiContractTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-04T16:25:29.746Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.417">
   <properties/>
-  <testcase name="registrationIncludesExactConfirmation" classname="com.novatech.terratech.ApiContractTest" time="0.294"/>
-  <testcase name="problemDetailsPreservesConflictAndNoDataCodes" classname="com.novatech.terratech.ApiContractTest" time="0.022"/>
-  <testcase name="noInternetIsNotAnEmptyCollection" classname="com.novatech.terratech.ApiContractTest" time="0.002"/>
-  <testcase name="historyAndDetailShareUnitsAndIdentity" classname="com.novatech.terratech.ApiContractTest" time="0.015"/>
-  <testcase name="sensorSelectionUsesFieldRoute" classname="com.novatech.terratech.ApiContractTest" time="0.007"/>
-  <testcase name="expiredSessionIsNotMislabelledOffline" classname="com.novatech.terratech.ApiContractTest" time="0.001"/>
+  <testcase name="registrationIncludesExactConfirmation" classname="com.novatech.terratech.ApiContractTest" time="0.357"/>
+  <testcase name="problemDetailsPreservesConflictAndNoDataCodes" classname="com.novatech.terratech.ApiContractTest" time="0.024"/>
+  <testcase name="noInternetIsNotAnEmptyCollection" classname="com.novatech.terratech.ApiContractTest" time="0.004"/>
+  <testcase name="historyAndDetailShareUnitsAndIdentity" classname="com.novatech.terratech.ApiContractTest" time="0.018"/>
+  <testcase name="sensorSelectionUsesFieldRoute" classname="com.novatech.terratech.ApiContractTest" time="0.009"/>
+  <testcase name="expiredSessionIsNotMislabelledOffline" classname="com.novatech.terratech.ApiContractTest" time="0.002"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

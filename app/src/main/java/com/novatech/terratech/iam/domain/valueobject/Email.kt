@@ -13,13 +13,3 @@ value class Email private constructor(val value: String) {
     }
   }
 }
-
-@JvmInline
-value class Password private constructor(val value: String) {
-  companion object {
-    fun of(value: String): Password {
-      if (value.length !in 6..128) throw Failure("INVALID_PASSWORD")
-      return Password(value)
-    }
-  }
-}

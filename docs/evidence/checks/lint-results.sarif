@@ -1632,7 +1632,7 @@
                     "fixes": [
                         {
                             "description": {
-                                "text": "Replace with new library catalog declaration for androidx-compose-ui-ui-test-junit4-accessibility3"
+                                "text": "Replace with new library catalog declaration for ui-test-junit4-accessibility"
                             },
                             "artifactChanges": [
                                 {
@@ -1643,12 +1643,12 @@
                                     "replacements": [
                                         {
                                             "deletedRegion": {
-                                                "startLine": 21,
+                                                "startLine": 50,
                                                 "startColumn": 1,
-                                                "charOffset": 350
+                                                "charOffset": 3052
                                             },
                                             "insertedContent": {
-                                                "text": "androidx-compose-ui-ui-test-junit4-accessibility3 = { module = \"androidx.compose.ui:ui-test-junit4-accessibility\" }\n\n"
+                                                "text": "ui-test-junit4-accessibility = { module = \"androidx.compose.ui:ui-test-junit4-accessibility\" }\n\n"
                                             }
                                         }
                                     ]
@@ -1669,7 +1669,7 @@
                                                 "charLength": 50
                                             },
                                             "insertedContent": {
-                                                "text": "libs.androidx.compose.ui.ui.test.junit4.accessibility3\n"
+                                                "text": "libs.ui.test.junit4.accessibility\n"
                                             }
                                         }
                                     ]

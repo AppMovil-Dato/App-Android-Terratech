@@ -13,6 +13,7 @@ Implementación validada en Debug sobre Pixel 8 API 36 (Android 16), con backend
 | Artemis UI black-box | Un recorrido adicional aprobado: 35 aserciones, 112 pasos; sin LLM | [ui-results.json](evidence/artemis/ui-results.json), [resumen](evidence/artemis/summary.json), [guía](ARTEMIS_TESTING.md) |
 | Reinicio offline | Proceso cerrado y reabierto sin red; sesión, selección y lecturas restauradas | [cold-restart.xml](evidence/backend-journey/cold-restart.xml), [captura](evidence/backend-journey/cold-restart.png) |
 | Lint Debug | Cero errores; 28 observaciones reportadas | [SARIF](evidence/checks/lint-results.sarif) |
+| Modularización | Tipos y componentes Compose separados; APIs/DAOs por contexto; 125 archivos Kotlin revisados | `scripts/check-modularity.py`; [guía](DEVELOPMENT_GUIDE.md#8-organización-de-archivos) |
 | Arquitectura | Dominio/aplicación sin imports de Android, Hilt, Room, Retrofit o Gson | Inspección de imports y exploración Codegraph |
 
 Las 14 instrumentadas independientes incluyen UI/idiomas/accesibilidad automática, Room y sesión cifrada. La prueba del recorrido se ejecuta por separado; no se suma dos veces. Artemis aporta otra ejecución independiente por el árbol completo de accesibilidad y el controlador de dispositivo, sin API de pruebas Compose ni llamadas a modelos. Sus 35 aserciones pertenecen a un solo recorrido, no a 35 casos JUnit. Las observaciones de Lint incluyen sugerencias de versiones y recursos sin uso; cero errores no significa cero advertencias. No se infiere un porcentaje funcional o cobertura de líneas a partir de estos resultados.
@@ -41,3 +42,7 @@ El segundo comando requiere el backend hermano compilado Debug y MySQL local ais
 Para la aceptación física: conectar Android por USB, configurar `adb reverse` y la URL indicados en el README, repetir registro/perfil/parcela/sensor/histórico, apagar la conexión y reiniciar el proceso. Revisar texto ampliado y navegación mediante clics. TalkBack no es un requisito de este cierre. Registrar dispositivo/versión/resultado en esta matriz antes de marcarlo verificado.
 
 La [matriz de historias](ANDROID_TB1_MATRIX.md) relaciona criterios con pruebas. La apariencia fue revisada sobre capturas reales del emulador y conserva verde/ámbar, tarjetas redondeadas y jerarquía sans serif. La fuente original exacta de los PNG no está identificada.
+
+## Refactor de modularización
+
+Tras separar tipos, pantallas, contenido, componentes, APIs y DAOs, vuelven a pasar **32 unitarias, 14 instrumentadas y las 35 aserciones de Artemis**. La evidencia de `checks` y `artemis` corresponde al código reorganizado; el recorrido Compose y su video se conservan como evidencia anterior. [Resumen del refactor](evidence/modularity/summary.json). El esquema Room y el contrato Swagger permanecen idénticos. El APK Debug y el paquete local se actualizan con el código reorganizado.

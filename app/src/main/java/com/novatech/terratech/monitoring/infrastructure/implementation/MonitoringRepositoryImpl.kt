@@ -2,15 +2,19 @@ package com.novatech.terratech.monitoring.infrastructure.implementation
 
 import androidx.room.withTransaction
 import com.novatech.terratech.core.domain.Failure
-import com.novatech.terratech.core.infrastructure.local.*
-import com.novatech.terratech.core.infrastructure.remote.*
+import com.novatech.terratech.core.infrastructure.local.TerraDatabase
+import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
+import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
 import com.novatech.terratech.monitoring.infrastructure.mapper.*
+import com.novatech.terratech.monitoring.infrastructure.remote.MonitoringApi
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.CreateFieldDto
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.RegisterSensorDto
 import java.time.Instant
 import kotlinx.coroutines.flow.map
 
 class MonitoringRepositoryImpl(
-  private val api: TerraApi,
+  private val api: MonitoringApi,
   private val db: TerraDatabase,
   private val store: com.novatech.terratech.iam.infrastructure.local.SessionStore,
 ) : MonitoringRepository {

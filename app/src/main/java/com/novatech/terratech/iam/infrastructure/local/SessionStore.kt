@@ -24,14 +24,6 @@ class SessionStore(private val context: Context) {
   private val pref = stringPreferencesKey("encrypted_session")
   private val gson = Gson()
 
-  private data class Stored(
-    val userId: Int,
-    val email: String,
-    val fullName: String,
-    val token: String,
-    val expiresAt: String,
-  )
-
   private fun key(): SecretKey {
     val store = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
     (store.getKey(keyName, null) as? SecretKey)?.let {
@@ -65,7 +57,7 @@ class SessionStore(private val context: Context) {
       val s =
         gson.fromJson(
           String(cipher.doFinal(Base64.decode(parts[1], Base64.NO_WRAP)), Charsets.UTF_8),
-          Stored::class.java,
+          StoredSession::class.java,
         )
       Session(s.userId, s.email, s.fullName, s.token, Instant.parse(s.expiresAt))
     } catch (e: Exception) {
@@ -79,7 +71,7 @@ class SessionStore(private val context: Context) {
     cipher.init(Cipher.ENCRYPT_MODE, key())
     val data =
       gson
-        .toJson(Stored(s.userId, s.email, s.fullName, s.token, s.expiresAt.toString()))
+        .toJson(StoredSession(s.userId, s.email, s.fullName, s.token, s.expiresAt.toString()))
         .toByteArray(Charsets.UTF_8)
     val raw =
       Base64.encodeToString(cipher.iv, Base64.NO_WRAP) +
