@@ -42,6 +42,10 @@ El harness acepta únicamente un emulador (por defecto `emulator-5554`) y borra 
 
 Paths por defecto corresponden al runtime local de revisión. Personalizar `TB1_DOTNET`, `TB1_MYSQL_CLI`, `TB1_ADB`, `TB1_MYSQL_PORT`, `TB1_ANDROID_API_PORT` y `TB1_ANDROID_SERIAL` cuando haga falta. No hay credenciales de producción ni contraseñas sembradas; las cuentas se crean desde UI para la prueba.
 
+## Pruebas adicionales con Artemis
+
+Artemis está instalado localmente con su consola y helper. Ejecutar `TB1_E2E_DRIVER=artemis python3 scripts/verify-backend-journey.py` para el recorrido determinista por la interfaz Android real; ver [instalación, comandos y límites](docs/ARTEMIS_TESTING.md). Las pruebas autónomas de lenguaje natural requieren una clave de IA local, aún no configurada.
+
 ## Empaquetar artefactos Android
 
 Después de generar el APK Debug, grabar el recorrido y guardar los cambios en Git, ejecutar `python3 scripts/package-tb1.py`. Crea `artifacts/TerraTech-TB1-android.zip` con el código versionado, evidencia, APK y video; verifica el hash del APK y guarda un manifiesto. No incluye `.git`, SDK, builds, configuración local ni credenciales. Este ZIP es la porción Android del entregable del equipo; la nomenclatura oficial requiere NRC y startup.

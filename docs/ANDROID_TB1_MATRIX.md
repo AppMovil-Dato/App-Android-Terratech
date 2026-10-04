@@ -15,6 +15,8 @@ Estado: implementación del recorrido disponible; evidencia de emulador y contro
 | Transversal — Arquitectura | Contextos en raíz, cuatro capas, dominio/aplicación Kotlin puro y mapeo DTO/Room | Inspección de código + verificación de imports; Codegraph | No aplica |
 | Transversal — Idiomas/accesibilidad | Inglés por defecto, español, texto ampliado, semántica de gráfico y valores listados | ComposeScreensTest con Accessibility Test Framework; revisión visual de capturas; TalkBack manual pendiente | Pendiente |
 
+También se ejecutó el recorrido black-box con Artemis: US06, US07, US09, US17, US11, US10, US12 y consulta offline. [35 aserciones aprobadas](evidence/artemis/ui-results.json), [720 lecturas y reinicio del proceso sin red](evidence/artemis/summary.json). Esta ejecución usa su helper/controlador local, sin LLM, y no reemplaza la validación física.
+
 ## Reproducibilidad y límites
 
 Pruebas unitarias en `app/src/test`; instrumentadas en `app/src/androidTest`. El harness guarda resultados y capturas en `docs/evidence/backend-journey`. Las pruebas aisladas del backend también cubren propiedad/JWT y están documentadas en su repositorio; no se cuentan como pruebas Android.

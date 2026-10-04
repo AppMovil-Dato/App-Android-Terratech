@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='UTF-8' ?>
-<testsuites tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-04T06:22:08" hostname="localhost">
-  <testsuite name="com.novatech.terratech.BackendJourneyTest" tests="1" failures="0" errors="0" skipped="0" time="43.626" timestamp="2026-10-04T06:22:08" hostname="localhost">
+<testsuites tests="1" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-04T15:47:50" hostname="localhost">
+  <testsuite name="com.novatech.terratech.BackendJourneyTest" tests="1" failures="0" errors="0" skipped="0" time="45.472" timestamp="2026-10-04T15:47:50" hostname="localhost">
     <properties>
       <property name="device" value="emulator-5554" />
     </properties>
-    <testcase name="completeJourneyWithOfflineAndLogout" classname="com.novatech.terratech.BackendJourneyTest" time="43.626" />
+    <testcase name="completeJourneyWithOfflineAndLogout" classname="com.novatech.terratech.BackendJourneyTest" time="45.472" />
   </testsuite>
 </testsuites>

@@ -1,0 +1,42 @@
+{
+  "artemisCommit": "351ca8422f7b5b54e80a9c1ce03a222e02415b6b",
+  "autonomousReady": false,
+  "reason": "No LLM provider key configured",
+  "checks": [
+    {
+      "id": "python_runtime",
+      "status": "pass",
+      "summary": "Python 3.12.14 Ready"
+    },
+    {
+      "id": "system_config",
+      "status": "pass",
+      "summary": "Config Valid"
+    },
+    {
+      "id": "integration_host",
+      "status": "pass",
+      "summary": "Host Ready"
+    },
+    {
+      "id": "gemini_api_key",
+      "status": "fail",
+      "summary": "Key Missing"
+    },
+    {
+      "id": "android_adb",
+      "status": "pass",
+      "summary": "Connected"
+    },
+    {
+      "id": "toolchain",
+      "status": "pass",
+      "summary": "Ready (FFmpeg + scrcpy)"
+    },
+    {
+      "id": "vision_ocr_key",
+      "status": "pass",
+      "summary": "Not Configured (Optional)"
+    }
+  ]
+}

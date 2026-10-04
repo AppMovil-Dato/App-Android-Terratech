@@ -32,6 +32,16 @@ manifest = {
     'apiBaseUrl': checks['apiBaseUrl'],
     'files': {p.name: {'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in [apk, video]},
 }
+artemis_result = root / 'docs/evidence/artemis/ui-results.json'
+if artemis_result.exists():
+    ui = json.loads(artemis_result.read_text())
+    summary_path = root / 'docs/evidence/artemis/summary.json'
+    if not ui.get('passed') or not summary_path.exists():
+        raise SystemExit('Artemis evidence is incomplete or failed.')
+    summary = json.loads(summary_path.read_text())
+    if not summary.get('journeyPassed') or not summary.get('coldProcessRestartOfflinePassed'):
+        raise SystemExit('Artemis journey or offline restart failed.')
+    manifest['artemis'] = {'journeyPassed': True, 'assertionsPassed': ui['assertionsPassed'], 'llmUsed': ui['llmUsed']}
 (artifacts / 'delivery-manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
 source = subprocess.check_output(['git', 'archive', '--format=zip', 'HEAD'], cwd=root)
 target = artifacts / 'TerraTech-TB1-android.zip'

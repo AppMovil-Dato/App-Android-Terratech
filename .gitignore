@@ -27,3 +27,7 @@ local.properties
 # Generated validation logs and installable APKs
 /docs/evidence/**/*.log
 /artifacts/
+
+# Python test harness caches
+__pycache__/
+*.py[cod]
