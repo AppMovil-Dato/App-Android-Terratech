@@ -1,6 +1,6 @@
 # Validación Android TB1
 
-Implementación validada en Debug sobre Pixel 8 API 36 (Android 16), con backend .NET/MySQL local aislado. No se ha publicado el servicio. La prueba en teléfono físico y la revisión manual con TalkBack permanecen pendientes; no se declara cerrada la aceptación completa del TB1.
+Implementación validada en Debug sobre Pixel 8 API 36 (Android 16), con backend .NET/MySQL local aislado. No se ha publicado el servicio. La prueba en teléfono físico mediante clics permanece pendiente; TalkBack queda fuera de la aceptación acordada con el equipo; no se declara cerrada la aceptación completa del TB1.
 
 ## Resultados
 
@@ -38,6 +38,6 @@ python3 scripts/verify-backend-journey.py
 
 El segundo comando requiere el backend hermano compilado Debug y MySQL local aislado; los paths configurables están en el README. Crea y conserva una base nueva de prueba; utiliza comandos explícitos de demostración en Development. El APK del harness apunta a localhost:55024 a través de la dirección del emulador. El APK de entrega apunta al backend local en 55023; para cambiar la URL, reconstruir siguiendo el README.
 
-Para la aceptación física: conectar Android por USB, configurar `adb reverse` y la URL indicados en el README, repetir registro/perfil/parcela/sensor/histórico, apagar la conexión y reiniciar el proceso. Revisar texto ampliado, navegación y TalkBack. Registrar dispositivo/versión/resultado en esta matriz antes de marcarlo verificado.
+Para la aceptación física: conectar Android por USB, configurar `adb reverse` y la URL indicados en el README, repetir registro/perfil/parcela/sensor/histórico, apagar la conexión y reiniciar el proceso. Revisar texto ampliado y navegación mediante clics. TalkBack no es un requisito de este cierre. Registrar dispositivo/versión/resultado en esta matriz antes de marcarlo verificado.
 
 La [matriz de historias](ANDROID_TB1_MATRIX.md) relaciona criterios con pruebas. La apariencia fue revisada sobre capturas reales del emulador y conserva verde/ámbar, tarjetas redondeadas y jerarquía sans serif. La fuente original exacta de los PNG no está identificada.

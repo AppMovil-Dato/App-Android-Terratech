@@ -13,7 +13,7 @@ Estado: implementación del recorrido disponible; evidencia de emulador y contro
 | US12 — Histórico | Siete días por defecto, treinta días, gráfico/lista cronológicos, intervalo vacío y detalle | DomainRulesTest, RoomCacheTest.chronologicalOrderHandlesMixedIsoUtcPrecision, ComposeScreensTest y BackendJourneyTest: exige 720 muestras en 30 días | Pendiente |
 | Consulta sin conexión | Datos descargados, fechas, aviso offline, reintentar; persistencia tras reiniciar; sin escrituras en cola | RoomCacheTest, SessionAndPersistenceTest, MonitoringStateTest, BackendJourneyTest y verificación host de cierre/reapertura del proceso; cold-restart.png/xml | Pendiente |
 | Transversal — Arquitectura | Contextos en raíz, cuatro capas, dominio/aplicación Kotlin puro y mapeo DTO/Room | Inspección de código + verificación de imports; Codegraph | No aplica |
-| Transversal — Idiomas/accesibilidad | Inglés por defecto, español, texto ampliado, semántica de gráfico y valores listados | ComposeScreensTest con Accessibility Test Framework; revisión visual de capturas; TalkBack manual pendiente | Pendiente |
+| Transversal — Idiomas/accesibilidad | Inglés por defecto, español, texto ampliado, semántica de gráfico y valores listados | ComposeScreensTest con Accessibility Test Framework; revisión visual de capturas; TalkBack fuera de la aceptación acordada; recorrido físico mediante clics pendiente | Pendiente |
 
 También se ejecutó el recorrido black-box con Artemis: US06, US07, US09, US17, US11, US10, US12 y consulta offline. [35 aserciones aprobadas](evidence/artemis/ui-results.json), [720 lecturas y reinicio del proceso sin red](evidence/artemis/summary.json). Esta ejecución usa su helper/controlador local, sin LLM, y no reemplaza la validación física.
 

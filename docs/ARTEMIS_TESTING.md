@@ -39,4 +39,4 @@ Clonar el repositorio en `.tools/artemis`, hacer checkout del commit indicado y 
 
 No se ejecutó el instalador global de reglas de Artemis ni se reemplazó AGENTS.md. La configuración MCP oficial puede generarse con `scripts/artemis.sh mcp --generate-config codex`; registrar ese servidor en Codex requiere recargarlo para que sus herramientas estén disponibles. La CLI y estas pruebas funcionan sin ese registro.
 
-Artemis sobre un emulador no acredita la ejecución en teléfono físico ni la revisión manual con TalkBack exigidas por el cierre Android TB1.
+Artemis sobre un emulador no acredita la ejecución en teléfono físico. El cierre Android TB1 requiere repetir el recorrido mediante clics en un teléfono; TalkBack queda fuera de esta aceptación por decisión del equipo.

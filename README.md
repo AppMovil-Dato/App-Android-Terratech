@@ -28,7 +28,7 @@ Para teléfono físico con USB, iniciar el backend en localhost:55023, usar `adb
 ./gradlew :app:connectedDebugAndroidTest
 ```
 
-La suite instrumentada usa un emulador/dispositivo con inglés por defecto; el caso de traducción configura español explícitamente. `BackendJourneyTest` se selecciona mediante el harness de integración, no corre automáticamente contra un servidor cualquiera. Las pruebas de accesibilidad automáticas requieren API 34+; las funciones de la app soportan minSdk 29. La prueba en teléfono físico y la revisión manual con TalkBack siguen siendo pasos de aceptación.
+La suite instrumentada usa un emulador/dispositivo con inglés por defecto; el caso de traducción configura español explícitamente. `BackendJourneyTest` se selecciona mediante el harness de integración, no corre automáticamente contra un servidor cualquiera. Las pruebas de accesibilidad automáticas requieren API 34+; las funciones de la app soportan minSdk 29. La prueba en teléfono físico mediante clics sigue siendo un paso de aceptación. La revisión manual con TalkBack queda fuera del cierre TB1 por decisión del equipo; se conservan las comprobaciones automáticas de accesibilidad.
 
 Para el recorrido real, el backend hermano debe estar compilado en **Debug**, con MySQL de revisión aislado en localhost:33308:
 
