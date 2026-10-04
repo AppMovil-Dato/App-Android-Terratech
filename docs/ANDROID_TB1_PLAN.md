@@ -1,12 +1,12 @@
 # Plan de desarrollo Android para TB1
 
-Fecha: 4 de octubre de 2026, America/Lima. Estado: plan inicial definido; aplicación todavía Empty Activity. Esta preparación registra el proyecto y el plan en Git, sin implementar pantallas ni instalar dependencias.
+Fecha: 4 de octubre de 2026, America/Lima. Estado: recorrido implementado. El cierre y sus evidencias se siguen en ANDROID_VALIDATION.md y ANDROID_TB1_MATRIX.md; validación física pendiente. Las fases originales se conservan como criterios de aceptación.
 
 ## Resultado que presentaremos
 
 Registro → login → completar perfil → crear/elegir parcela → asociar sensor por código → consultar indicadores → histórico 7/30 días → detalle de lectura → volver a consultar los datos descargados sin conexión.
 
-Historias: US06, US07, US09, US17, US11, US10, US12 y nueva HU de consulta sin conexión. El backend ya cubre el recorrido; ver [contrato](BACKEND_CONTRACT.md) y [OpenAPI](backend-openapi.snapshot.json). El almacenamiento y las pantallas Android todavía deben implementarse y probarse.
+Historias: US06, US07, US09, US17, US11, US10, US12 y nueva HU de consulta sin conexión. El backend ya cubre el recorrido; ver [contrato](BACKEND_CONTRACT.md) y [OpenAPI](backend-openapi.snapshot.json). Almacenamiento y pantallas implementados; verificar el alcance real con la matriz y resultados actuales.
 
 ## Decisiones de arquitectura
 
@@ -28,7 +28,7 @@ La guía local exige explícitamente value objects para variables con reglas de 
 | WorkManager | Pospuesto: TB1 requiere lectura offline y actualización manual/al abrir, sin cola de escrituras |
 | Coil | Solo si incorporamos imágenes reales; no necesario para indicadores ni formularios |
 
-Las versiones se fijarán en `libs.versions.toml` al validar el toolchain. AGP 9.4.1, SDK 37, Kotlin 2.2.10 y JDK de daemon 25 son valores actuales declarados, todavía no comprobados. No copiar versiones del ejemplo ni cambiar todo el toolchain sin diagnosticar. Todas las compilaciones y pruebas Android serán **Debug**.
+Las versiones están fijadas y verificadas en `libs.versions.toml`: AGP 9.4.1, SDK 37, Kotlin Compose 2.4.20, Compose BOM 2026.09.00 y JDK de daemon 25. Los resultados Debug se registran en ANDROID_VALIDATION.md. Todas las compilaciones y pruebas Android serán **Debug**.
 
 ## Interfaz y navegación
 
@@ -93,7 +93,7 @@ Cierre TB1 Android: APK Debug ejecutable en dispositivo físico, pruebas aprobad
 
 IA, recomendaciones, electroválvulas, clima, mercado, push, correo verificado y recuperación de contraseña quedan fuera del flujo TB1. No mostrar botones funcionales de esos módulos. El recurso interno, servicio externo y feature de aprendizaje autónomo del proyecto completo deberán seleccionarse con evidencia de qué se enseñó en clase; no asumir que Hilt/Room acreditan ese requisito. Sus decisiones no bloquean este recorrido.
 
-La familia exacta de fuente requiere el archivo de diseño o metadatos originales: el ZIP contiene PNG, sin archivos de fuente. Validación del toolchain, fechas del Sprint y asignación de responsables quedan pendientes de la ejecución/organización del equipo.
+La familia exacta de fuente requiere el archivo de diseño o metadatos originales: el ZIP contiene PNG, sin archivos de fuente. El toolchain ya está validado; fechas del Sprint y asignación de responsables corresponden a la organización del equipo.
 
 ## Fuentes
 

@@ -1,0 +1,494 @@
+{
+  "engine": "Artemis UnifiedMobileController + Accessibility Helper",
+  "llmUsed": false,
+  "deviceSerial": "emulator-5554",
+  "passed": true,
+  "error": null,
+  "assertionsPassed": 35,
+  "steps": [
+    {
+      "assert": "welcome",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "no_account"
+    },
+    {
+      "action": "input",
+      "target": "full_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "email",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "confirmation",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "register"
+    },
+    {
+      "assert": "error_confirmation",
+      "passed": true
+    },
+    {
+      "action": "input",
+      "target": "confirmation",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "register"
+    },
+    {
+      "assert": "registered",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "no_account"
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "confirmation",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "register"
+    },
+    {
+      "assert": "error_duplicate",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "have_account"
+    },
+    {
+      "action": "input",
+      "target": "email",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "login"
+    },
+    {
+      "assert": "error_credentials",
+      "passed": true
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "login"
+    },
+    {
+      "assert": "use_profile",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "use_profile"
+    },
+    {
+      "action": "input",
+      "target": "farm_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "phone",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "location",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "area_ha",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "save"
+    },
+    {
+      "assert": "profile_saved",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "edit_profile"
+    },
+    {
+      "action": "input",
+      "target": "full_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "area_ha",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "save"
+    },
+    {
+      "assert": "profile_saved",
+      "passed": true
+    },
+    {
+      "assert": "Ana Torres Vega",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "fields"
+    },
+    {
+      "action": "tap",
+      "target": "new_field"
+    },
+    {
+      "action": "input",
+      "target": "field_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "crop",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "area_ha",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "soil",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "latitude",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "longitude",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "save"
+    },
+    {
+      "assert": "my_fields",
+      "passed": true
+    },
+    {
+      "assert": "Parcela Norte",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "choose_field"
+    },
+    {
+      "action": "tap",
+      "target": "associate"
+    },
+    {
+      "action": "input",
+      "target": "sensor_code",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "sensor_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "associate"
+    },
+    {
+      "assert": "error_sensor",
+      "passed": true
+    },
+    {
+      "action": "input",
+      "target": "sensor_code",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "associate"
+    },
+    {
+      "assert": "error_sensor",
+      "passed": true
+    },
+    {
+      "action": "input",
+      "target": "sensor_code",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "associate"
+    },
+    {
+      "assert": "view_sensor",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "associate"
+    },
+    {
+      "action": "input",
+      "target": "sensor_code",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "sensor_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "associate"
+    },
+    {
+      "assert": "error_occupied",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "back"
+    },
+    {
+      "action": "tap",
+      "target": "view_sensor"
+    },
+    {
+      "assert": "SIMULATED",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "view_history"
+    },
+    {
+      "assert": "days_7",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "days_30"
+    },
+    {
+      "assert": "Readings: 720",
+      "passed": true
+    },
+    {
+      "assert": "reading_detail",
+      "passed": true
+    },
+    {
+      "assert": "SIMULATED",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "home"
+    },
+    {
+      "action": "tap",
+      "target": "retry"
+    },
+    {
+      "assert": "offline",
+      "passed": true
+    },
+    {
+      "assert": "SIMULATED",
+      "passed": true
+    },
+    {
+      "assert": "offline",
+      "passed": true
+    },
+    {
+      "assert": "Parcela Norte",
+      "passed": true
+    },
+    {
+      "assert": "SIMULATED",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "profile"
+    },
+    {
+      "action": "tap",
+      "target": "logout"
+    },
+    {
+      "assert": "logout_title",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "logout"
+    },
+    {
+      "assert": "welcome",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "no_account"
+    },
+    {
+      "action": "input",
+      "target": "full_name",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "email",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "confirmation",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "register"
+    },
+    {
+      "assert": "registered",
+      "passed": true
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "login"
+    },
+    {
+      "assert": "use_profile",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "fields"
+    },
+    {
+      "assert": "no_fields",
+      "passed": true
+    },
+    {
+      "assert": "secondAccountCannotSeeFirstAccountField",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "profile"
+    },
+    {
+      "action": "tap",
+      "target": "logout"
+    },
+    {
+      "assert": "logout_title",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "logout"
+    },
+    {
+      "assert": "welcome",
+      "passed": true
+    },
+    {
+      "action": "input",
+      "target": "email",
+      "valueRecorded": false
+    },
+    {
+      "action": "input",
+      "target": "password",
+      "valueRecorded": false
+    },
+    {
+      "action": "tap",
+      "target": "login"
+    },
+    {
+      "assert": "SIMULATED",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "view_history"
+    },
+    {
+      "action": "tap",
+      "target": "days_30"
+    },
+    {
+      "assert": "Readings: 720",
+      "passed": true
+    },
+    {
+      "action": "tap",
+      "target": "home"
+    }
+  ],
+  "timestampUtc": "2026-10-04T16:31:51.068408+00:00"
+}

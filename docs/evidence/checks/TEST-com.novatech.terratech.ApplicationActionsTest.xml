@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.ApplicationActionsTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-04T16:25:30.164Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.008">
+  <properties/>
+  <testcase name="validRegistrationKeepsPasswordSpaces" classname="com.novatech.terratech.ApplicationActionsTest" time="0.003"/>
+  <testcase name="loginUsesValidatedNormalizedEmail" classname="com.novatech.terratech.ApplicationActionsTest" time="0.001"/>
+  <testcase name="shortNameNeverCallsBackend" classname="com.novatech.terratech.ApplicationActionsTest" time="0.001"/>
+  <testcase name="rejectedConfirmationNeverCallsBackend" classname="com.novatech.terratech.ApplicationActionsTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

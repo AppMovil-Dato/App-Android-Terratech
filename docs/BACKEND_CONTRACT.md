@@ -1,6 +1,6 @@
 # Contrato Android del TB1
 
-Base: `/api/v1`. JSON camelCase en los contratos nuevos. JWT en `Authorization: Bearer <token>`. ID enteros, fechas ISO 8601 UTC, superficie en m². Android convierte m² a hectáreas dividiendo entre 10 000.
+Servidor desplegado: `https://terratech-api.lucemz.com/`. Base: `/api/v1`. JSON camelCase en los contratos nuevos. JWT en `Authorization: Bearer <token>`. ID enteros, fechas ISO 8601 UTC, superficie en m². Android convierte m² a hectáreas dividiendo entre 10 000.
 
 | Paso | Endpoint | Resultado |
 |---|---|---|
