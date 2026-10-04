@@ -10,16 +10,16 @@ Arquitectura DDD con contextos en raíz y cuatro capas; Compose/Material 3, MVVM
 
 Abrir este directorio en Android Studio. SDK 37, minSdk 29; Gradle 9.6.0, AGP 9.4.1, Kotlin Compose 2.4.20 y toolchain JDK 25, gestionado por la configuración del daemon. Las dependencias están fijadas en `gradle/libs.versions.toml`.
 
-La base por defecto para emulador es `http://10.0.2.2:55023/`, con el backend local iniciado aparte. Cambiarla por comando, siempre con `/` al final:
+La base por defecto es `https://terratech-api.lucemz.com/`, el backend desplegado en Cloud Run con MySQL en Aiven. Funciona desde emulador y teléfono con conexión a Internet. Compilar e instalar:
 
 ```sh
-./gradlew :app:assembleDebug -PTERRATECH_API_URL=https://api.example.com/
+./gradlew :app:assembleDebug
 ./gradlew :app:installDebug
 ```
 
-La URL de ejemplo es un placeholder, no un backend publicado. Solo Debug permite HTTP. No se versiona `local.properties`; configurar el SDK del equipo en Android Studio.
+Para usar otro servidor, pasar `-PTERRATECH_API_URL=URL` al compilar y al instalar, siempre con `/` al final. Solo Debug permite HTTP. No se versiona `local.properties`; configurar el SDK del equipo en Android Studio.
 
-Para teléfono físico con USB, iniciar el backend en localhost:55023, usar `adb reverse tcp:55023 tcp:55023` y compilar con `-PTERRATECH_API_URL=http://127.0.0.1:55023/`. Mantener el servidor y el USB disponibles durante la demostración conectada.
+Para probar opcionalmente un backend local en emulador, usar `-PTERRATECH_API_URL=http://10.0.2.2:55023/`. Para el backend local en teléfono físico con USB, iniciar el backend en localhost:55023, usar `adb reverse tcp:55023 tcp:55023` y compilar con `-PTERRATECH_API_URL=http://127.0.0.1:55023/`. Mantener el servidor y el USB disponibles durante la demostración conectada.
 
 ## Pruebas Debug
 
@@ -65,4 +65,4 @@ JWT cifrado con clave de Android Keystore; contraseñas no persistidas. Reautent
 
 Repositorio: https://github.com/AppMovil-Dato/App-Android-Terratech.git. Ramas `main`, `develop` y `feature/tb1-android`. Usar Codegraph para explorar y compilar exclusivamente Debug.
 
-IA, electroválvulas, clima, mercado, push, verificación de correo y recuperación de contraseña no forman parte de este TB1. No hay backend publicado todavía. Los requisitos de servicio externo, recurso interno y aprendizaje autónomo del proyecto completo se revisan en la guía; no se presentan como implementados por este recorrido.
+IA, electroválvulas, clima, mercado, push, verificación de correo y recuperación de contraseña no forman parte de este TB1. El backend publicado está disponible en https://terratech-api.lucemz.com/; Swagger en https://terratech-api.lucemz.com/swagger/index.html. Los requisitos de servicio externo, recurso interno y aprendizaje autónomo del proyecto completo se revisan en la guía; no se presentan como implementados por este recorrido.

@@ -1,6 +1,8 @@
 # Validación Android TB1
 
-Implementación validada en Debug sobre Pixel 8 API 36 (Android 16), con backend .NET/MySQL local aislado. No se ha publicado el servicio. La prueba en teléfono físico mediante clics permanece pendiente; TalkBack queda fuera de la aceptación acordada con el equipo; no se declara cerrada la aceptación completa del TB1.
+Implementación validada en Debug sobre Pixel 8 API 36 (Android 16), con backend .NET/MySQL local aislado. El backend ya está publicado en `https://terratech-api.lucemz.com/`; las evidencias del recorrido descritas abajo corresponden al servidor local aislado. La prueba en teléfono físico mediante clics permanece pendiente; TalkBack queda fuera de la aceptación acordada con el equipo; no se declara cerrada la aceptación completa del TB1.
+
+Actualización de conexión (4 de octubre de 2026): la compilación por defecto usa `https://terratech-api.lucemz.com/`. Verificados `assembleDebug`, `testDebugUnitTest` (32 pruebas, 0 fallos) y `lintDebug`; el `BuildConfig` generado contiene la URL HTTPS y las 11 rutas Retrofit existen en OpenAPI publicado. APK actualizado: `app/build/outputs/apk/debug/app-debug.apk`. Los APK, videos y recorridos locales históricos mencionados abajo conservan su configuración original; esta comprobación no acredita un recorrido de UI contra Production.
 
 ## Resultados
 

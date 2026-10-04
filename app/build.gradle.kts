@@ -31,7 +31,7 @@ android {
   buildFeatures { buildConfig = true }
   defaultConfig {
     val apiUrl =
-      providers.gradleProperty("TERRATECH_API_URL").orElse("http://10.0.2.2:55023/").get()
+      providers.gradleProperty("TERRATECH_API_URL").orElse("https://terratech-api.lucemz.com/").get()
     require(apiUrl.endsWith("/")) { "TERRATECH_API_URL must end with /" }
     buildConfigField("String", "API_URL", "\"$apiUrl\"")
   }
