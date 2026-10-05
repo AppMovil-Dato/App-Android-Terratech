@@ -1,0 +1,32 @@
+{
+  "variant": "Debug",
+  "unit": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "instrumented": {
+    "tests": 25,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "device": "Pixel_4 emulator Android 10",
+  "lint": {
+    "errors": 0,
+    "warnings": 42
+  },
+  "modularity": {
+    "kotlinFiles": 192,
+    "passed": true
+  },
+  "navigationTests": 6,
+  "physicalDeviceTested": false,
+  "date": "2026-10-05",
+  "apk": {
+    "path": "artifacts/TerraTech-TB1-navigation-debug.apk",
+    "apiUrl": "https://terratech-api.lucemz.com/",
+    "sha256": "56da3d4651743f21c0d890551453e4c0d1ef73c7afc7d54a4021c31fd25dd311"
+  }
+}

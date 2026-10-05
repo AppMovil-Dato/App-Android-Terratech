@@ -6,6 +6,7 @@ import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.domain.repository.AccountRepository
 import com.novatech.terratech.monitoring.application.usecase.MonitoringActions
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
+import com.novatech.terratech.monitoring.domain.valueobject.FieldDraft
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Instant
@@ -119,6 +120,24 @@ constructor(private val actions: MonitoringActions, private val account: Account
         observeReadings()
         refresh()
     }
+
+    fun selectSensor(deviceId: Int) {
+        val sensor = mutable.value.sensors.find { it.id == deviceId } ?: return
+        if (mutable.value.fieldId != sensor.fieldId) selectField(sensor.fieldId)
+        if (mutable.value.deviceId != deviceId) selectDevice(deviceId)
+    }
+
+    fun createField(profileId: Int, draft: FieldDraft) =
+        createField(
+            profileId,
+            draft.name.value,
+            draft.crop,
+            draft.area.value / 10000,
+            draft.soil,
+            draft.coordinates.latitude,
+            draft.coordinates.longitude,
+            draft.boundary,
+        )
 
     fun days(days: Int) {
         if (days !in listOf(7, 30)) return

@@ -171,3 +171,7 @@ python3 scripts/check-modularity.py --backend '../../BackEnd'
 ```
 
 Esta regla no exige mover los miembros y companion objects fuera del tipo al que pertenecen ni separar cada constante de los tokens visuales.
+
+## Organización de Compose
+
+La implementación mantiene Single Activity. `TerraTechApp` observa sesión/estado; `SignedInApp` conecta acciones; `TerraTechNavHost` registra los subgrafos por contexto. Las pantallas y su contenido reciben estado y callbacks, sin NavController. La estructura, los alcances de Hilt y las pruebas están documentados en [COMPOSE_NAVIGATION.md](COMPOSE_NAVIGATION.md).

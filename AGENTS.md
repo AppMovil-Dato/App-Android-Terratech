@@ -13,3 +13,6 @@
 
 - Usar imports explícitos; no escribir nombres de paquetes dentro de firmas o cuerpos ni usar imports con comodines.
 - Usar nombres descriptivos para estados, parámetros y variables. Ejecutar `python3 scripts/check-kotlin-style.py` después de editar Kotlin.
+
+- Mantener una Activity y el NavHost separado del contenido visual. Las rutas son tipos serializables propios, con IDs como argumentos; no concatenar rutas de texto.
+- Registrar destinos por contexto, pasar callbacks a las pantallas y ejecutar las pruebas de navegación al modificar grafos o pilas. Ver docs/COMPOSE_NAVIGATION.md.

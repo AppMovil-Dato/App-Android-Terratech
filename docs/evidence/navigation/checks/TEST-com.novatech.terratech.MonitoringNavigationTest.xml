@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.MonitoringNavigationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-10-05T22:42:35.732Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.029">
+  <properties/>
+  <testcase name="restoringSensorRouteSelectsItsFieldAndPersistsThePair" classname="com.novatech.terratech.MonitoringNavigationTest" time="0.029"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

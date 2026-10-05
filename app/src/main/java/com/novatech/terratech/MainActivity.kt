@@ -17,7 +17,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TerraTechTheme {
-                Surface(color = MaterialTheme.colorScheme.background) { TerraTechApp() }
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    TerraTechApp()
+                }
             }
         }
     }

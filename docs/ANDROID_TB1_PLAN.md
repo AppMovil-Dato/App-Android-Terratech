@@ -23,7 +23,7 @@ La guía local exige explícitamente value objects para variables con reglas de 
 | Room + Flow | Fuente de datos observada por UI para parcelas, sensores y lecturas descargadas |
 | DataStore | Preferencias, IDs seleccionados y metadatos ligeros; no guardar el token en texto plano |
 | Android Keystore | Proteger material de sesión persistido; excluirlo de copias de seguridad y registros |
-| Navigation Compose | Grafo de sesión y grafo principal, con selección y detalle |
+| Navigation Compose | Sesión controla el acceso; NavHost privado con subgrafos Inicio, Parcelas y Perfil, rutas tipadas y detalle |
 | Compose Canvas | Gráfica de humedad y anillo; acompañarlos con valores, leyenda y detalle accesibles |
 | WorkManager | Pospuesto: TB1 requiere lectura offline y actualización manual/al abrir, sin cola de escrituras |
 | Coil | Solo si incorporamos imágenes reales; no necesario para indicadores ni formularios |

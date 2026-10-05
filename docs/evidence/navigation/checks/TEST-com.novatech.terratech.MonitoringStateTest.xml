@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.MonitoringStateTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2026-10-05T22:42:35.765Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.062">
+  <properties/>
+  <testcase name="secondAccountClearsSelectionAndCachedReadingsImmediately" classname="com.novatech.terratech.MonitoringStateTest" time="0.01"/>
+  <testcase name="emptyParcelClearsPreviousDeviceReadings" classname="com.novatech.terratech.MonitoringStateTest" time="0.025"/>
+  <testcase name="invalidSensorNeverReachesRepository" classname="com.novatech.terratech.MonitoringStateTest" time="0.005"/>
+  <testcase name="creationEventSurvivesAutomaticRefreshUntilAcknowledged" classname="com.novatech.terratech.MonitoringStateTest" time="0.003"/>
+  <testcase name="occupiedSensorRetainsSelectionAndShowsConflict" classname="com.novatech.terratech.MonitoringStateTest" time="0.004"/>
+  <testcase name="offlineKeepsCachedValuesAndDoesNotLookEmpty" classname="com.novatech.terratech.MonitoringStateTest" time="0.008"/>
+  <testcase name="recoveryClearsOfflineFlagAfterSuccessfulRefresh" classname="com.novatech.terratech.MonitoringStateTest" time="0.005"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

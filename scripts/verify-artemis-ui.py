@@ -112,9 +112,9 @@ class Journey:
             await asyncio.sleep(0.35)
         raise AssertionError(f"UI did not expose expected label: {label}")
 
-    async def expect(self, key, timeout=20):
+    async def expect(self, key, timeout=20, scroll=False):
         label = STRINGS.get(key, key)
-        await self.node(label, timeout=timeout)
+        await self.node(label, timeout=timeout, scroll=scroll)
         self.steps.append({"assert": key, "passed": True})
         print("PASS", key, flush=True)
 
@@ -227,26 +227,33 @@ class Journey:
             await asyncio.sleep(0.15)
         else:
             raise AssertionError(f"Field did not clear: {key}")
-        if not client.send_text(value):
-            raise AssertionError(f"Input failed: {key}")
-        deadline = time.monotonic() + 8
-        while time.monotonic() < deadline:
-            rows = await self.screen()
-            focused = [
-                n
-                for n in rows
-                if n.get("class") == "android.widget.EditText"
-                and n.get("focused") == "true"
-            ]
-            if focused and (
-                focused[0].get("text") == value
-                or (
-                    focused[0].get("password") == "true"
-                    and len(focused[0].get("text", "")) == len(value)
-                )
-            ):
+        for attempt in range(2):
+            if attempt and not client.clear_text():
+                raise AssertionError(f"Retry clear failed: {key}")
+            if not client.send_text(value):
+                raise AssertionError(f"Input failed: {key}")
+            deadline = time.monotonic() + 20
+            accepted = False
+            while time.monotonic() < deadline:
+                rows = await self.screen()
+                focused = [
+                    n
+                    for n in rows
+                    if n.get("class") == "android.widget.EditText"
+                    and n.get("focused") == "true"
+                ]
+                if focused and (
+                    focused[0].get("text") == value
+                    or (
+                        focused[0].get("password") == "true"
+                        and len(focused[0].get("text", "")) == len(value)
+                    )
+                ):
+                    accepted = True
+                    break
+                await asyncio.sleep(0.15)
+            if accepted:
                 break
-            await asyncio.sleep(0.15)
         else:
             raise AssertionError(f"Field did not accept expected text: {key}")
         await self.hide_keyboard()
@@ -396,7 +403,7 @@ class Journey:
         await self.expect("error_sensor")
         await self.input("sensor_code", "TT-ZZZ001")
         await self.click("associate")
-        await self.expect("view_history")
+        await self.expect("view_history", scroll=True)
         await self.click("back")
         await self.expect("view_sensor")
         await self.click("associate")

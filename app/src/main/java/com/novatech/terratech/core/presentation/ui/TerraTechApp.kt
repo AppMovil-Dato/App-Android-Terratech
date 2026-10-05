@@ -8,8 +8,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.novatech.terratech.core.presentation.state.forUser
 import com.novatech.terratech.iam.presentation.ui.AccountScreen
 import com.novatech.terratech.iam.presentation.viewmodel.AccountViewModel
@@ -18,9 +18,9 @@ import com.novatech.terratech.profile.presentation.viewmodel.ProfileViewModel
 
 @Composable
 fun TerraTechApp(
-    accountViewModel: AccountViewModel = viewModel(),
-    profileViewModel: ProfileViewModel = viewModel(),
-    monitoringViewModel: MonitoringViewModel = viewModel(),
+    accountViewModel: AccountViewModel = hiltViewModel(),
+    profileViewModel: ProfileViewModel = hiltViewModel(),
+    monitoringViewModel: MonitoringViewModel = hiltViewModel(),
 ) {
     val accountState by accountViewModel.state.collectAsStateWithLifecycle()
     val profileState by profileViewModel.state.collectAsStateWithLifecycle()
@@ -41,7 +41,7 @@ fun TerraTechApp(
         )
         return
     }
-    key(session.userId) {
+    key("typed-navigation-v1", session.userId) {
         SignedInApp(
             session,
             accountState,

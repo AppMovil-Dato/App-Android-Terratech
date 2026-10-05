@@ -48,3 +48,11 @@ La [matriz de historias](ANDROID_TB1_MATRIX.md) relaciona criterios con pruebas.
 ## Refactor de modularización
 
 Tras separar tipos, pantallas, contenido, componentes, APIs y DAOs, vuelven a pasar **32 unitarias, 14 instrumentadas y las 35 aserciones de Artemis**. La evidencia de `checks` y `artemis` corresponde al código reorganizado; el recorrido Compose y su video se conservan como evidencia anterior. [Resumen del refactor](evidence/modularity/summary.json). El esquema Room y el contrato Swagger permanecen idénticos. El APK Debug y el paquete local se actualizan con el código reorganizado.
+
+## Refactor de Compose y navegación — 5 de octubre de 2026
+
+La estructura actual se describe en [COMPOSE_NAVIGATION.md](COMPOSE_NAVIGATION.md). Mantiene una Activity y un NavHost privado con tres subgrafos y rutas tipadas. Se separan navegación, reautenticación, contenido del Scaffold y formularios; se prueba la restauración de pestañas, los argumentos, Atrás y el cambio de cuenta.
+
+La suite Debug pasó **40 unitarias y 25 instrumentadas** sobre Pixel 4 emulado con Android 10, sin fallos ni casos omitidos. Seis de las instrumentadas corresponden a `NavigationGraphTest`. `lintDebug` reporta cero errores y 42 advertencias; los controles de estilo y modularidad revisan 192 archivos Kotlin. Estos resultados corresponden al refactor actual; la tabla anterior conserva resultados históricos de otras etapas. [Resumen](evidence/navigation/checks/summary.json) y [XML](evidence/navigation/checks/). La prueba en teléfono físico permanece pendiente.
+
+Artemis completó el recorrido actual con 36 aserciones y 115 pasos: registro con sesión, perfil, parcela dibujada, validaciones de sensor, 720 lecturas, detalle, offline y aislamiento entre cuentas. El harness también confirmó un reinicio real del proceso sin conexión, con selección y mediciones restauradas. [Resultado UI](evidence/navigation/artemis/ui-results.json) y [resumen de integración](evidence/navigation/artemis/summary.json). Se ejecutó sin TalkBack ni LLM; el backend/MySQL usados fueron locales y aislados.

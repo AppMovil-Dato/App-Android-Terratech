@@ -58,6 +58,8 @@ JWT cifrado con clave de Android Keystore; contraseñas no persistidas. Reautent
 
 ## Documentación y evidencia
 
+- [Organización de Compose y navegación](docs/COMPOSE_NAVIGATION.md): una Activity, rutas tipadas, tres subgrafos y separación de contenedores/contenido.
+
 - [Validación Android](docs/ANDROID_VALIDATION.md) y [matriz TB1](docs/ANDROID_TB1_MATRIX.md).
 - [Plan](docs/ANDROID_TB1_PLAN.md), [guía](docs/DEVELOPMENT_GUIDE.md) y [dirección visual](docs/design/VISUAL_DIRECTION.md).
 - [Contrato backend](docs/BACKEND_CONTRACT.md) y [snapshot OpenAPI](docs/backend-openapi.snapshot.json).
