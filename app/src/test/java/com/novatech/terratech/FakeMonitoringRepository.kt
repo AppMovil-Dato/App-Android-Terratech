@@ -1,14 +1,15 @@
 package com.novatech.terratech
 
 import com.novatech.terratech.core.domain.Failure
-import com.novatech.terratech.monitoring.domain.entity.*
+import com.novatech.terratech.monitoring.domain.entity.DownloadState
+import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import java.time.Instant
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.Assert.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeMonitoringRepository : MonitoringRepository {
     val plots =
@@ -71,7 +72,7 @@ class FakeMonitoringRepository : MonitoringRepository {
         soil: String,
         latitude: Double,
         longitude: Double,
-        boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates>,
+        boundary: List<Coordinates>,
     ): Field {
         connected()
         val created = Field(2, profile, name, area, soil, latitude, longitude, crop, boundary)

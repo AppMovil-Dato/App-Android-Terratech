@@ -3,7 +3,8 @@ package com.novatech.terratech
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.application.usecase.AccountActions
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.fail
 import org.junit.Test
 
 class ApplicationActionsTest {
@@ -14,8 +15,8 @@ class ApplicationActionsTest {
         try {
             AccountActions(repo).register("Ana", "a@example.com", "secret ", "secret")
             fail()
-        } catch (e: Failure) {
-            assertEquals("PASSWORD_CONFIRMATION_MISMATCH", e.code)
+        } catch (exception: Failure) {
+            assertEquals("PASSWORD_CONFIRMATION_MISMATCH", exception.code)
         }
         assertEquals(0, repo.calls)
     }
@@ -33,8 +34,8 @@ class ApplicationActionsTest {
         try {
             AccountActions(repo).register("A", "a@example.com", "secret", "secret")
             fail()
-        } catch (e: Failure) {
-            assertEquals("INVALID_NAME", e.code)
+        } catch (exception: Failure) {
+            assertEquals("INVALID_NAME", exception.code)
         }
         assertEquals(0, repo.calls)
     }

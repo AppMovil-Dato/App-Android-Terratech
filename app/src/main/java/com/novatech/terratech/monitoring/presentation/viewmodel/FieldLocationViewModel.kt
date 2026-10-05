@@ -32,9 +32,9 @@ class FieldLocationViewModel @Inject constructor(private val find: FindFieldLoca
                 try {
                     val point = find(query)
                     mutable.value = MapSearchState(result = point, error = point == null)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
                     mutable.value = MapSearchState(error = true)
                 }
             }

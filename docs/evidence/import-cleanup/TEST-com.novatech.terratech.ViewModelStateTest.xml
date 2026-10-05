@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.ViewModelStateTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-05T20:43:50.892Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.023">
+  <properties/>
+  <testcase name="invalidConfirmationSetsErrorAndFinishesLoading" classname="com.novatech.terratech.ViewModelStateTest" time="0.017"/>
+  <testcase name="repeatedTapOnlySendsOneRequest" classname="com.novatech.terratech.ViewModelStateTest" time="0.003"/>
+  <testcase name="successClearsPreviousErrorAndReturnsToLogin" classname="com.novatech.terratech.ViewModelStateTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

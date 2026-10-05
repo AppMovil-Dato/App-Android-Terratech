@@ -1,11 +1,38 @@
 package com.novatech.terratech
 
-import androidx.compose.ui.test.*
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.assert
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.click
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasScrollToIndexAction
+import androidx.compose.ui.test.hasStateDescription
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.height
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performTextReplacement
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.width
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import java.io.FileInputStream
 import java.util.UUID
-import org.junit.*
+import org.junit.Assume
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -17,8 +44,8 @@ class BackendJourneyTest {
     private fun scroll(node: SemanticsNodeInteraction) {
         try {
             node.performScrollTo()
-        } catch (e: AssertionError) {
-            if (!e.message.orEmpty().contains("no parent layout")) throw e
+        } catch (exception: AssertionError) {
+            if (!exception.message.orEmpty().contains("no parent layout")) throw exception
         }
     }
 
@@ -46,7 +73,7 @@ class BackendJourneyTest {
 
     private fun shell(command: String) {
         InstrumentationRegistry.getInstrumentation().uiAutomation.executeShellCommand(command).use {
-            java.io.FileInputStream(it.fileDescriptor).readBytes()
+            FileInputStream(it.fileDescriptor).readBytes()
         }
     }
 
@@ -131,9 +158,7 @@ class BackendJourneyTest {
         listOf(.25f to .25f, .70f to .25f, .70f to .65f, .25f to .65f).forEachIndexed {
             index,
             (x, y) ->
-            map.performTouchInput {
-                click(androidx.compose.ui.geometry.Offset(width * x, height * y))
-            }
+            map.performTouchInput { click(Offset(width * x, height * y)) }
             capture("map-tap-${index + 1}")
             compose.waitUntil(10000) {
                 compose

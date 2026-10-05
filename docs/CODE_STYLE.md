@@ -8,3 +8,5 @@
 - Compilar y ejecutar pruebas en Debug.
 
 La configuración de edición está en `.editorconfig`. Kotlin sigue el formato Kotlinlang de ktfmt; los scripts Python usan Black.
+
+Android usa imports explícitos y nombres descriptivos como `profileState`, `monitoringState` y `accountViewModel`. Ejecutar `python3 scripts/check-kotlin-style.py` para verificar estas reglas en código de aplicación y pruebas.

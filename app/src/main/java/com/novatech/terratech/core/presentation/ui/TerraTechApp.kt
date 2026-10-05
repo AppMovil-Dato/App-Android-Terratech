@@ -1,50 +1,55 @@
 package com.novatech.terratech.core.presentation.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.*
 import com.novatech.terratech.core.presentation.state.forUser
 import com.novatech.terratech.iam.presentation.ui.AccountScreen
 import com.novatech.terratech.iam.presentation.viewmodel.AccountViewModel
-import com.novatech.terratech.monitoring.presentation.ui.*
 import com.novatech.terratech.monitoring.presentation.viewmodel.MonitoringViewModel
 import com.novatech.terratech.profile.presentation.viewmodel.ProfileViewModel
 
 @Composable
 fun TerraTechApp(
-    account: AccountViewModel = viewModel(),
-    profile: ProfileViewModel = viewModel(),
-    monitoring: MonitoringViewModel = viewModel(),
+    accountViewModel: AccountViewModel = viewModel(),
+    profileViewModel: ProfileViewModel = viewModel(),
+    monitoringViewModel: MonitoringViewModel = viewModel(),
 ) {
-    val auth by account.state.collectAsStateWithLifecycle()
-    val p by profile.state.collectAsStateWithLifecycle()
-    val m by monitoring.state.collectAsStateWithLifecycle()
-    if (!auth.restored) {
+    val accountState by accountViewModel.state.collectAsStateWithLifecycle()
+    val profileState by profileViewModel.state.collectAsStateWithLifecycle()
+    val monitoringState by monitoringViewModel.state.collectAsStateWithLifecycle()
+    if (!accountState.restored) {
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             CircularProgressIndicator()
         }
         return
     }
-    val session = auth.session
+    val session = accountState.session
     if (session == null) {
-        AccountScreen(auth, account::login, account::register, account::clearMessage)
+        AccountScreen(
+            accountState,
+            accountViewModel::login,
+            accountViewModel::register,
+            accountViewModel::clearMessage,
+        )
         return
     }
     key(session.userId) {
         SignedInApp(
             session,
-            auth,
-            p.forUser(session.userId),
-            m.forUser(session.userId),
-            account,
-            profile,
-            monitoring,
+            accountState,
+            profileState.forUser(session.userId),
+            monitoringState.forUser(session.userId),
+            accountViewModel,
+            profileViewModel,
+            monitoringViewModel,
         )
     }
 }

@@ -8,8 +8,14 @@ import com.novatech.terratech.profile.application.usecase.ProfileActions
 import com.novatech.terratech.profile.presentation.state.ProfileState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class ProfileViewModel
@@ -60,10 +66,12 @@ constructor(private val actions: ProfileActions, private val account: AccountRep
                 mutable.update { it.copy(busy = true, error = null, saved = false) }
                 try {
                     block(user)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
-                    mutable.update { it.copy(error = (e as? Failure)?.code ?: "UNKNOWN_ERROR") }
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
+                    mutable.update {
+                        it.copy(error = (exception as? Failure)?.code ?: "UNKNOWN_ERROR")
+                    }
                 } finally {
                     mutable.update { it.copy(busy = false, checked = true) }
                 }

@@ -3,14 +3,25 @@ package com.novatech.terratech
 import androidx.lifecycle.ViewModelStore
 import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.monitoring.application.usecase.MonitoringActions
-import com.novatech.terratech.monitoring.domain.entity.*
 import com.novatech.terratech.monitoring.presentation.viewmodel.MonitoringViewModel
 import java.time.Instant
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.Assert.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.last
+import kotlinx.coroutines.flow.single
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runCurrent
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MonitoringStateTest {

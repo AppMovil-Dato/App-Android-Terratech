@@ -1,21 +1,38 @@
 package com.novatech.terratech.iam.presentation.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.novatech.terratech.R
-import com.novatech.terratech.core.presentation.component.*
-import com.novatech.terratech.iam.presentation.component.*
-import com.novatech.terratech.iam.presentation.state.*
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.core.presentation.component.BrandMark
+import com.novatech.terratech.core.presentation.component.FarmCard
+import com.novatech.terratech.core.presentation.component.Notice
+import com.novatech.terratech.core.presentation.component.PrimaryButton
+import com.novatech.terratech.iam.presentation.component.AccountField
+import com.novatech.terratech.iam.presentation.component.AccountPasswordField
+import com.novatech.terratech.iam.presentation.state.AccountFormErrors
+import com.novatech.terratech.iam.presentation.state.AccountState
+import com.novatech.terratech.ui.theme.Muted
 
 @Composable
 internal fun AccountContent(

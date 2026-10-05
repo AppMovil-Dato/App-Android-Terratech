@@ -1,81 +1,95 @@
 package com.novatech.terratech.core.presentation.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.iam.presentation.viewmodel.AccountViewModel
-import com.novatech.terratech.monitoring.presentation.ui.*
+import com.novatech.terratech.monitoring.presentation.state.MonitoringState
+import com.novatech.terratech.monitoring.presentation.ui.CreateFieldScreen
+import com.novatech.terratech.monitoring.presentation.ui.FieldsScreen
+import com.novatech.terratech.monitoring.presentation.ui.HistoryScreen
+import com.novatech.terratech.monitoring.presentation.ui.HomeScreen
+import com.novatech.terratech.monitoring.presentation.ui.ReadingDetailScreen
+import com.novatech.terratech.monitoring.presentation.ui.RegisterSensorScreen
+import com.novatech.terratech.monitoring.presentation.ui.SensorScreen
+import com.novatech.terratech.monitoring.presentation.ui.SensorsScreen
 import com.novatech.terratech.monitoring.presentation.viewmodel.FieldLocationViewModel
 import com.novatech.terratech.monitoring.presentation.viewmodel.MonitoringViewModel
+import com.novatech.terratech.profile.presentation.state.ProfileState
 import com.novatech.terratech.profile.presentation.ui.ProfileScreen
 import com.novatech.terratech.profile.presentation.viewmodel.ProfileViewModel
 
 @Composable
 internal fun TerraTechNavHost(
-    nav: NavHostController,
-    session: com.novatech.terratech.iam.domain.entity.Session,
-    p: com.novatech.terratech.profile.presentation.state.ProfileState,
-    m: com.novatech.terratech.monitoring.presentation.state.MonitoringState,
-    account: AccountViewModel,
-    profile: ProfileViewModel,
-    monitoring: MonitoringViewModel,
+    navController: NavHostController,
+    session: Session,
+    profileState: ProfileState,
+    monitoringState: MonitoringState,
+    accountViewModel: AccountViewModel,
+    profileViewModel: ProfileViewModel,
+    monitoringViewModel: MonitoringViewModel,
     fieldLocation: FieldLocationViewModel = viewModel(),
 ) {
-    NavHost(navController = nav, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "home") {
         composable("home") {
             HomeScreen(
-                p.profile?.fullName?.ifBlank { session.fullName } ?: session.fullName,
-                m,
-                p.profile != null,
-                { nav.navigate("fields") },
-                { nav.navigate("profile") },
-                { nav.navigate("history") },
-                { nav.navigate("sensor") },
-                onCreateField = { nav.navigate(if (p.profile != null) "new-field" else "profile") },
-                onConnectSensor = {
-                    if (m.selectedField != null) nav.navigate("register-sensor")
-                    else nav.navigate("fields")
+                profileState.profile?.fullName?.ifBlank { session.fullName } ?: session.fullName,
+                monitoringState,
+                profileState.profile != null,
+                { navController.navigate("fields") },
+                { navController.navigate("profile") },
+                { navController.navigate("history") },
+                { navController.navigate("sensor") },
+                onCreateField = {
+                    navController.navigate(
+                        if (profileState.profile != null) "new-field" else "profile"
+                    )
                 },
-                onSwitchSensor = { nav.navigate("sensors") },
+                onConnectSensor = {
+                    if (monitoringState.selectedField != null)
+                        navController.navigate("register-sensor")
+                    else navController.navigate("fields")
+                },
+                onSwitchSensor = { navController.navigate("sensors") },
             )
         }
         composable("fields") {
             FieldsScreen(
-                m,
-                p.profile != null,
+                monitoringState,
+                profileState.profile != null,
                 {
-                    monitoring.selectField(it)
-                    nav.navigate("sensors")
+                    monitoringViewModel.selectField(it)
+                    navController.navigate("sensors")
                 },
-                { nav.navigate("new-field") },
-                { nav.navigate("profile") },
+                { navController.navigate("new-field") },
+                { navController.navigate("profile") },
             )
         }
         composable("profile") {
             ProfileScreen(
-                p,
+                profileState,
                 session,
-                profile::save,
-                profile::refresh,
-                account::logout,
-                if (m.fields.isEmpty()) ({ nav.navigate("new-field") }) else null,
+                profileViewModel::save,
+                profileViewModel::refresh,
+                accountViewModel::logout,
+                if (monitoringState.fields.isEmpty()) ({ navController.navigate("new-field") })
+                else null,
             )
         }
         composable("new-field") {
             CreateFieldScreen(
-                m.busy,
+                monitoringState.busy,
                 location = fieldLocation,
                 onCancel = {
-                    nav.popBackStack()
-                    monitoring.clearMessage()
+                    navController.popBackStack()
+                    monitoringViewModel.clearMessage()
                 },
                 onSave = { draft ->
-                    p.profile?.let {
-                        monitoring.createField(
+                    profileState.profile?.let {
+                        monitoringViewModel.createField(
                             it.id,
                             draft.name.value,
                             draft.crop,
@@ -91,38 +105,40 @@ internal fun TerraTechNavHost(
         }
         composable("sensors") {
             SensorsScreen(
-                m,
+                monitoringState,
                 {
-                    monitoring.selectDevice(it)
-                    nav.navigate("sensor")
+                    monitoringViewModel.selectDevice(it)
+                    navController.navigate("sensor")
                 },
-                { nav.navigate("register-sensor") },
+                { navController.navigate("register-sensor") },
             )
         }
         composable("register-sensor") {
             RegisterSensorScreen(
-                m.busy,
-                monitoring::registerSensor,
-                m.selectedField?.name.orEmpty(),
-                m.error,
-                monitoring::clearMessage,
+                monitoringState.busy,
+                monitoringViewModel::registerSensor,
+                monitoringState.selectedField?.name.orEmpty(),
+                monitoringState.error,
+                monitoringViewModel::clearMessage,
             )
         }
-        composable("sensor") { SensorScreen(m) { nav.navigate("history") } }
+        composable("sensor") { SensorScreen(monitoringState) { navController.navigate("history") } }
         composable("history") {
             HistoryScreen(
-                m,
-                monitoring::days,
+                monitoringState,
+                monitoringViewModel::days,
                 { id ->
-                    nav.navigate("reading/$id")
-                    monitoring.detail(id)
+                    navController.navigate("reading/$id")
+                    monitoringViewModel.detail(id)
                 },
-                monitoring::refresh,
+                monitoringViewModel::refresh,
             )
         }
         composable("reading/{id}") { backStack ->
             ReadingDetailScreen(
-                m.readings.find { it.id == backStack.arguments?.getString("id")?.toIntOrNull() }
+                monitoringState.readings.find {
+                    it.id == backStack.arguments?.getString("id")?.toIntOrNull()
+                }
             )
         }
     }

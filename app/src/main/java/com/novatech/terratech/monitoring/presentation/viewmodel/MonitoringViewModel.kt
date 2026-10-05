@@ -5,12 +5,25 @@ import androidx.lifecycle.viewModelScope
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.domain.repository.AccountRepository
 import com.novatech.terratech.monitoring.application.usecase.MonitoringActions
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.time.Instant
 import javax.inject.Inject
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNot
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.none
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 
 @HiltViewModel
 class MonitoringViewModel
@@ -173,8 +186,7 @@ constructor(private val actions: MonitoringActions, private val account: Account
         soil: String,
         lat: Double,
         lon: Double,
-        boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> =
-            emptyList(),
+        boundary: List<Coordinates> = emptyList(),
     ) = request {
         readingsJob?.cancel()
         downloadJob?.cancel()
@@ -218,10 +230,10 @@ constructor(private val actions: MonitoringActions, private val account: Account
                 try {
                     block(user)
                     mutable.update { it.copy(offline = false) }
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
-                    val code = (e as? Failure)?.code ?: "UNKNOWN_ERROR"
+                } catch (exception: CancellationException) {
+                    throw exception
+                } catch (exception: Exception) {
+                    val code = (exception as? Failure)?.code ?: "UNKNOWN_ERROR"
                     mutable.update { it.copy(error = code, offline = code == "OFFLINE") }
                 } finally {
                     mutable.update { it.copy(busy = false) }

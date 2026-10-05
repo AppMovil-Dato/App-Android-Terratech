@@ -1,6 +1,8 @@
 package com.novatech.terratech.monitoring.infrastructure.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Upsert
 import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.ReadingRow

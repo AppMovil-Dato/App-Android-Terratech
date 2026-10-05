@@ -2,6 +2,7 @@ package com.novatech.terratech.core.infrastructure.di
 
 import android.content.Context
 import androidx.room.Room
+import com.novatech.terratech.core.infrastructure.local.FieldBoundaryMigration
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
 import dagger.Module
@@ -10,7 +11,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.SupervisorJob
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -19,7 +23,7 @@ object PersistenceModule {
     @Singleton
     fun database(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, TerraDatabase::class.java, "terratech.db")
-            .addMigrations(com.novatech.terratech.core.infrastructure.local.FieldBoundaryMigration)
+            .addMigrations(FieldBoundaryMigration)
             .build()
 
     @Provides @Singleton fun store(@ApplicationContext context: Context) = SessionStore(context)

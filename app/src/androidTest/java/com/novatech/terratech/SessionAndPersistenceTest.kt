@@ -5,13 +5,23 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
+import com.novatech.terratech.core.infrastructure.remote.TerraApi
 import com.novatech.terratech.iam.domain.entity.Session
+import com.novatech.terratech.iam.infrastructure.implementation.AccountRepositoryImpl
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
 import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldRow
+import java.io.File
 import java.time.Instant
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -54,7 +64,7 @@ class SessionAndPersistenceTest {
         assertEquals(session, store.load())
         assertEquals(5 to 7, store.selection(91).first())
         assertEquals(null to null, store.selection(92).first())
-        val file = java.io.File(context.filesDir, "datastore/session.preferences_pb")
+        val file = File(context.filesDir, "datastore/session.preferences_pb")
         assertFalse(file.readBytes().toString(Charsets.ISO_8859_1).contains(session.token))
         store.clear()
         assertNull(store.load())
@@ -85,18 +95,9 @@ class SessionAndPersistenceTest {
                 .baseUrl(server.url("/"))
                 .addConverterFactory(retrofit2.converter.gson.GsonConverterFactory.create())
                 .build()
-                .create(com.novatech.terratech.core.infrastructure.remote.TerraApi::class.java)
-        val scope =
-            kotlinx.coroutines.CoroutineScope(
-                kotlinx.coroutines.SupervisorJob() + kotlinx.coroutines.Dispatchers.IO
-            )
-        val repo =
-            com.novatech.terratech.iam.infrastructure.implementation.AccountRepositoryImpl(
-                api,
-                store,
-                db,
-                scope,
-            )
+                .create(TerraApi::class.java)
+        val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+        val repo = AccountRepositoryImpl(api, store, db, scope)
         try {
             repo.restored.first { it }
             fun response(id: Int) =
@@ -113,7 +114,7 @@ class SessionAndPersistenceTest {
             assertTrue(db.dao().fields(91).first().isEmpty())
             assertEquals(92, repo.session.value!!.userId)
         } finally {
-            scope.coroutineContext[kotlinx.coroutines.Job]?.cancel()
+            scope.coroutineContext[Job]?.cancel()
             store.clear()
             db.close()
             server.shutdown()

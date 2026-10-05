@@ -1,0 +1,21 @@
+{
+  "validatedAtUtc": "2026-10-05T20:45:25.539100+00:00",
+  "variant": "Debug",
+  "unit": {
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "instrumented": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lintPassed": true,
+  "kotlinFilesChecked": 152,
+  "wildcardImports": 0,
+  "qualifiedNamesOutsideImports": 0,
+  "modularityPassed": true
+}

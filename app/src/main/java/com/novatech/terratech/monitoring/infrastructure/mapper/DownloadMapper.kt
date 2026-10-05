@@ -1,6 +1,6 @@
 package com.novatech.terratech.monitoring.infrastructure.mapper
 
-import com.novatech.terratech.monitoring.domain.entity.*
+import com.novatech.terratech.monitoring.domain.entity.DownloadState
 import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
 import java.time.Instant
 

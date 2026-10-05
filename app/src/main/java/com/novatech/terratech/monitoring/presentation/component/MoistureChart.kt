@@ -1,20 +1,24 @@
 package com.novatech.terratech.monitoring.presentation.component
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.*
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.novatech.terratech.R
-import com.novatech.terratech.core.presentation.ui.*
 import com.novatech.terratech.monitoring.domain.entity.Reading
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.ui.theme.Amber
+import com.novatech.terratech.ui.theme.FarmGreen
 
 @Composable
 fun MoistureChart(rows: List<Reading>, minimum: Double?) {
@@ -40,17 +44,19 @@ fun MoistureChart(rows: List<Reading>, minimum: Double?) {
         if (rows.isNotEmpty()) {
             val first = rows.first().recordedAt.toEpochMilli()
             val range = (rows.last().recordedAt.toEpochMilli() - first).coerceAtLeast(1)
-            fun point(r: Reading) =
+            fun point(reading: Reading) =
                 Offset(
                     left +
                         width *
-                            ((r.recordedAt.toEpochMilli() - first).toDouble() / range).toFloat(),
-                    height * (1 - r.moisturePercent.coerceIn(0.0, 100.0).toFloat() / 100),
+                            ((reading.recordedAt.toEpochMilli() - first).toDouble() / range)
+                                .toFloat(),
+                    height * (1 - reading.moisturePercent.coerceIn(0.0, 100.0).toFloat() / 100),
                 )
             val path = Path()
-            rows.forEachIndexed { i, r ->
-                val p = point(r)
-                if (i == 0) path.moveTo(p.x, p.y) else path.lineTo(p.x, p.y)
+            rows.forEachIndexed { i, reading ->
+                val position = point(reading)
+                if (i == 0) path.moveTo(position.x, position.y)
+                else path.lineTo(position.x, position.y)
             }
             val fill =
                 Path().apply {

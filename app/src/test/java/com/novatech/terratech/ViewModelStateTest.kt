@@ -2,10 +2,20 @@ package com.novatech.terratech
 
 import com.novatech.terratech.iam.application.usecase.AccountActions
 import com.novatech.terratech.iam.presentation.viewmodel.AccountViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import org.junit.*
-import org.junit.Assert.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Before
+import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ViewModelStateTest {

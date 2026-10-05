@@ -1,5 +1,7 @@
 package com.novatech.terratech.monitoring.domain.entity
 
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
+
 data class Field(
     val id: Int,
     val profileId: Int,
@@ -9,6 +11,5 @@ data class Field(
     val latitude: Double,
     val longitude: Double,
     val cropName: String?,
-    val boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> =
-        emptyList(),
+    val boundary: List<Coordinates> = emptyList(),
 )

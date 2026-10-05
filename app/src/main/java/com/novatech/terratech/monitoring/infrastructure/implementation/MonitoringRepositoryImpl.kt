@@ -4,11 +4,17 @@ import androidx.room.withTransaction
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.core.infrastructure.remote.apiCall
+import com.novatech.terratech.iam.infrastructure.local.SessionStore
+import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
-import com.novatech.terratech.monitoring.infrastructure.mapper.*
+import com.novatech.terratech.monitoring.infrastructure.mapper.domain
+import com.novatech.terratech.monitoring.infrastructure.mapper.row
 import com.novatech.terratech.monitoring.infrastructure.remote.MonitoringApi
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.CreateFieldDto
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldVertexDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.RegisterSensorDto
 import java.time.Instant
 import kotlinx.coroutines.flow.map
@@ -16,7 +22,7 @@ import kotlinx.coroutines.flow.map
 class MonitoringRepositoryImpl(
     private val api: MonitoringApi,
     private val db: TerraDatabase,
-    private val store: com.novatech.terratech.iam.infrastructure.local.SessionStore,
+    private val store: SessionStore,
 ) : MonitoringRepository {
     private val dao = db.dao()
 
@@ -63,8 +69,8 @@ class MonitoringRepositoryImpl(
         soil: String,
         latitude: Double,
         longitude: Double,
-        boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates>,
-    ): com.novatech.terratech.monitoring.domain.entity.Field {
+        boundary: List<Coordinates>,
+    ): Field {
         val row =
             apiCall {
                     api.createField(
@@ -76,10 +82,7 @@ class MonitoringRepositoryImpl(
                             latitude,
                             longitude,
                             crop,
-                            boundary.map {
-                                com.novatech.terratech.monitoring.infrastructure.remote.dto
-                                    .FieldVertexDto(it.latitude, it.longitude)
-                            },
+                            boundary.map { FieldVertexDto(it.latitude, it.longitude) },
                         )
                     )
                 }
@@ -88,12 +91,7 @@ class MonitoringRepositoryImpl(
         return row.domain()
     }
 
-    override suspend fun registerSensor(
-        user: Int,
-        field: Int,
-        code: String,
-        name: String,
-    ): com.novatech.terratech.monitoring.domain.entity.Sensor {
+    override suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor {
         val row = apiCall { api.registerSensor(RegisterSensorDto(code, field, name)) }.row(user)
         dao.putSensors(listOf(row))
         return row.domain()
@@ -103,8 +101,9 @@ class MonitoringRepositoryImpl(
         val latest =
             try {
                 apiCall { api.latest(device) }.reading
-            } catch (e: Failure) {
-                if (e.code == "NO_READINGS" && e.status == 404) null else throw e
+            } catch (exception: Failure) {
+                if (exception.code == "NO_READINGS" && exception.status == 404) null
+                else throw exception
             }
         val history = apiCall { api.history(device, days) }
         val rows =

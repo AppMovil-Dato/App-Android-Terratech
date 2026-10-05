@@ -1,8 +1,13 @@
 package com.novatech.terratech.monitoring.application.usecase
 
 import com.novatech.terratech.core.domain.Failure
+import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
-import com.novatech.terratech.monitoring.domain.valueobject.*
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
+import com.novatech.terratech.monitoring.domain.valueobject.FieldDraft
+import com.novatech.terratech.monitoring.domain.valueobject.FieldName
+import com.novatech.terratech.monitoring.domain.valueobject.SensorCode
 
 class MonitoringActions(private val repository: MonitoringRepository) {
     fun selection(user: Int) = repository.selection(user)
@@ -40,9 +45,8 @@ class MonitoringActions(private val repository: MonitoringRepository) {
         soil: String,
         latitude: Double,
         longitude: Double,
-        boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> =
-            emptyList(),
-    ): com.novatech.terratech.monitoring.domain.entity.Field {
+        boundary: List<Coordinates> = emptyList(),
+    ): Field {
         val draft = FieldDraft.of(name, crop, hectares, soil, latitude, longitude, boundary)
         return repository.createField(
             user,
@@ -57,12 +61,7 @@ class MonitoringActions(private val repository: MonitoringRepository) {
         )
     }
 
-    suspend fun registerSensor(
-        user: Int,
-        field: Int,
-        code: String,
-        name: String,
-    ): com.novatech.terratech.monitoring.domain.entity.Sensor {
+    suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor {
         val sensorName = FieldName.of(name)
         return repository.registerSensor(user, field, SensorCode.of(code).value, sensorName.value)
     }

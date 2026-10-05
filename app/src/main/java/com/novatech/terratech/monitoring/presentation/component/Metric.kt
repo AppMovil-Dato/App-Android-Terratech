@@ -1,14 +1,11 @@
 package com.novatech.terratech.monitoring.presentation.component
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.semantics.*
 import com.novatech.terratech.core.presentation.component.FarmCard
-import com.novatech.terratech.core.presentation.ui.*
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.ui.theme.Muted
 
 @Composable
 internal fun Metric(label: String, value: String, modifier: Modifier) {

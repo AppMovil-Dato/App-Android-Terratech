@@ -5,7 +5,9 @@ import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.profile.domain.entity.FarmProfile
 import com.novatech.terratech.profile.presentation.state.ProfileState
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class UiOwnershipTest {

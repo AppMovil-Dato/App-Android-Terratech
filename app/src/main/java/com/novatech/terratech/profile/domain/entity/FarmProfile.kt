@@ -1,4 +1,5 @@
 package com.novatech.terratech.profile.domain.entity
+
 data class FarmProfile(
     val id: Int,
     val userId: Int,

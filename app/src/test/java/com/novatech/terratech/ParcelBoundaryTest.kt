@@ -4,7 +4,8 @@ import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.domain.valueobject.FieldDraft
 import com.novatech.terratech.monitoring.domain.valueobject.ParcelBoundary
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class ParcelBoundaryTest {

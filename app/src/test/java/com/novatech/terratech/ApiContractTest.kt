@@ -1,15 +1,20 @@
 package com.novatech.terratech
 
+import com.google.gson.JsonParser
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.core.infrastructure.remote.TerraApi
 import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.iam.infrastructure.remote.dto.RegisterDto
-import com.novatech.terratech.monitoring.infrastructure.mapper.*
+import com.novatech.terratech.monitoring.infrastructure.mapper.domain
+import com.novatech.terratech.monitoring.infrastructure.mapper.row
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldDto
+import java.io.IOException
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -42,7 +47,7 @@ class ApiContractTest {
             api.register(RegisterDto("Ana", "a@example.com", " secret ", " secret "))
             val req = s.takeRequest()
             assertEquals("/api/v1/authentication/sign-up", req.path)
-            val json = com.google.gson.JsonParser.parseString(req.body.readUtf8()).asJsonObject
+            val json = JsonParser.parseString(req.body.readUtf8()).asJsonObject
             assertEquals(" secret ", json["confirmPassword"].asString)
         }
     }
@@ -70,9 +75,9 @@ class ApiContractTest {
                 try {
                     apiCall { api.latest(1) }
                     fail()
-                } catch (e: Failure) {
-                    assertEquals(status, e.status)
-                    assertEquals(code, e.code)
+                } catch (exception: Failure) {
+                    assertEquals(status, exception.status)
+                    assertEquals(code, exception.code)
                 }
             }
         }
@@ -99,20 +104,20 @@ class ApiContractTest {
     @Test
     fun noInternetIsNotAnEmptyCollection() = runTest {
         try {
-            apiCall<List<FieldDto>> { throw java.io.IOException("network") }
+            apiCall<List<FieldDto>> { throw IOException("network") }
             fail()
-        } catch (e: Failure) {
-            assertEquals("OFFLINE", e.code)
+        } catch (exception: Failure) {
+            assertEquals("OFFLINE", exception.code)
         }
     }
 
     @Test
     fun expiredSessionIsNotMislabelledOffline() = runTest {
         try {
-            apiCall<Unit> { throw java.io.IOException("SESSION_EXPIRED") }
+            apiCall<Unit> { throw IOException("SESSION_EXPIRED") }
             fail()
-        } catch (e: Failure) {
-            assertEquals("UNAUTHENTICATED", e.code)
+        } catch (exception: Failure) {
+            assertEquals("UNAUTHENTICATED", exception.code)
         }
     }
 }

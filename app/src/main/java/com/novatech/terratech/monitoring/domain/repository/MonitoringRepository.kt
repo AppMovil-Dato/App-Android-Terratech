@@ -1,6 +1,10 @@
 package com.novatech.terratech.monitoring.domain.repository
 
-import com.novatech.terratech.monitoring.domain.entity.*
+import com.novatech.terratech.monitoring.domain.entity.DownloadState
+import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.Sensor
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import kotlinx.coroutines.flow.Flow
 
 interface MonitoringRepository {
@@ -29,8 +33,7 @@ interface MonitoringRepository {
         soil: String,
         latitude: Double,
         longitude: Double,
-        boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> =
-            emptyList(),
+        boundary: List<Coordinates> = emptyList(),
     ): Field
 
     suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor

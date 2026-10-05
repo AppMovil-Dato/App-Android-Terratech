@@ -7,7 +7,11 @@ import com.novatech.terratech.monitoring.infrastructure.remote.dto.LatestDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.ReadingDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.RegisterSensorDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.SensorDto
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface MonitoringApi {
     @GET("api/v1/fields") suspend fun fields(): List<FieldDto>

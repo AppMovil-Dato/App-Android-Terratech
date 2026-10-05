@@ -1,7 +1,11 @@
 package com.novatech.terratech.monitoring.domain.valueobject
 
 import com.novatech.terratech.core.domain.Failure
-import kotlin.math.*
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sin
 
 data class ParcelBoundary private constructor(val points: List<Coordinates>) {
     val areaM2: Double
@@ -52,35 +56,55 @@ data class ParcelBoundary private constructor(val points: List<Coordinates>) {
         private fun area(points: List<Coordinates>): Double {
             var sum = 0.0
             for (i in points.indices) {
-                val a = points[i]
-                val b = points[(i + 1) % points.size]
-                var delta = Math.toRadians(b.longitude - a.longitude)
+                val currentPoint = points[i]
+                val nextPoint = points[(i + 1) % points.size]
+                var delta = Math.toRadians(nextPoint.longitude - currentPoint.longitude)
                 if (delta > PI) delta -= 2 * PI
                 if (delta < -PI) delta += 2 * PI
                 sum +=
-                    delta * (2 + sin(Math.toRadians(a.latitude)) + sin(Math.toRadians(b.latitude)))
+                    delta *
+                        (2 +
+                            sin(Math.toRadians(currentPoint.latitude)) +
+                            sin(Math.toRadians(nextPoint.latitude)))
             }
             return abs(sum * 6371009.0 * 6371009.0 / 2)
         }
 
         private fun intersects(
-            a: Coordinates,
-            b: Coordinates,
-            c: Coordinates,
-            d: Coordinates,
+            firstStart: Coordinates,
+            firstEnd: Coordinates,
+            secondStart: Coordinates,
+            secondEnd: Coordinates,
         ): Boolean {
-            fun cross(p: Coordinates, q: Coordinates, r: Coordinates) =
-                (q.longitude - p.longitude) * (r.latitude - p.latitude) -
-                    (q.latitude - p.latitude) * (r.longitude - p.longitude)
-            fun on(p: Coordinates, q: Coordinates, r: Coordinates) =
-                abs(cross(p, q, r)) < 1e-12 &&
-                    r.latitude in min(p.latitude, q.latitude)..max(p.latitude, q.latitude) &&
-                    r.longitude in min(p.longitude, q.longitude)..max(p.longitude, q.longitude)
-            return cross(a, b, c) * cross(a, b, d) < 0 && cross(c, d, a) * cross(c, d, b) < 0 ||
-                on(a, b, c) ||
-                on(a, b, d) ||
-                on(c, d, a) ||
-                on(c, d, b)
+            fun signedArea(segmentStart: Coordinates, segmentEnd: Coordinates, point: Coordinates) =
+                (segmentEnd.longitude - segmentStart.longitude) *
+                    (point.latitude - segmentStart.latitude) -
+                    (segmentEnd.latitude - segmentStart.latitude) *
+                        (point.longitude - segmentStart.longitude)
+            fun isOnSegment(
+                segmentStart: Coordinates,
+                segmentEnd: Coordinates,
+                point: Coordinates,
+            ) =
+                abs(signedArea(segmentStart, segmentEnd, point)) < 1e-12 &&
+                    point.latitude in
+                        min(segmentStart.latitude, segmentEnd.latitude)..max(
+                                segmentStart.latitude,
+                                segmentEnd.latitude,
+                            ) &&
+                    point.longitude in
+                        min(segmentStart.longitude, segmentEnd.longitude)..max(
+                                segmentStart.longitude,
+                                segmentEnd.longitude,
+                            )
+            return signedArea(firstStart, firstEnd, secondStart) *
+                signedArea(firstStart, firstEnd, secondEnd) < 0 &&
+                signedArea(secondStart, secondEnd, firstStart) *
+                    signedArea(secondStart, secondEnd, firstEnd) < 0 ||
+                isOnSegment(firstStart, firstEnd, secondStart) ||
+                isOnSegment(firstStart, firstEnd, secondEnd) ||
+                isOnSegment(secondStart, secondEnd, firstStart) ||
+                isOnSegment(secondStart, secondEnd, firstEnd)
         }
     }
 }

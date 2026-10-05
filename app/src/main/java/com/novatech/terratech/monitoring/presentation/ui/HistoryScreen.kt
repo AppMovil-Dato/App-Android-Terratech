@@ -1,14 +1,24 @@
 package com.novatech.terratech.monitoring.presentation.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.*
+import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.unit.dp
 import com.novatech.terratech.R
 import com.novatech.terratech.core.presentation.component.EmptyCard
@@ -17,10 +27,10 @@ import com.novatech.terratech.core.presentation.component.PageTitle
 import com.novatech.terratech.core.presentation.component.Pill
 import com.novatech.terratech.core.presentation.format.number
 import com.novatech.terratech.core.presentation.format.timestamp
-import com.novatech.terratech.core.presentation.ui.*
 import com.novatech.terratech.monitoring.presentation.component.MoistureChart
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.ui.theme.FarmGreen
+import com.novatech.terratech.ui.theme.Muted
 
 @Composable
 fun HistoryScreen(

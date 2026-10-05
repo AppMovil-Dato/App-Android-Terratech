@@ -4,7 +4,8 @@ import com.novatech.terratech.monitoring.application.usecase.FindFieldLocation
 import com.novatech.terratech.monitoring.domain.repository.LocationSearch
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class FindFieldLocationTest {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.ApiContractTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-10-05T20:43:50.350Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.385">
+  <properties/>
+  <testcase name="registrationIncludesExactConfirmation" classname="com.novatech.terratech.ApiContractTest" time="0.339"/>
+  <testcase name="problemDetailsPreservesConflictAndNoDataCodes" classname="com.novatech.terratech.ApiContractTest" time="0.02"/>
+  <testcase name="noInternetIsNotAnEmptyCollection" classname="com.novatech.terratech.ApiContractTest" time="0.002"/>
+  <testcase name="historyAndDetailShareUnitsAndIdentity" classname="com.novatech.terratech.ApiContractTest" time="0.014"/>
+  <testcase name="sensorSelectionUsesFieldRoute" classname="com.novatech.terratech.ApiContractTest" time="0.007"/>
+  <testcase name="expiredSessionIsNotMislabelledOffline" classname="com.novatech.terratech.ApiContractTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,9 +1,17 @@
 package com.novatech.terratech.monitoring.presentation.component
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toString
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -17,11 +25,20 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
-import com.google.maps.android.compose.*
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.Polygon
+import com.google.maps.android.compose.Polyline
+import com.google.maps.android.compose.rememberCameraPositionState
+import com.google.maps.android.compose.rememberUpdatedMarkerState
 import com.novatech.terratech.BuildConfig
 import com.novatech.terratech.R
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.ui.theme.FarmGreen
+import kotlinx.coroutines.delay
 
 @Composable
 fun FieldMapView(
@@ -44,7 +61,7 @@ fun FieldMapView(
     var unavailable by remember { mutableStateOf(false) }
     LaunchedEffect(loaded) {
         if (!loaded) {
-            kotlinx.coroutines.delay(15000)
+            delay(15000)
             unavailable = true
         }
     }

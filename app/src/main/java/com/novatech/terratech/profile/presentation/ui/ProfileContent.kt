@@ -1,12 +1,23 @@
 package com.novatech.terratech.profile.presentation.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.toString
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,11 +29,12 @@ import com.novatech.terratech.core.presentation.component.PageTitle
 import com.novatech.terratech.core.presentation.component.Pill
 import com.novatech.terratech.core.presentation.component.PrimaryButton
 import com.novatech.terratech.core.presentation.format.areaNumber
-import com.novatech.terratech.core.presentation.ui.*
 import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.profile.presentation.component.ProfileForm
 import com.novatech.terratech.profile.presentation.state.ProfileState
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.ui.theme.FarmGreen
+import com.novatech.terratech.ui.theme.LeafLight
+import com.novatech.terratech.ui.theme.Muted
 
 @Composable
 internal fun ProfileContent(

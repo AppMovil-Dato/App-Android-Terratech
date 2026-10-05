@@ -1,10 +1,9 @@
 package com.novatech.terratech.core.presentation.component
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.ui.theme.Muted
 
 @Composable
 fun EmptyCard(title: String, body: String? = null, action: (@Composable () -> Unit)? = null) {

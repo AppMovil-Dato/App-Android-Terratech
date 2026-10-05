@@ -2,12 +2,18 @@ package com.novatech.terratech
 
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.domain.entity.Session
-import com.novatech.terratech.iam.domain.valueobject.*
+import com.novatech.terratech.iam.domain.valueobject.Email
+import com.novatech.terratech.iam.domain.valueobject.Password
 import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.domain.valueobject.SensorCode
 import com.novatech.terratech.profile.domain.valueobject.AreaM2
+import com.novatech.terratech.profile.domain.valueobject.FarmDetails
 import java.time.Instant
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Test
 
 class DomainRulesTest {
@@ -19,8 +25,8 @@ class DomainRulesTest {
         try {
             block()
             fail("Expected validation failure")
-        } catch (e: Failure) {
-            assertEquals(code, e.code)
+        } catch (exception: Failure) {
+            assertEquals(code, exception.code)
         }
     }
 
@@ -92,40 +98,16 @@ class DomainRulesTest {
 
     @Test
     fun coordinatesRejectInvalidOrNonFiniteValues() {
-        invalid("INVALID_COORDINATES") {
-            com.novatech.terratech.monitoring.domain.valueobject.Coordinates.of(91.0, 0.0)
-        }
-        invalid("INVALID_COORDINATES") {
-            com.novatech.terratech.monitoring.domain.valueobject.Coordinates.of(0.0, Double.NaN)
-        }
-        assertEquals(
-            -77.0,
-            com.novatech.terratech.monitoring.domain.valueobject.Coordinates.of(-12.0, -77.0)
-                .longitude,
-            0.0,
-        )
+        invalid("INVALID_COORDINATES") { Coordinates.of(91.0, 0.0) }
+        invalid("INVALID_COORDINATES") { Coordinates.of(0.0, Double.NaN) }
+        assertEquals(-77.0, Coordinates.of(-12.0, -77.0).longitude, 0.0)
     }
 
     @Test
     fun profileValidationLivesInDomainAndPreservesTerrainUnits() {
-        val details =
-            com.novatech.terratech.profile.domain.valueobject.FarmDetails.of(
-                " Ana ",
-                " Farm ",
-                "999",
-                "Lima",
-                2.25,
-            )
+        val details = FarmDetails.of(" Ana ", " Farm ", "999", "Lima", 2.25)
         assertEquals("Ana", details.name.value)
         assertEquals(22500.0, details.area.value, 0.0)
-        invalid("REQUIRED_FIELDS") {
-            com.novatech.terratech.profile.domain.valueobject.FarmDetails.of(
-                "Ana",
-                "Farm",
-                "999",
-                "",
-                2.25,
-            )
-        }
+        invalid("REQUIRED_FIELDS") { FarmDetails.of("Ana", "Farm", "999", "", 2.25) }
     }
 }

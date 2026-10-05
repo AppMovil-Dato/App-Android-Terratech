@@ -4,7 +4,8 @@ import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.profile.domain.repository.ProfileRepository
-import com.novatech.terratech.profile.infrastructure.mapper.*
+import com.novatech.terratech.profile.infrastructure.mapper.domain
+import com.novatech.terratech.profile.infrastructure.mapper.row
 import com.novatech.terratech.profile.infrastructure.remote.ProfileApi
 import com.novatech.terratech.profile.infrastructure.remote.dto.SaveProfileDto
 import kotlinx.coroutines.flow.map
@@ -16,8 +17,8 @@ class ProfileRepositoryImpl(private val api: ProfileApi, private val db: TerraDa
     override suspend fun refresh(userId: Int) {
         try {
             db.dao().putProfile(apiCall { api.profile() }.row(userId))
-        } catch (e: Failure) {
-            if (e.status != 404 || e.code != "PROFILE_NOT_FOUND") throw e
+        } catch (exception: Failure) {
+            if (exception.status != 404 || exception.code != "PROFILE_NOT_FOUND") throw exception
         }
     }
 

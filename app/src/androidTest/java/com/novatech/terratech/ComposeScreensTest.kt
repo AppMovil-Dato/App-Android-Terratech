@@ -1,23 +1,41 @@
 package com.novatech.terratech
 
+import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.test.*
+import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasClickAction
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.accessibility.enableAccessibilityChecks
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onLast
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollTo
+import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.unit.Density
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.novatech.terratech.iam.presentation.state.AccountState
 import com.novatech.terratech.iam.presentation.ui.AccountScreen
+import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
-import com.novatech.terratech.monitoring.presentation.ui.*
+import com.novatech.terratech.monitoring.presentation.ui.FieldsScreen
+import com.novatech.terratech.monitoring.presentation.ui.HistoryScreen
+import com.novatech.terratech.monitoring.presentation.ui.SensorScreen
 import com.novatech.terratech.ui.theme.TerraTechTheme
+import java.time.Instant
 import java.util.Locale
-import org.junit.*
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -63,10 +81,7 @@ class ComposeScreensTest {
 
     @Test
     fun spanishResourcesAreRendered() {
-        val original =
-            androidx.test.core.app.ApplicationProvider.getApplicationContext<
-                android.content.Context
-            >()
+        val original = ApplicationProvider.getApplicationContext<Context>()
         val config =
             Configuration(original.resources.configuration).apply { setLocale(Locale("es", "PE")) }
         val localized = original.createConfigurationContext(config)
@@ -92,18 +107,7 @@ class ComposeScreensTest {
                     FieldsScreen(
                         MonitoringState(
                             fields =
-                                listOf(
-                                    com.novatech.terratech.monitoring.domain.entity.Field(
-                                        1,
-                                        1,
-                                        "North",
-                                        5000.0,
-                                        "Loam",
-                                        -12.0,
-                                        -77.0,
-                                        "Potato",
-                                    )
-                                )
+                                listOf(Field(1, 1, "North", 5000.0, "Loam", -12.0, -77.0, "Potato"))
                         ),
                         true,
                         { selection = it },
@@ -119,18 +123,7 @@ class ComposeScreensTest {
 
     @Test
     fun sensorDoesNotInventThresholdWithoutDownloadedReference() {
-        val reading =
-            com.novatech.terratech.monitoring.domain.entity.Reading(
-                1,
-                2,
-                java.time.Instant.now(),
-                28.0,
-                23.0,
-                35.0,
-                18.0,
-                60.0,
-                "SIMULATED",
-            )
+        val reading = Reading(1, 2, Instant.now(), 28.0, 23.0, 35.0, 18.0, 60.0, "SIMULATED")
         compose.setContent {
             TerraTechTheme { SensorScreen(MonitoringState(readings = listOf(reading)), {}) }
         }

@@ -1,15 +1,18 @@
 package com.novatech.terratech
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import com.google.gson.JsonParser
 import com.novatech.terratech.core.infrastructure.local.FieldBoundaryMigration
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert.*
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 
@@ -26,33 +29,25 @@ class FieldBoundaryMigrationTest {
                 .assets
                 .open("com.novatech.terratech.core.infrastructure.local.TerraDatabase/1.json")
                 .bufferedReader()
-                .use {
-                    com.google.gson.JsonParser.parseReader(it)
-                        .asJsonObject
-                        .getAsJsonObject("database")
-                }
+                .use { JsonParser.parseReader(it).asJsonObject.getAsJsonObject("database") }
         context.getDatabasePath(name).parentFile!!.mkdirs()
-        android.database.sqlite.SQLiteDatabase.openOrCreateDatabase(
-                context.getDatabasePath(name),
-                null,
-            )
-            .use { old ->
-                schema.getAsJsonArray("entities").forEach { element ->
-                    val entity = element.asJsonObject
-                    val table = entity["tableName"].asString
-                    old.execSQL(entity["createSql"].asString.replace("\${TABLE_NAME}", table))
-                    entity.getAsJsonArray("indices")?.forEach {
-                        old.execSQL(
-                            it.asJsonObject["createSql"].asString.replace("\${TABLE_NAME}", table)
-                        )
-                    }
+        SQLiteDatabase.openOrCreateDatabase(context.getDatabasePath(name), null).use { old ->
+            schema.getAsJsonArray("entities").forEach { element ->
+                val entity = element.asJsonObject
+                val table = entity["tableName"].asString
+                old.execSQL(entity["createSql"].asString.replace("\${TABLE_NAME}", table))
+                entity.getAsJsonArray("indices")?.forEach {
+                    old.execSQL(
+                        it.asJsonObject["createSql"].asString.replace("\${TABLE_NAME}", table)
+                    )
                 }
-                schema.getAsJsonArray("setupQueries").forEach { old.execSQL(it.asString) }
-                old.execSQL(
-                    "INSERT INTO fields (userId,id,profileId,name,sizeM2,soilType,latitude,longitude,cropName) VALUES (91,5,2,'North',10000,'Loam',-12,-77,'Potato')"
-                )
-                old.version = 1
             }
+            schema.getAsJsonArray("setupQueries").forEach { old.execSQL(it.asString) }
+            old.execSQL(
+                "INSERT INTO fields (userId,id,profileId,name,sizeM2,soilType,latitude,longitude,cropName) VALUES (91,5,2,'North',10000,'Loam',-12,-77,'Potato')"
+            )
+            old.version = 1
+        }
         val db =
             Room.databaseBuilder(context, TerraDatabase::class.java, name)
                 .addMigrations(FieldBoundaryMigration)

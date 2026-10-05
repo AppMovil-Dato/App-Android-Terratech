@@ -1,19 +1,21 @@
 package com.novatech.terratech.core.presentation.ui
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.*
 import com.novatech.terratech.R
-import com.novatech.terratech.monitoring.presentation.ui.*
 
 @Composable
 internal fun TerraTechBottomBar(route: String, onNavigate: (String) -> Unit) {
-    NavigationBar(containerColor = androidx.compose.ui.graphics.Color.White) {
+    NavigationBar(containerColor = Color.White) {
         listOf("home" to R.string.home, "fields" to R.string.fields, "profile" to R.string.profile)
             .forEach { (destination, label) ->
                 NavigationBarItem(

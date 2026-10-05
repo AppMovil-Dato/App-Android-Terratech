@@ -10,3 +10,6 @@
 - Cada componente Compose de nivel superior debe tener un archivo propio; separar estado de pantalla, contenido y componentes reutilizables.
 - DTOs, entidades y DAOs pertenecen a la infraestructura de su contexto. No agrupar tipos o pantallas en archivos contenedores.
 - Ejecutar `python3 scripts/check-modularity.py` al modificar la organización del código.
+
+- Usar imports explícitos; no escribir nombres de paquetes dentro de firmas o cuerpos ni usar imports con comodines.
+- Usar nombres descriptivos para estados, parámetros y variables. Ejecutar `python3 scripts/check-kotlin-style.py` después de editar Kotlin.

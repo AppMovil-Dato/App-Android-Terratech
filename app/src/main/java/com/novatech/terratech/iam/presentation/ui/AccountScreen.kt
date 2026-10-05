@@ -1,13 +1,13 @@
 package com.novatech.terratech.iam.presentation.ui
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.text.input.*
-import com.novatech.terratech.core.presentation.ui.*
+import androidx.compose.runtime.setValue
 import com.novatech.terratech.iam.presentation.state.AccountState
-import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun AccountScreen(

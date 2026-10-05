@@ -1,12 +1,13 @@
 package com.novatech.terratech.monitoring.domain.valueobject
 
 import com.novatech.terratech.core.domain.Failure
+import java.util.Locale
 
 @JvmInline
 value class SensorCode private constructor(val value: String) {
     companion object {
         fun of(value: String): SensorCode {
-            val code = value.trim().uppercase(java.util.Locale.ROOT)
+            val code = value.trim().uppercase(Locale.ROOT)
             if (!Regex("TT-[A-Z0-9]{6}").matches(code)) throw Failure("INVALID_SENSOR_CODE")
             return SensorCode(code)
         }

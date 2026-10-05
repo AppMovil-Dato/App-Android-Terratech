@@ -1,6 +1,8 @@
 package com.novatech.terratech.profile.infrastructure.local.dao
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Query
+import androidx.room.Upsert
 import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
 import kotlinx.coroutines.flow.Flow
 

@@ -3,7 +3,6 @@ package com.novatech.terratech
 import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.iam.domain.repository.AccountRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import org.junit.Assert.*
 
 class FakeAccountRepository : AccountRepository {
     override val session = MutableStateFlow<Session?>(null)

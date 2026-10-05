@@ -1,6 +1,6 @@
 package com.novatech.terratech.monitoring.infrastructure.mapper
 
-import com.novatech.terratech.monitoring.domain.entity.*
+import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.infrastructure.local.entity.SensorRow
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.SensorDto
 

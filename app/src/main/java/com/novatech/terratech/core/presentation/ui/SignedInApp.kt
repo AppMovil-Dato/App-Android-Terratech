@@ -1,69 +1,89 @@
 package com.novatech.terratech.core.presentation.ui
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.outlined.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.*
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.novatech.terratech.R
 import com.novatech.terratech.core.presentation.component.Notice
+import com.novatech.terratech.core.presentation.component.TerraTechToolbar
+import com.novatech.terratech.iam.domain.entity.Session
+import com.novatech.terratech.iam.presentation.state.AccountState
 import com.novatech.terratech.iam.presentation.ui.AccountScreen
 import com.novatech.terratech.iam.presentation.viewmodel.AccountViewModel
-import com.novatech.terratech.monitoring.presentation.ui.*
+import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.monitoring.presentation.viewmodel.MonitoringViewModel
+import com.novatech.terratech.profile.presentation.state.ProfileState
 import com.novatech.terratech.profile.presentation.viewmodel.ProfileViewModel
 
 @Composable
 internal fun SignedInApp(
-    session: com.novatech.terratech.iam.domain.entity.Session,
-    auth: com.novatech.terratech.iam.presentation.state.AccountState,
-    p: com.novatech.terratech.profile.presentation.state.ProfileState,
-    m: com.novatech.terratech.monitoring.presentation.state.MonitoringState,
-    account: AccountViewModel,
-    profile: ProfileViewModel,
-    monitoring: MonitoringViewModel,
+    session: Session,
+    accountState: AccountState,
+    profileState: ProfileState,
+    monitoringState: MonitoringState,
+    accountViewModel: AccountViewModel,
+    profileViewModel: ProfileViewModel,
+    monitoringViewModel: MonitoringViewModel,
 ) {
-    val nav = rememberNavController()
-    val entry by nav.currentBackStackEntryAsState()
-    val route = entry?.destination?.route ?: "home"
+    val navController = rememberNavController()
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val route = backStackEntry?.destination?.route ?: "home"
     var reauth by remember { mutableStateOf(false) }
     var reauthToken by remember { mutableStateOf(session.token) }
     if (reauth) {
         BackHandler { reauth = false }
         AccountScreen(
-            auth,
-            onLogin = { email, password -> account.login(email, password) },
-            onRegister = account::register,
-            onClear = account::clearMessage,
+            accountState,
+            onLogin = { email, password -> accountViewModel.login(email, password) },
+            onRegister = accountViewModel::register,
+            onClear = accountViewModel::clearMessage,
             reauth = true,
         )
         LaunchedEffect(session.token) { if (session.token != reauthToken) reauth = false }
         return
     }
-    val snackbar = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
     val createdFieldMessage = stringResource(R.string.field_created)
     val createdSensorMessage = stringResource(R.string.sensor_created)
-    LaunchedEffect(m.created) {
-        if (m.created) {
-            val fieldCreated = m.createdFieldId != null
-            nav.navigate(if (fieldCreated) "sensors" else "sensor") {
+    LaunchedEffect(monitoringState.created) {
+        if (monitoringState.created) {
+            val fieldCreated = monitoringState.createdFieldId != null
+            navController.navigate(if (fieldCreated) "sensors" else "sensor") {
                 popUpTo(if (fieldCreated) "new-field" else "register-sensor") { inclusive = true }
                 launchSingleTop = true
             }
-            monitoring.clearMessage()
-            snackbar.showSnackbar(if (fieldCreated) createdFieldMessage else createdSensorMessage)
+            monitoringViewModel.clearMessage()
+            snackbarHostState.showSnackbar(
+                if (fieldCreated) createdFieldMessage else createdSensorMessage
+            )
         }
     }
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbar) },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = {
             if (route !in listOf("new-field", "register-sensor"))
                 TerraTechBottomBar(route) { destination ->
-                    monitoring.clearMessage()
-                    nav.navigate(destination) {
+                    monitoringViewModel.clearMessage()
+                    navController.navigate(destination) {
                         popUpTo("home")
                         launchSingleTop = true
                     }
@@ -71,9 +91,13 @@ internal fun SignedInApp(
         },
     ) { padding ->
         Column(Modifier.padding(padding).fillMaxSize()) {
-            if (m.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
-            if (route != "profile") Notice(m.error)
-            if (m.error == "UNAUTHENTICATED" || p.error == "UNAUTHENTICATED" || session.expired())
+            if (monitoringState.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
+            if (route != "profile") Notice(monitoringState.error)
+            if (
+                monitoringState.error == "UNAUTHENTICATED" ||
+                    profileState.error == "UNAUTHENTICATED" ||
+                    session.expired()
+            )
                 TextButton(
                     onClick = {
                         reauthToken = session.token
@@ -83,29 +107,38 @@ internal fun SignedInApp(
                     Text(stringResource(R.string.reauth))
                 }
             if (route != "new-field")
-                com.novatech.terratech.core.presentation.component.TerraTechToolbar(
+                TerraTechToolbar(
                     title =
                         when (route) {
-                            "sensors" -> m.selectedField?.name.orEmpty()
+                            "sensors" -> monitoringState.selectedField?.name.orEmpty()
                             "sensor",
-                            "history" -> m.selectedSensor?.name.orEmpty()
+                            "history" -> monitoringState.selectedSensor?.name.orEmpty()
                             "register-sensor" -> stringResource(R.string.associate)
-                            else -> p.profile?.fundoName ?: "TerraTech"
+                            else -> profileState.profile?.fundoName ?: "TerraTech"
                         },
-                    busy = m.busy,
+                    busy = monitoringState.busy,
                     onBack =
                         if (route !in listOf("home", "fields", "profile"))
                             ({
-                                nav.popBackStack()
-                                monitoring.clearMessage()
+                                navController.popBackStack()
+                                monitoringViewModel.clearMessage()
                             })
                         else null,
                     onRefresh =
-                        if (route !in listOf("profile", "register-sensor")) monitoring::refresh
+                        if (route !in listOf("profile", "register-sensor"))
+                            monitoringViewModel::refresh
                         else null,
                 )
             Box(Modifier.weight(1f)) {
-                TerraTechNavHost(nav, session, p, m, account, profile, monitoring)
+                TerraTechNavHost(
+                    navController,
+                    session,
+                    profileState,
+                    monitoringState,
+                    accountViewModel,
+                    profileViewModel,
+                    monitoringViewModel,
+                )
             }
         }
     }

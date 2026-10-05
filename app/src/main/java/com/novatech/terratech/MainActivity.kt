@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import com.novatech.terratech.core.presentation.ui.TerraTechApp
 import com.novatech.terratech.ui.theme.TerraTechTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,11 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TerraTechTheme {
-                androidx.compose.material3.Surface(
-                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
-                ) {
-                    TerraTechApp()
-                }
+                Surface(color = MaterialTheme.colorScheme.background) { TerraTechApp() }
             }
         }
     }

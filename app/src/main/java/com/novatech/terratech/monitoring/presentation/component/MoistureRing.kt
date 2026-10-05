@@ -1,20 +1,25 @@
 package com.novatech.terratech.monitoring.presentation.component
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.*
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.semantics.*
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import com.novatech.terratech.core.presentation.format.number
-import com.novatech.terratech.core.presentation.ui.*
-import com.novatech.terratech.ui.theme.*
+import com.novatech.terratech.ui.theme.Amber
+import com.novatech.terratech.ui.theme.FarmGreen
+import com.novatech.terratech.ui.theme.LeafLight
 
 @Composable
 internal fun MoistureRing(value: Double, warning: Boolean) {

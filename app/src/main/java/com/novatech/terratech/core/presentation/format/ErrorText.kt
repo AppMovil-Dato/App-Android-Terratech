@@ -1,12 +1,8 @@
 package com.novatech.terratech.core.presentation.format
 
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.novatech.terratech.R
-import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun errorText(code: String): String =

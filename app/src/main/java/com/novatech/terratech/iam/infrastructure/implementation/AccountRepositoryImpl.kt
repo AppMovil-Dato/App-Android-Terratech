@@ -1,5 +1,6 @@
 package com.novatech.terratech.iam.infrastructure.implementation
 
+import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.iam.domain.entity.Session
@@ -9,8 +10,11 @@ import com.novatech.terratech.iam.infrastructure.remote.AccountApi
 import com.novatech.terratech.iam.infrastructure.remote.dto.LoginDto
 import com.novatech.terratech.iam.infrastructure.remote.dto.RegisterDto
 import java.time.Instant
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class AccountRepositoryImpl(
     private val api: AccountApi,
@@ -53,10 +57,10 @@ class AccountRepositoryImpl(
         } else {
             try {
                 login(email, password)
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                throw com.novatech.terratech.core.domain.Failure("ACCOUNT_CREATED_LOGIN_REQUIRED")
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                throw Failure("ACCOUNT_CREATED_LOGIN_REQUIRED")
             }
         }
     }
@@ -74,15 +78,15 @@ class AccountRepositoryImpl(
         )
     }
 
-    private suspend fun persistSession(s: Session) {
+    private suspend fun persistSession(session: Session) {
         val previous = current.value
-        if (previous?.userId != s.userId) {
+        if (previous?.userId != session.userId) {
             current.value = null
             store.clear()
             db.dao().clearPrivateData()
         }
-        store.save(s)
-        current.value = s
+        store.save(session)
+        current.value = session
     }
 
     override suspend fun logout() {

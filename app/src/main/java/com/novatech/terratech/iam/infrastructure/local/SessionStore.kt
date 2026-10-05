@@ -4,7 +4,9 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.novatech.terratech.iam.domain.entity.Session
@@ -45,41 +47,53 @@ class SessionStore(private val context: Context) {
     }
 
     suspend fun load(): Session? {
-        val raw = context.sessionData.data.first()[pref] ?: return null
+        val encryptedSession = context.sessionData.data.first()[pref] ?: return null
         return try {
-            val parts = raw.split(":")
+            val parts = encryptedSession.split(":")
             val cipher = Cipher.getInstance("AES/GCM/NoPadding")
             cipher.init(
                 Cipher.DECRYPT_MODE,
                 key(),
                 GCMParameterSpec(128, Base64.decode(parts[0], Base64.NO_WRAP)),
             )
-            val s =
+            val storedSession =
                 gson.fromJson(
                     String(cipher.doFinal(Base64.decode(parts[1], Base64.NO_WRAP)), Charsets.UTF_8),
                     StoredSession::class.java,
                 )
-            Session(s.userId, s.email, s.fullName, s.token, Instant.parse(s.expiresAt))
-        } catch (e: Exception) {
+            Session(
+                storedSession.userId,
+                storedSession.email,
+                storedSession.fullName,
+                storedSession.token,
+                Instant.parse(storedSession.expiresAt),
+            )
+        } catch (exception: Exception) {
             clear()
             null
         }
     }
 
-    suspend fun save(s: Session) {
+    suspend fun save(session: Session) {
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")
         cipher.init(Cipher.ENCRYPT_MODE, key())
         val data =
             gson
                 .toJson(
-                    StoredSession(s.userId, s.email, s.fullName, s.token, s.expiresAt.toString())
+                    StoredSession(
+                        session.userId,
+                        session.email,
+                        session.fullName,
+                        session.token,
+                        session.expiresAt.toString(),
+                    )
                 )
                 .toByteArray(Charsets.UTF_8)
-        val raw =
+        val encryptedSession =
             Base64.encodeToString(cipher.iv, Base64.NO_WRAP) +
                 ":" +
                 Base64.encodeToString(cipher.doFinal(data), Base64.NO_WRAP)
-        context.sessionData.edit { it[pref] = raw }
+        context.sessionData.edit { it[pref] = encryptedSession }
     }
 
     fun selection(user: Int) =
@@ -89,10 +103,10 @@ class SessionStore(private val context: Context) {
 
     suspend fun select(user: Int, field: Int?, device: Int?) {
         context.sessionData.edit { prefs ->
-            val f = intPreferencesKey("field_$user")
-            val d = intPreferencesKey("device_$user")
-            if (field == null) prefs.remove(f) else prefs[f] = field
-            if (device == null) prefs.remove(d) else prefs[d] = device
+            val fieldKey = intPreferencesKey("field_$user")
+            val deviceKey = intPreferencesKey("device_$user")
+            if (field == null) prefs.remove(fieldKey) else prefs[fieldKey] = field
+            if (device == null) prefs.remove(deviceKey) else prefs[deviceKey] = device
         }
     }
 
