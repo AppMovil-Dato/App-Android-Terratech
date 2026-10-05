@@ -7,7 +7,7 @@ import com.novatech.terratech.iam.infrastructure.remote.dto.UserDto
 import retrofit2.http.*
 
 interface AccountApi {
-  @POST("api/v1/authentication/sign-up") suspend fun register(@Body body: RegisterDto): UserDto
+    @POST("api/v1/authentication/sign-up") suspend fun register(@Body body: RegisterDto): UserDto
 
-  @POST("api/v1/authentication/sign-in") suspend fun login(@Body body: LoginDto): LoginResponse
+    @POST("api/v1/authentication/sign-in") suspend fun login(@Body body: LoginDto): LoginResponse
 }

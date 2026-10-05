@@ -20,46 +20,50 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 internal fun ReadingSummary(reading: Reading, state: MonitoringState) {
-  val minimum = state.download?.minimumMoisture
-  FarmCard {
-    Row(
-      Modifier.fillMaxWidth(),
-      horizontalArrangement = Arrangement.SpaceBetween,
-      verticalAlignment = Alignment.CenterVertically,
-    ) {
-      MoistureRing(
-        reading.moisturePercent,
-        minimum != null && reading.moisturePercent < minimum,
-      )
-      Column(
-        Modifier.weight(1f).padding(start = 12.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-      ) {
-        Text(stringResource(R.string.moisture), style = MaterialTheme.typography.titleMedium)
-        if (minimum != null) {
-          Pill(
-            stringResource(
-              if (minimum != null && reading.moisturePercent < minimum) R.string.below_threshold
-              else R.string.within_reference
-            ),
-            minimum != null && reading.moisturePercent < minimum,
-          )
+    val minimum = state.download?.minimumMoisture
+    FarmCard {
+        Row(
+            Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            MoistureRing(
+                reading.moisturePercent,
+                minimum != null && reading.moisturePercent < minimum,
+            )
+            Column(
+                Modifier.weight(1f).padding(start = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Text(
+                    stringResource(R.string.moisture),
+                    style = MaterialTheme.typography.titleMedium,
+                )
+                if (minimum != null) {
+                    Pill(
+                        stringResource(
+                            if (minimum != null && reading.moisturePercent < minimum)
+                                R.string.below_threshold
+                            else R.string.within_reference
+                        ),
+                        minimum != null && reading.moisturePercent < minimum,
+                    )
+                }
+            }
         }
-      }
+        Pill(reading.source)
+        Text(
+            stringResource(R.string.updated, timestamp(reading.recordedAt)),
+            color = Muted,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        if (reading.isStale(state.now)) Pill(stringResource(R.string.old_data), true)
+        state.download?.downloadedAt?.let {
+            Text(
+                stringResource(R.string.downloaded, timestamp(it)),
+                color = Muted,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
-    Pill(reading.source)
-    Text(
-      stringResource(R.string.updated, timestamp(reading.recordedAt)),
-      color = Muted,
-      style = MaterialTheme.typography.bodyMedium,
-    )
-    if (reading.isStale(state.now)) Pill(stringResource(R.string.old_data), true)
-    state.download?.downloadedAt?.let {
-      Text(
-        stringResource(R.string.downloaded, timestamp(it)),
-        color = Muted,
-        style = MaterialTheme.typography.bodyMedium,
-      )
-    }
-  }
 }

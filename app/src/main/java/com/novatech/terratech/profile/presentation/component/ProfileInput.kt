@@ -17,24 +17,24 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 internal fun ProfileInput(
-  value: String,
-  change: (String) -> Unit,
-  label: Int,
-  type: KeyboardType = KeyboardType.Text,
-  invalid: Boolean = false,
-  enabled: Boolean = true,
+    value: String,
+    change: (String) -> Unit,
+    label: Int,
+    type: KeyboardType = KeyboardType.Text,
+    invalid: Boolean = false,
+    enabled: Boolean = true,
 ) {
-  val focus = LocalFocusManager.current
-  OutlinedTextField(
-    value,
-    change,
-    label = { Text(stringResource(label)) },
-    modifier = Modifier.fillMaxWidth(),
-    singleLine = true,
-    keyboardOptions = KeyboardOptions(keyboardType = type, imeAction = ImeAction.Next),
-    keyboardActions = KeyboardActions(onNext = { focus.moveFocus(FocusDirection.Down) }),
-    enabled = enabled,
-    isError = invalid,
-    supportingText = if (invalid) ({ Text(stringResource(R.string.error_required)) }) else null,
-  )
+    val focus = LocalFocusManager.current
+    OutlinedTextField(
+        value,
+        change,
+        label = { Text(stringResource(label)) },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = type, imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions(onNext = { focus.moveFocus(FocusDirection.Down) }),
+        enabled = enabled,
+        isError = invalid,
+        supportingText = if (invalid) ({ Text(stringResource(R.string.error_required)) }) else null,
+    )
 }

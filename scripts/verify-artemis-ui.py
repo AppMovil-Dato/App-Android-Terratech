@@ -120,7 +120,10 @@ class Journey:
 
     async def click(self, key, scroll=True, last=False):
         e = await self.node(
-            STRINGS.get(key, key), scroll=scroll, last=last, clickable=key not in ("home", "fields", "profile")
+            STRINGS.get(key, key),
+            scroll=scroll,
+            last=last,
+            clickable=key not in ("home", "fields", "profile"),
         )
         result = await self.controller.tap_at(*self.center(e))
         if result.error:
@@ -129,7 +132,7 @@ class Journey:
         await asyncio.sleep(0.3)
 
     async def hide_keyboard(self):
-        # The helper intentionally omits the IME from its hierarchy; query Android's actual IME state.
+
         state = await self.controller.controller.execute_shell("dumpsys input_method")
         if "mInputShown=true" in state:
             await self.controller.press_key("4")
@@ -139,16 +142,14 @@ class Journey:
                     "dumpsys input_method"
                 )
                 if "mInputShown=true" not in state:
-                    await asyncio.sleep(
-                        0.6
-                    )  # Let Compose's IME inset animation settle before locating again.
+                    await asyncio.sleep(0.6)
                     return
                 await asyncio.sleep(0.2)
             raise AssertionError("Keyboard did not close")
 
     async def input(self, key, value):
         await self.hide_keyboard()
-        # Bring the complete control above the keyboard area before focusing it.
+
         for _ in range(10):
             e = await self.node(STRINGS[key], scroll=True)
             rows = await self.screen()
@@ -183,7 +184,7 @@ class Journey:
             if error:
                 raise AssertionError(error)
             await asyncio.sleep(0.3)
-        # Never reuse coordinates captured before the final scroll/inset transition.
+
         await asyncio.sleep(0.5)
         e = await self.node(STRINGS[key], scroll=True)
         result = await self.controller.tap_at(*self.center(e))
@@ -209,8 +210,7 @@ class Journey:
         else:
             raise AssertionError(f"Field did not gain focus: {key}")
         client = self.controller.ctx.ui_adb_client
-        # The upstream key-event fallback does not reliably clear long Compose/password fields.
-        # Use Artemis's explicit accessibility clear/type RPCs rather than app internals.
+
         if not client.clear_text():
             raise AssertionError(f"Clear failed: {key}")
         deadline = time.monotonic() + 8
@@ -300,11 +300,18 @@ class Journey:
         await self.click("register")
         await self.expect("new_field")
         assert not any(e.get("text") == STRINGS["welcome"] for e in await self.screen())
-        self.steps.append({"assert": "signupEntersAppWithoutOnboarding", "passed": True})
+        self.steps.append(
+            {"assert": "signupEntersAppWithoutOnboarding", "passed": True}
+        )
         await self.capture("registered-home")
         await self.logout()
         await self.click("no_account")
-        for key, value in [("full_name", "Ana Torres"), ("email", email), ("password", password), ("confirmation", password)]:
+        for key, value in [
+            ("full_name", "Ana Torres"),
+            ("email", email),
+            ("password", password),
+            ("confirmation", password),
+        ]:
             await self.input(key, value)
         await self.click("register")
         await self.expect("error_duplicate")
@@ -319,7 +326,11 @@ class Journey:
         await self.click("new_field")
         await self.input("phone", "999888777")
         await self.click("continue_action")
-        for key, value in [("farm_name", "Fundo Artemis"), ("location", "Huaral, Lima"), ("area_ha", "1.25")]:
+        for key, value in [
+            ("farm_name", "Fundo Artemis"),
+            ("location", "Huaral, Lima"),
+            ("area_ha", "1.25"),
+        ]:
             await self.input(key, value)
         await self.click("profile_finish")
         await self.expect("profile_saved")
@@ -329,27 +340,45 @@ class Journey:
         await self.input("crop", "Papa")
         await self.click("continue_action")
         await self.click("map_draw")
-        # Native taps on the map surface, no test semantics or injected coordinates.
+
         deadline = time.monotonic() + 30
         while time.monotonic() < deadline:
             rows = await self.screen()
             maps = [e for e in rows if e.get("content-desc") == STRINGS["field_map"]]
             if maps:
                 break
-            await asyncio.sleep(.3)
+            await asyncio.sleep(0.3)
         else:
             raise AssertionError("Google Maps surface was not exposed")
-        b = max(maps, key=lambda e: e["parsed_bounds"]["bottom"] - e["parsed_bounds"]["top"])["parsed_bounds"]
+        b = max(
+            maps, key=lambda e: e["parsed_bounds"]["bottom"] - e["parsed_bounds"]["top"]
+        )["parsed_bounds"]
         if b["bottom"] >= self.last.height - 190:
-            await self.controller.swipe_coords(self.last.width // 2, int(self.last.height * .72), self.last.width // 2, int(self.last.height * .4), 350)
-            maps = [e for e in await self.screen() if e.get("content-desc") == STRINGS["field_map"]]
-            b = max(maps, key=lambda e: e["parsed_bounds"]["bottom"] - e["parsed_bounds"]["top"])["parsed_bounds"]
+            await self.controller.swipe_coords(
+                self.last.width // 2,
+                int(self.last.height * 0.72),
+                self.last.width // 2,
+                int(self.last.height * 0.4),
+                350,
+            )
+            maps = [
+                e
+                for e in await self.screen()
+                if e.get("content-desc") == STRINGS["field_map"]
+            ]
+            b = max(
+                maps,
+                key=lambda e: e["parsed_bounds"]["bottom"] - e["parsed_bounds"]["top"],
+            )["parsed_bounds"]
         await asyncio.sleep(3)
-        for x, y in [(.25, .25), (.70, .25), (.70, .65), (.25, .65)]:
-            result = await self.controller.tap_at(int(b["left"] + (b["right"] - b["left"]) * x), int(b["top"] + (b["bottom"] - b["top"]) * y))
+        for x, y in [(0.25, 0.25), (0.70, 0.25), (0.70, 0.65), (0.25, 0.65)]:
+            result = await self.controller.tap_at(
+                int(b["left"] + (b["right"] - b["left"]) * x),
+                int(b["top"] + (b["bottom"] - b["top"]) * y),
+            )
             assert not result.error, result.error
             self.steps.append({"action": "mapTap", "passed": True})
-            await asyncio.sleep(.5)
+            await asyncio.sleep(0.5)
         await self.expect(STRINGS["map_points"].replace("%1$d", "4").replace("%d", "4"))
         await self.capture("map-polygon")
         await self.click("continue_action")
@@ -470,7 +499,9 @@ async def main():
                     "deviceSerial": SERIAL,
                     "passed": error is None,
                     "error": error,
-                    "assertionsPassed": sum(x.get("passed", False) for x in j.steps if "assert" in x),
+                    "assertionsPassed": sum(
+                        x.get("passed", False) for x in j.steps if "assert" in x
+                    ),
                     "checksPassed": sum(x.get("passed", False) for x in j.steps),
                     "steps": j.steps,
                     "timestampUtc": datetime.datetime.now(

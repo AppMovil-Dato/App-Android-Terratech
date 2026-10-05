@@ -8,30 +8,30 @@ import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldVertexDto
 
 fun FieldDto.row(user: Int) =
-  FieldRow(
-    user,
-    id,
-    profileId,
-    name,
-    sizeM2,
-    soilType,
-    latitude,
-    longitude,
-    cropName,
-    Gson().toJson(boundary.orEmpty()),
-  )
+    FieldRow(
+        user,
+        id,
+        profileId,
+        name,
+        sizeM2,
+        soilType,
+        latitude,
+        longitude,
+        cropName,
+        Gson().toJson(boundary.orEmpty()),
+    )
 
 fun FieldRow.domain() =
-  Field(
-    id,
-    profileId,
-    name,
-    sizeM2,
-    soilType,
-    latitude,
-    longitude,
-    cropName,
-    Gson().fromJson(boundaryJson, Array<FieldVertexDto>::class.java).map {
-      Coordinates.of(it.latitude, it.longitude)
-    },
-  )
+    Field(
+        id,
+        profileId,
+        name,
+        sizeM2,
+        soilType,
+        latitude,
+        longitude,
+        cropName,
+        Gson().fromJson(boundaryJson, Array<FieldVertexDto>::class.java).map {
+            Coordinates.of(it.latitude, it.longitude)
+        },
+    )

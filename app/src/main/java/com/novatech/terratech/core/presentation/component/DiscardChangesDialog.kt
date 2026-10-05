@@ -7,11 +7,13 @@ import com.novatech.terratech.R
 
 @Composable
 fun DiscardChangesDialog(onDismiss: () -> Unit, onDiscard: () -> Unit) {
-  AlertDialog(
-    onDismissRequest = onDismiss,
-    title = { Text(stringResource(R.string.unsaved_title)) },
-    text = { Text(stringResource(R.string.unsaved_body)) },
-    confirmButton = { TextButton(onClick = onDiscard) { Text(stringResource(R.string.leave)) } },
-    dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.stay)) } },
-  )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.unsaved_title)) },
+        text = { Text(stringResource(R.string.unsaved_body)) },
+        confirmButton = {
+            TextButton(onClick = onDiscard) { Text(stringResource(R.string.leave)) }
+        },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.stay)) } },
+    )
 }

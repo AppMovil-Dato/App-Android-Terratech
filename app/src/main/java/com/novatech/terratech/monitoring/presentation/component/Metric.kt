@@ -12,8 +12,8 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 internal fun Metric(label: String, value: String, modifier: Modifier) {
-  FarmCard(modifier) {
-    Text(label, color = Muted, style = MaterialTheme.typography.bodyMedium)
-    Text(value, style = MaterialTheme.typography.titleLarge)
-  }
+    FarmCard(modifier) {
+        Text(label, color = Muted, style = MaterialTheme.typography.bodyMedium)
+        Text(value, style = MaterialTheme.typography.titleLarge)
+    }
 }

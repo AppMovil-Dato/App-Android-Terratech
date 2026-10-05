@@ -22,32 +22,37 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun ReadingDetailScreen(reading: Reading?) {
-  LazyColumn(
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    item { PageTitle(stringResource(R.string.reading_detail)) }
-    if (reading == null) item { EmptyCard(stringResource(R.string.error_missing)) }
-    else {
-      item {
-        FarmCard {
-          Text(
-            stringResource(R.string.reading_id, reading.id),
-            style = MaterialTheme.typography.titleLarge,
-          )
-          Text(timestamp(reading.recordedAt))
-          Pill(reading.source)
-          Text(stringResource(R.string.moisture) + ": " + number(reading.moisturePercent) + " %")
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item { PageTitle(stringResource(R.string.reading_detail)) }
+        if (reading == null) item { EmptyCard(stringResource(R.string.error_missing)) }
+        else {
+            item {
+                FarmCard {
+                    Text(
+                        stringResource(R.string.reading_id, reading.id),
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                    Text(timestamp(reading.recordedAt))
+                    Pill(reading.source)
+                    Text(
+                        stringResource(R.string.moisture) +
+                            ": " +
+                            number(reading.moisturePercent) +
+                            " %"
+                    )
+                }
+            }
+            item { ReadingMetrics(reading) }
+            item {
+                Text(
+                    stringResource(R.string.units_note),
+                    color = Muted,
+                    style = MaterialTheme.typography.bodySmall,
+                )
+            }
         }
-      }
-      item { ReadingMetrics(reading) }
-      item {
-        Text(
-          stringResource(R.string.units_note),
-          color = Muted,
-          style = MaterialTheme.typography.bodySmall,
-        )
-      }
     }
-  }
 }

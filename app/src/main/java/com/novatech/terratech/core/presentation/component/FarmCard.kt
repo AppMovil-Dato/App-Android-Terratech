@@ -12,16 +12,16 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun FarmCard(modifier: Modifier = Modifier, content: @Composable ColumnScope.() -> Unit) {
-  Card(
-    modifier.fillMaxWidth(),
-    shape = RoundedCornerShape(20.dp),
-    colors = CardDefaults.cardColors(containerColor = Color.White),
-    elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-  ) {
-    Column(
-      Modifier.padding(16.dp),
-      verticalArrangement = Arrangement.spacedBy(12.dp),
-      content = content,
-    )
-  }
+    Card(
+        modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ) {
+        Column(
+            Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            content = content,
+        )
+    }
 }

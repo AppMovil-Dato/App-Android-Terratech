@@ -13,82 +13,81 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 class AccountRepositoryImpl(
-  private val api: AccountApi,
-  private val store: SessionStore,
-  private val db: TerraDatabase,
-  private val scope: CoroutineScope,
+    private val api: AccountApi,
+    private val store: SessionStore,
+    private val db: TerraDatabase,
+    private val scope: CoroutineScope,
 ) : AccountRepository {
-  private val current = MutableStateFlow<Session?>(null)
-  private val ready = MutableStateFlow(false)
-  override val session = current.asStateFlow()
-  override val restored = ready.asStateFlow()
+    private val current = MutableStateFlow<Session?>(null)
+    private val ready = MutableStateFlow(false)
+    override val session = current.asStateFlow()
+    override val restored = ready.asStateFlow()
 
-  init {
-    scope.launch {
-      try {
-        current.value = store.load()
-      } finally {
-        ready.value = true
-      }
+    init {
+        scope.launch {
+            try {
+                current.value = store.load()
+            } finally {
+                ready.value = true
+            }
+        }
     }
-  }
 
-  override suspend fun register(
-    name: String,
-    email: String,
-    password: String,
-    confirmation: String,
-  ) {
-    val result = apiCall { api.register(RegisterDto(name, email, password, confirmation)) }
-    if (!result.token.isNullOrBlank() && !result.expiresAt.isNullOrBlank()) {
-      persistSession(
-        Session(
-          result.id,
-          result.emailAddress,
-          result.fullName.orEmpty(),
-          result.token,
-          Instant.parse(result.expiresAt),
+    override suspend fun register(
+        name: String,
+        email: String,
+        password: String,
+        confirmation: String,
+    ) {
+        val result = apiCall { api.register(RegisterDto(name, email, password, confirmation)) }
+        if (!result.token.isNullOrBlank() && !result.expiresAt.isNullOrBlank()) {
+            persistSession(
+                Session(
+                    result.id,
+                    result.emailAddress,
+                    result.fullName.orEmpty(),
+                    result.token,
+                    Instant.parse(result.expiresAt),
+                )
+            )
+        } else {
+            try {
+                login(email, password)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                throw com.novatech.terratech.core.domain.Failure("ACCOUNT_CREATED_LOGIN_REQUIRED")
+            }
+        }
+    }
+
+    override suspend fun login(email: String, password: String) {
+        val dto = apiCall { api.login(LoginDto(email, password)) }
+        persistSession(
+            Session(
+                dto.id,
+                dto.emailAddress,
+                dto.fullName.orEmpty(),
+                dto.token,
+                Instant.parse(dto.expiresAt),
+            )
         )
-      )
-    } else {
-      // Compatibility with servers deployed before signup returned a session.
-      try {
-        login(email, password)
-      } catch (e: CancellationException) {
-        throw e
-      } catch (e: Exception) {
-        throw com.novatech.terratech.core.domain.Failure("ACCOUNT_CREATED_LOGIN_REQUIRED")
-      }
     }
-  }
 
-  override suspend fun login(email: String, password: String) {
-    val dto = apiCall { api.login(LoginDto(email, password)) }
-    persistSession(
-      Session(
-        dto.id,
-        dto.emailAddress,
-        dto.fullName.orEmpty(),
-        dto.token,
-        Instant.parse(dto.expiresAt),
-      )
-    )
-  }
-
-  private suspend fun persistSession(s: Session) {
-    val previous = current.value
-    if (previous?.userId != s.userId) {
-      current.value = null
-      store.clear()
-      db.dao().clearPrivateData()
+    private suspend fun persistSession(s: Session) {
+        val previous = current.value
+        if (previous?.userId != s.userId) {
+            current.value = null
+            store.clear()
+            db.dao().clearPrivateData()
+        }
+        store.save(s)
+        current.value = s
     }
-    store.save(s)
-    current.value = s
-  }
 
-  override suspend fun logout() {
-    current.value = null
-    store.clear()
-    db.dao().clearPrivateData()
-  }
+    override suspend fun logout() {
+        current.value = null
+        store.clear()
+        db.dao().clearPrivateData()
+    }
 }

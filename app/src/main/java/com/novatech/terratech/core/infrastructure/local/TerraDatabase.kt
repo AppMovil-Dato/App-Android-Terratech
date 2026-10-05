@@ -9,11 +9,17 @@ import com.novatech.terratech.monitoring.infrastructure.local.entity.SensorRow
 import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
 
 @Database(
-  entities =
-    [ProfileRow::class, FieldRow::class, SensorRow::class, ReadingRow::class, DownloadRow::class],
-  version = 2,
-  exportSchema = true,
+    entities =
+        [
+            ProfileRow::class,
+            FieldRow::class,
+            SensorRow::class,
+            ReadingRow::class,
+            DownloadRow::class,
+        ],
+    version = 2,
+    exportSchema = true,
 )
 abstract class TerraDatabase : RoomDatabase() {
-  abstract fun dao(): TerraDao
+    abstract fun dao(): TerraDao
 }

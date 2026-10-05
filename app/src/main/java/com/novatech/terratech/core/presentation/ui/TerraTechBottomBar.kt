@@ -13,31 +13,40 @@ import com.novatech.terratech.monitoring.presentation.ui.*
 
 @Composable
 internal fun TerraTechBottomBar(route: String, onNavigate: (String) -> Unit) {
-  NavigationBar(containerColor = androidx.compose.ui.graphics.Color.White) {
-    listOf("home" to R.string.home, "fields" to R.string.fields, "profile" to R.string.profile)
-      .forEach { (destination, label) ->
-        NavigationBarItem(
-          selected =
-            when (destination) {
-              "fields" ->
-                route in listOf("fields", "new-field", "sensors", "register-sensor", "sensor")
-              "home" -> route == "home" || route == "history" || route.startsWith("reading/")
-              else -> route == destination
-            },
-          onClick = {
-            onNavigate(destination)
-          },
-          icon = {
-            if (destination == "fields")
-              Icon(painterResource(R.drawable.ic_fields), contentDescription = null)
-            else
-              Icon(
-                if (destination == "home") Icons.Outlined.Home else Icons.Outlined.Person,
-                contentDescription = null,
-              )
-          },
-          label = { Text(stringResource(label)) },
-        )
-      }
-  }
+    NavigationBar(containerColor = androidx.compose.ui.graphics.Color.White) {
+        listOf("home" to R.string.home, "fields" to R.string.fields, "profile" to R.string.profile)
+            .forEach { (destination, label) ->
+                NavigationBarItem(
+                    selected =
+                        when (destination) {
+                            "fields" ->
+                                route in
+                                    listOf(
+                                        "fields",
+                                        "new-field",
+                                        "sensors",
+                                        "register-sensor",
+                                        "sensor",
+                                    )
+                            "home" ->
+                                route == "home" ||
+                                    route == "history" ||
+                                    route.startsWith("reading/")
+                            else -> route == destination
+                        },
+                    onClick = { onNavigate(destination) },
+                    icon = {
+                        if (destination == "fields")
+                            Icon(painterResource(R.drawable.ic_fields), contentDescription = null)
+                        else
+                            Icon(
+                                if (destination == "home") Icons.Outlined.Home
+                                else Icons.Outlined.Person,
+                                contentDescription = null,
+                            )
+                    },
+                    label = { Text(stringResource(label)) },
+                )
+            }
+    }
 }

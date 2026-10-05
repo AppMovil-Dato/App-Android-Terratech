@@ -12,12 +12,12 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun Pill(text: String, warning: Boolean = false) {
-  Surface(color = if (warning) AmberLight else LeafLight, shape = RoundedCornerShape(50.dp)) {
-    Text(
-      text,
-      Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
-      color = if (warning) Color(0xFF8F4B00) else FarmGreen,
-      style = MaterialTheme.typography.labelMedium,
-    )
-  }
+    Surface(color = if (warning) AmberLight else LeafLight, shape = RoundedCornerShape(50.dp)) {
+        Text(
+            text,
+            Modifier.padding(horizontal = 12.dp, vertical = 7.dp),
+            color = if (warning) Color(0xFF8F4B00) else FarmGreen,
+            style = MaterialTheme.typography.labelMedium,
+        )
+    }
 }

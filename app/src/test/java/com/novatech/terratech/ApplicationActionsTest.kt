@@ -8,41 +8,41 @@ import org.junit.Test
 
 class ApplicationActionsTest {
 
-  @Test
-  fun rejectedConfirmationNeverCallsBackend() = runTest {
-    val repo = FakeAccountRepository()
-    try {
-      AccountActions(repo).register("Ana", "a@example.com", "secret ", "secret")
-      fail()
-    } catch (e: Failure) {
-      assertEquals("PASSWORD_CONFIRMATION_MISMATCH", e.code)
+    @Test
+    fun rejectedConfirmationNeverCallsBackend() = runTest {
+        val repo = FakeAccountRepository()
+        try {
+            AccountActions(repo).register("Ana", "a@example.com", "secret ", "secret")
+            fail()
+        } catch (e: Failure) {
+            assertEquals("PASSWORD_CONFIRMATION_MISMATCH", e.code)
+        }
+        assertEquals(0, repo.calls)
     }
-    assertEquals(0, repo.calls)
-  }
 
-  @Test
-  fun validRegistrationKeepsPasswordSpaces() = runTest {
-    val repo = FakeAccountRepository()
-    AccountActions(repo).register(" Ana ", " A@EXAMPLE.COM ", " secret ", " secret ")
-    assertEquals(listOf("Ana", "a@example.com", " secret ", " secret "), repo.last)
-  }
-
-  @Test
-  fun shortNameNeverCallsBackend() = runTest {
-    val repo = FakeAccountRepository()
-    try {
-      AccountActions(repo).register("A", "a@example.com", "secret", "secret")
-      fail()
-    } catch (e: Failure) {
-      assertEquals("INVALID_NAME", e.code)
+    @Test
+    fun validRegistrationKeepsPasswordSpaces() = runTest {
+        val repo = FakeAccountRepository()
+        AccountActions(repo).register(" Ana ", " A@EXAMPLE.COM ", " secret ", " secret ")
+        assertEquals(listOf("Ana", "a@example.com", " secret ", " secret "), repo.last)
     }
-    assertEquals(0, repo.calls)
-  }
 
-  @Test
-  fun loginUsesValidatedNormalizedEmail() = runTest {
-    val repo = FakeAccountRepository()
-    AccountActions(repo).login(" A@EXAMPLE.COM ", "secret")
-    assertEquals(listOf("a@example.com", "secret"), repo.last)
-  }
+    @Test
+    fun shortNameNeverCallsBackend() = runTest {
+        val repo = FakeAccountRepository()
+        try {
+            AccountActions(repo).register("A", "a@example.com", "secret", "secret")
+            fail()
+        } catch (e: Failure) {
+            assertEquals("INVALID_NAME", e.code)
+        }
+        assertEquals(0, repo.calls)
+    }
+
+    @Test
+    fun loginUsesValidatedNormalizedEmail() = runTest {
+        val repo = FakeAccountRepository()
+        AccountActions(repo).login(" A@EXAMPLE.COM ", "secret")
+        assertEquals(listOf("a@example.com", "secret"), repo.last)
+    }
 }

@@ -10,5 +10,5 @@ import dagger.hilt.components.SingletonComponent
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class LocationModule {
-  @Binds abstract fun location(implementation: GeocoderLocationSearch): LocationSearch
+    @Binds abstract fun location(implementation: GeocoderLocationSearch): LocationSearch
 }

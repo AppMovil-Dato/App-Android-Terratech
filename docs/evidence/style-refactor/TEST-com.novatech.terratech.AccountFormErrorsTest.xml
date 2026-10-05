@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.AccountFormErrorsTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-10-05T20:28:54.931Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.018">
+  <properties/>
+  <testcase name="registrationReportsIndividualFieldsAndExactConfirmation" classname="com.novatech.terratech.AccountFormErrorsTest" time="0.01"/>
+  <testcase name="loginDoesNotRequireRegistrationFields" classname="com.novatech.terratech.AccountFormErrorsTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

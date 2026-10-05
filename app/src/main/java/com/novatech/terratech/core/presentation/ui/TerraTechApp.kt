@@ -18,31 +18,33 @@ import com.novatech.terratech.profile.presentation.viewmodel.ProfileViewModel
 
 @Composable
 fun TerraTechApp(
-  account: AccountViewModel = viewModel(),
-  profile: ProfileViewModel = viewModel(),
-  monitoring: MonitoringViewModel = viewModel(),
+    account: AccountViewModel = viewModel(),
+    profile: ProfileViewModel = viewModel(),
+    monitoring: MonitoringViewModel = viewModel(),
 ) {
-  val auth by account.state.collectAsStateWithLifecycle()
-  val p by profile.state.collectAsStateWithLifecycle()
-  val m by monitoring.state.collectAsStateWithLifecycle()
-  if (!auth.restored) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-    return
-  }
-  val session = auth.session
-  if (session == null) {
-    AccountScreen(auth, account::login, account::register, account::clearMessage)
-    return
-  }
-  key(session.userId) {
-    SignedInApp(
-      session,
-      auth,
-      p.forUser(session.userId),
-      m.forUser(session.userId),
-      account,
-      profile,
-      monitoring,
-    )
-  }
+    val auth by account.state.collectAsStateWithLifecycle()
+    val p by profile.state.collectAsStateWithLifecycle()
+    val m by monitoring.state.collectAsStateWithLifecycle()
+    if (!auth.restored) {
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
+    val session = auth.session
+    if (session == null) {
+        AccountScreen(auth, account::login, account::register, account::clearMessage)
+        return
+    }
+    key(session.userId) {
+        SignedInApp(
+            session,
+            auth,
+            p.forUser(session.userId),
+            m.forUser(session.userId),
+            account,
+            profile,
+            monitoring,
+        )
+    }
 }

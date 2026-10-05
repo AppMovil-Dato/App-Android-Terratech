@@ -21,22 +21,25 @@ import kotlinx.coroutines.*
 @Module
 @InstallIn(SingletonComponent::class)
 object RepositoryModule {
-  @Provides
-  @Singleton
-  fun accounts(
-    api: AccountApi,
-    store: SessionStore,
-    db: TerraDatabase,
-    scope: CoroutineScope,
-  ): AccountRepository = AccountRepositoryImpl(api, store, db, scope)
+    @Provides
+    @Singleton
+    fun accounts(
+        api: AccountApi,
+        store: SessionStore,
+        db: TerraDatabase,
+        scope: CoroutineScope,
+    ): AccountRepository = AccountRepositoryImpl(api, store, db, scope)
 
-  @Provides
-  @Singleton
-  fun profiles(api: ProfileApi, db: TerraDatabase): ProfileRepository =
-    ProfileRepositoryImpl(api, db)
+    @Provides
+    @Singleton
+    fun profiles(api: ProfileApi, db: TerraDatabase): ProfileRepository =
+        ProfileRepositoryImpl(api, db)
 
-  @Provides
-  @Singleton
-  fun monitoring(api: MonitoringApi, db: TerraDatabase, store: SessionStore): MonitoringRepository =
-    MonitoringRepositoryImpl(api, db, store)
+    @Provides
+    @Singleton
+    fun monitoring(
+        api: MonitoringApi,
+        db: TerraDatabase,
+        store: SessionStore,
+    ): MonitoringRepository = MonitoringRepositoryImpl(api, db, store)
 }

@@ -12,33 +12,33 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun ProfileScreen(
-  state: ProfileState,
-  session: Session,
-  onSave: (String, String, String, String, Double) -> Unit,
-  onRefresh: () -> Unit,
-  onLogout: () -> Unit,
-  onContinue: (() -> Unit)? = null,
+    state: ProfileState,
+    session: Session,
+    onSave: (String, String, String, String, Double) -> Unit,
+    onRefresh: () -> Unit,
+    onLogout: () -> Unit,
+    onContinue: (() -> Unit)? = null,
 ) {
-  var editing by rememberSaveable { mutableStateOf(false) }
-  var confirmLogout by remember { mutableStateOf(false) }
-  LaunchedEffect(state.saved) { if (state.saved) editing = false }
-  ProfileContent(
-    state,
-    session,
-    editing,
-    onEditingChange = { editing = it },
-    onSave = onSave,
-    onContinue = onContinue,
-    onRefresh = onRefresh,
-    onRequestLogout = { confirmLogout = true },
-  )
-  if (confirmLogout) {
-    LogoutConfirmationDialog(
-      onDismiss = { confirmLogout = false },
-      onConfirm = {
-        confirmLogout = false
-        onLogout()
-      },
+    var editing by rememberSaveable { mutableStateOf(false) }
+    var confirmLogout by remember { mutableStateOf(false) }
+    LaunchedEffect(state.saved) { if (state.saved) editing = false }
+    ProfileContent(
+        state,
+        session,
+        editing,
+        onEditingChange = { editing = it },
+        onSave = onSave,
+        onContinue = onContinue,
+        onRefresh = onRefresh,
+        onRequestLogout = { confirmLogout = true },
     )
-  }
+    if (confirmLogout) {
+        LogoutConfirmationDialog(
+            onDismiss = { confirmLogout = false },
+            onConfirm = {
+                confirmLogout = false
+                onLogout()
+            },
+        )
+    }
 }

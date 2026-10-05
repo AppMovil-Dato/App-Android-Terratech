@@ -8,22 +8,22 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class FindFieldLocationTest {
-  @Test
-  fun searchTrimsValidQueriesAndSkipsInvalidOnes() = runTest {
-    val queries = mutableListOf<String>()
-    val find =
-      FindFieldLocation(
-        object : LocationSearch {
-          override suspend fun find(query: String): Coordinates? {
-            queries += query
-            return Coordinates.of(-14.0, -75.0)
-          }
-        }
-      )
-    assertNull(find(" "))
-    assertNull(find("x"))
-    assertNull(find("x".repeat(201)))
-    assertEquals(Coordinates.of(-14.0, -75.0), find(" Ica "))
-    assertEquals(listOf("Ica"), queries)
-  }
+    @Test
+    fun searchTrimsValidQueriesAndSkipsInvalidOnes() = runTest {
+        val queries = mutableListOf<String>()
+        val find =
+            FindFieldLocation(
+                object : LocationSearch {
+                    override suspend fun find(query: String): Coordinates? {
+                        queries += query
+                        return Coordinates.of(-14.0, -75.0)
+                    }
+                }
+            )
+        assertNull(find(" "))
+        assertNull(find("x"))
+        assertNull(find("x".repeat(201)))
+        assertEquals(Coordinates.of(-14.0, -75.0), find(" Ica "))
+        assertEquals(listOf("Ica"), queries)
+    }
 }

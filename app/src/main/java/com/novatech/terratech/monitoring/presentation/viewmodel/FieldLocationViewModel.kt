@@ -14,28 +14,29 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class FieldLocationViewModel @Inject constructor(private val find: FindFieldLocation) :
-  ViewModel() {
-  private val mutable = MutableStateFlow(MapSearchState())
-  val state = mutable.asStateFlow()
-  private var job: Job? = null
+    ViewModel() {
+    private val mutable = MutableStateFlow(MapSearchState())
+    val state = mutable.asStateFlow()
+    private var job: Job? = null
 
-  fun reset() {
-    job?.cancel()
-    mutable.value = MapSearchState()
-  }
-
-  fun search(query: String) {
-    job?.cancel()
-    job = viewModelScope.launch {
-      mutable.value = MapSearchState(searching = true)
-      try {
-        val point = find(query)
-        mutable.value = MapSearchState(result = point, error = point == null)
-      } catch (e: CancellationException) {
-        throw e
-      } catch (e: Exception) {
-        mutable.value = MapSearchState(error = true)
-      }
+    fun reset() {
+        job?.cancel()
+        mutable.value = MapSearchState()
     }
-  }
+
+    fun search(query: String) {
+        job?.cancel()
+        job =
+            viewModelScope.launch {
+                mutable.value = MapSearchState(searching = true)
+                try {
+                    val point = find(query)
+                    mutable.value = MapSearchState(result = point, error = point == null)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    mutable.value = MapSearchState(error = true)
+                }
+            }
+    }
 }

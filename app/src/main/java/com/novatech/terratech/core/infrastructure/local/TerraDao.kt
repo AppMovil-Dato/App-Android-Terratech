@@ -5,15 +5,14 @@ import androidx.room.Transaction
 import com.novatech.terratech.monitoring.infrastructure.local.dao.MonitoringDao
 import com.novatech.terratech.profile.infrastructure.local.dao.ProfileDao
 
-/** Composes context queries for one atomic private-data cleanup. */
 @Dao
 interface TerraDao : ProfileDao, MonitoringDao {
-  @Transaction
-  suspend fun clearPrivateData() {
-    clearProfiles()
-    clearFields()
-    clearSensors()
-    clearReadings()
-    clearDownloads()
-  }
+    @Transaction
+    suspend fun clearPrivateData() {
+        clearProfiles()
+        clearFields()
+        clearSensors()
+        clearReadings()
+        clearDownloads()
+    }
 }

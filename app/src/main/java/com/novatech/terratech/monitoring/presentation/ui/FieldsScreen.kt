@@ -21,46 +21,54 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun FieldsScreen(
-  state: MonitoringState,
-  hasProfile: Boolean,
-  onChoose: (Int) -> Unit,
-  onCreate: () -> Unit,
-  onProfile: () -> Unit,
+    state: MonitoringState,
+    hasProfile: Boolean,
+    onChoose: (Int) -> Unit,
+    onCreate: () -> Unit,
+    onProfile: () -> Unit,
 ) {
-  LazyColumn(
-    Modifier.fillMaxSize(),
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    item {
-      PageTitle(
-        stringResource(R.string.my_fields),
-        stringResource(R.string.plot_count, state.fields.size),
-      )
+    LazyColumn(
+        Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item {
+            PageTitle(
+                stringResource(R.string.my_fields),
+                stringResource(R.string.plot_count, state.fields.size),
+            )
+        }
+        item {
+            PrimaryButton(
+                stringResource(if (hasProfile) R.string.new_field else R.string.complete_profile),
+                !state.busy,
+            ) {
+                if (hasProfile) onCreate() else onProfile()
+            }
+        }
+        if (state.fields.isEmpty())
+            item {
+                EmptyCard(
+                    stringResource(R.string.no_fields),
+                    stringResource(R.string.no_fields_body),
+                )
+            }
+        items(state.fields, key = { it.id }) { field ->
+            FarmCard {
+                Pill(field.cropName ?: stringResource(R.string.crop))
+                Text(field.name, style = MaterialTheme.typography.titleLarge)
+                Text(areaNumber(field.sizeM2 / 10000) + " ha · " + field.soilType, color = Muted)
+                Text(
+                    stringResource(
+                        R.string.sensor_count,
+                        state.sensors.count { it.fieldId == field.id },
+                    ),
+                    color = Muted,
+                )
+                PrimaryButton(stringResource(R.string.view_field), !state.busy) {
+                    onChoose(field.id)
+                }
+            }
+        }
     }
-    item {
-      PrimaryButton(
-        stringResource(if (hasProfile) R.string.new_field else R.string.complete_profile),
-        !state.busy,
-      ) {
-        if (hasProfile) onCreate() else onProfile()
-      }
-    }
-    if (state.fields.isEmpty())
-      item {
-        EmptyCard(stringResource(R.string.no_fields), stringResource(R.string.no_fields_body))
-      }
-    items(state.fields, key = { it.id }) { field ->
-      FarmCard {
-        Pill(field.cropName ?: stringResource(R.string.crop))
-        Text(field.name, style = MaterialTheme.typography.titleLarge)
-        Text(areaNumber(field.sizeM2 / 10000) + " ha · " + field.soilType, color = Muted)
-        Text(
-          stringResource(R.string.sensor_count, state.sensors.count { it.fieldId == field.id }),
-          color = Muted,
-        )
-        PrimaryButton(stringResource(R.string.view_field), !state.busy) { onChoose(field.id) }
-      }
-    }
-  }
 }

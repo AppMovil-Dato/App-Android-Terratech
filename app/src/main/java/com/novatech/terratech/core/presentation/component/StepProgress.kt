@@ -10,26 +10,26 @@ import com.novatech.terratech.R
 
 @Composable
 fun StepProgress(step: Int, labels: List<String>) {
-  Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-    Text(
-      stringResource(R.string.step_of, step + 1, labels.size),
-      style = MaterialTheme.typography.labelLarge,
-      color = MaterialTheme.colorScheme.primary,
-    )
-    LinearProgressIndicator(
-      progress = { (step + 1f) / labels.size },
-      modifier = Modifier.fillMaxWidth(),
-    )
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-      labels.forEachIndexed { i, text ->
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Text(
-          text,
-          style = MaterialTheme.typography.labelSmall,
-          color =
-            if (i == step) MaterialTheme.colorScheme.primary
-            else MaterialTheme.colorScheme.onSurfaceVariant,
+            stringResource(R.string.step_of, step + 1, labels.size),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.primary,
         )
-      }
+        LinearProgressIndicator(
+            progress = { (step + 1f) / labels.size },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            labels.forEachIndexed { i, text ->
+                Text(
+                    text,
+                    style = MaterialTheme.typography.labelSmall,
+                    color =
+                        if (i == step) MaterialTheme.colorScheme.primary
+                        else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
     }
-  }
 }

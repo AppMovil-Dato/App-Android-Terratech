@@ -11,12 +11,12 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun PrimaryButton(text: String, enabled: Boolean = true, onClick: () -> Unit) {
-  Button(
-    onClick = onClick,
-    enabled = enabled,
-    modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
-    shape = RoundedCornerShape(14.dp),
-  ) {
-    Text(text)
-  }
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier.fillMaxWidth().heightIn(min = 52.dp),
+        shape = RoundedCornerShape(14.dp),
+    ) {
+        Text(text)
+    }
 }

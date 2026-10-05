@@ -20,23 +20,26 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun SensorScreen(state: MonitoringState, onHistory: () -> Unit) {
-  LazyColumn(
-    contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp),
-  ) {
-    item {
-      PageTitle(
-        state.selectedSensor?.name ?: stringResource(R.string.sensor_detail),
-        state.selectedSensor?.sensorCode,
-      )
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item {
+            PageTitle(
+                state.selectedSensor?.name ?: stringResource(R.string.sensor_detail),
+                state.selectedSensor?.sensorCode,
+            )
+        }
+        state.latest?.let { r ->
+            item { ReadingSummary(r, state) }
+            item { ReadingMetrics(r) }
+        }
+            ?: item {
+                EmptyCard(
+                    stringResource(R.string.no_readings),
+                    stringResource(R.string.no_readings_body),
+                )
+            }
+        item { PrimaryButton(stringResource(R.string.view_history), onClick = onHistory) }
     }
-    state.latest?.let { r ->
-      item { ReadingSummary(r, state) }
-      item { ReadingMetrics(r) }
-    }
-      ?: item {
-        EmptyCard(stringResource(R.string.no_readings), stringResource(R.string.no_readings_body))
-      }
-    item { PrimaryButton(stringResource(R.string.view_history), onClick = onHistory) }
-  }
 }

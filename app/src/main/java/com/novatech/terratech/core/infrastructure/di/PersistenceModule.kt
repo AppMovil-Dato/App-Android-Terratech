@@ -15,14 +15,14 @@ import kotlinx.coroutines.*
 @Module
 @InstallIn(SingletonComponent::class)
 object PersistenceModule {
-  @Provides
-  @Singleton
-  fun database(@ApplicationContext context: Context) =
-    Room.databaseBuilder(context, TerraDatabase::class.java, "terratech.db")
-      .addMigrations(com.novatech.terratech.core.infrastructure.local.FieldBoundaryMigration)
-      .build()
+    @Provides
+    @Singleton
+    fun database(@ApplicationContext context: Context) =
+        Room.databaseBuilder(context, TerraDatabase::class.java, "terratech.db")
+            .addMigrations(com.novatech.terratech.core.infrastructure.local.FieldBoundaryMigration)
+            .build()
 
-  @Provides @Singleton fun store(@ApplicationContext context: Context) = SessionStore(context)
+    @Provides @Singleton fun store(@ApplicationContext context: Context) = SessionStore(context)
 
-  @Provides @Singleton fun scope() = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    @Provides @Singleton fun scope() = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 }

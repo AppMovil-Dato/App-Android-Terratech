@@ -18,26 +18,26 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 internal fun MoistureRing(value: Double, warning: Boolean) {
-  val label = number(value) + " %"
-  Box(
-    Modifier.size(130.dp).semantics(mergeDescendants = true) { contentDescription = label },
-    contentAlignment = Alignment.Center,
-  ) {
-    Canvas(Modifier.fillMaxSize()) {
-      val stroke = 10.dp.toPx()
-      val inset = stroke / 2
-      val size = Size(size.width - stroke, size.height - stroke)
-      drawArc(LeafLight, 0f, 360f, false, Offset(inset, inset), size, style = Stroke(stroke))
-      drawArc(
-        if (warning) Amber else FarmGreen,
-        -90f,
-        (value.coerceIn(0.0, 100.0) * 3.6).toFloat(),
-        false,
-        Offset(inset, inset),
-        size,
-        style = Stroke(stroke, cap = StrokeCap.Round),
-      )
+    val label = number(value) + " %"
+    Box(
+        Modifier.size(130.dp).semantics(mergeDescendants = true) { contentDescription = label },
+        contentAlignment = Alignment.Center,
+    ) {
+        Canvas(Modifier.fillMaxSize()) {
+            val stroke = 10.dp.toPx()
+            val inset = stroke / 2
+            val size = Size(size.width - stroke, size.height - stroke)
+            drawArc(LeafLight, 0f, 360f, false, Offset(inset, inset), size, style = Stroke(stroke))
+            drawArc(
+                if (warning) Amber else FarmGreen,
+                -90f,
+                (value.coerceIn(0.0, 100.0) * 3.6).toFloat(),
+                false,
+                Offset(inset, inset),
+                size,
+                style = Stroke(stroke, cap = StrokeCap.Round),
+            )
+        }
+        Text(label, style = MaterialTheme.typography.headlineMedium)
     }
-    Text(label, style = MaterialTheme.typography.headlineMedium)
-  }
 }

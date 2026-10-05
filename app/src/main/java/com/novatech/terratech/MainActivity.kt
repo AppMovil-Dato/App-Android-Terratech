@@ -10,17 +10,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    enableEdgeToEdge()
-    setContent {
-      TerraTechTheme {
-        androidx.compose.material3.Surface(
-          color = androidx.compose.material3.MaterialTheme.colorScheme.background
-        ) {
-          TerraTechApp()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            TerraTechTheme {
+                androidx.compose.material3.Surface(
+                    color = androidx.compose.material3.MaterialTheme.colorScheme.background
+                ) {
+                    TerraTechApp()
+                }
+            }
         }
-      }
     }
-  }
 }

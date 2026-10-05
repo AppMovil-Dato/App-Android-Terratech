@@ -12,17 +12,17 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 internal fun FormInput(
-  value: String,
-  change: (String) -> Unit,
-  label: Int,
-  type: KeyboardType = KeyboardType.Text,
+    value: String,
+    change: (String) -> Unit,
+    label: Int,
+    type: KeyboardType = KeyboardType.Text,
 ) {
-  OutlinedTextField(
-    value,
-    change,
-    label = { Text(stringResource(label)) },
-    modifier = Modifier.fillMaxWidth(),
-    singleLine = true,
-    keyboardOptions = KeyboardOptions(keyboardType = type),
-  )
+    OutlinedTextField(
+        value,
+        change,
+        label = { Text(stringResource(label)) },
+        modifier = Modifier.fillMaxWidth(),
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = type),
+    )
 }

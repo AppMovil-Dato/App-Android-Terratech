@@ -16,26 +16,30 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun ReadingMetrics(r: Reading) {
-  Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-      Metric(
-        stringResource(R.string.temperature),
-        number(r.soilTemperatureC) + " °C",
-        Modifier.weight(1f),
-      )
-      Metric(stringResource(R.string.nitrogen), number(r.nitrogenPpm) + " ppm", Modifier.weight(1f))
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Metric(
+                stringResource(R.string.temperature),
+                number(r.soilTemperatureC) + " °C",
+                Modifier.weight(1f),
+            )
+            Metric(
+                stringResource(R.string.nitrogen),
+                number(r.nitrogenPpm) + " ppm",
+                Modifier.weight(1f),
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            Metric(
+                stringResource(R.string.phosphorus),
+                number(r.phosphorusPpm) + " ppm",
+                Modifier.weight(1f),
+            )
+            Metric(
+                stringResource(R.string.potassium),
+                number(r.potassiumPpm) + " ppm",
+                Modifier.weight(1f),
+            )
+        }
     }
-    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-      Metric(
-        stringResource(R.string.phosphorus),
-        number(r.phosphorusPpm) + " ppm",
-        Modifier.weight(1f),
-      )
-      Metric(
-        stringResource(R.string.potassium),
-        number(r.potassiumPpm) + " ppm",
-        Modifier.weight(1f),
-      )
-    }
-  }
 }

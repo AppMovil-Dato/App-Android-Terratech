@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProfileDao {
-  @Query("SELECT * FROM profiles WHERE userId=:user") fun profile(user: Int): Flow<ProfileRow?>
+    @Query("SELECT * FROM profiles WHERE userId=:user") fun profile(user: Int): Flow<ProfileRow?>
 
-  @Upsert suspend fun putProfile(row: ProfileRow)
+    @Upsert suspend fun putProfile(row: ProfileRow)
 
-  @Query("DELETE FROM profiles") suspend fun clearProfiles()
+    @Query("DELETE FROM profiles") suspend fun clearProfiles()
 }

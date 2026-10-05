@@ -21,26 +21,26 @@ import retrofit2.converter.gson.GsonConverterFactory
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-  @Provides
-  @Singleton
-  fun api(account: Provider<AccountRepository>): TerraApi {
-    val client =
-      OkHttpClient.Builder()
-        .connectTimeout(10, TimeUnit.SECONDS)
-        .readTimeout(20, TimeUnit.SECONDS)
-        .addInterceptor(SessionAuthorizationInterceptor(account))
-        .build()
-    return Retrofit.Builder()
-      .baseUrl(BuildConfig.API_URL)
-      .client(client)
-      .addConverterFactory(GsonConverterFactory.create())
-      .build()
-      .create(TerraApi::class.java)
-  }
+    @Provides
+    @Singleton
+    fun api(account: Provider<AccountRepository>): TerraApi {
+        val client =
+            OkHttpClient.Builder()
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(20, TimeUnit.SECONDS)
+                .addInterceptor(SessionAuthorizationInterceptor(account))
+                .build()
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.API_URL)
+            .client(client)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(TerraApi::class.java)
+    }
 
-  @Provides fun accountApi(api: TerraApi): AccountApi = api
+    @Provides fun accountApi(api: TerraApi): AccountApi = api
 
-  @Provides fun profileApi(api: TerraApi): ProfileApi = api
+    @Provides fun profileApi(api: TerraApi): ProfileApi = api
 
-  @Provides fun monitoringApi(api: TerraApi): MonitoringApi = api
+    @Provides fun monitoringApi(api: TerraApi): MonitoringApi = api
 }

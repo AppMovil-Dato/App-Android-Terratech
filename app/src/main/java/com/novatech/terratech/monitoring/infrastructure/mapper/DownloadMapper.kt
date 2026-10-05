@@ -5,9 +5,9 @@ import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
 import java.time.Instant
 
 fun DownloadRow.domain() =
-  DownloadState(
-    Instant.parse(downloadedAt),
-    fromUtc?.let(Instant::parse),
-    toUtc?.let(Instant::parse),
-    minimumMoisture,
-  )
+    DownloadState(
+        Instant.parse(downloadedAt),
+        fromUtc?.let(Instant::parse),
+        toUtc?.let(Instant::parse),
+        minimumMoisture,
+    )

@@ -9,8 +9,8 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun PageTitle(title: String, subtitle: String? = null) {
-  Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-    Text(title, style = MaterialTheme.typography.headlineMedium)
-    subtitle?.let { Text(it, color = Muted) }
-  }
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(title, style = MaterialTheme.typography.headlineMedium)
+        subtitle?.let { Text(it, color = Muted) }
+    }
 }

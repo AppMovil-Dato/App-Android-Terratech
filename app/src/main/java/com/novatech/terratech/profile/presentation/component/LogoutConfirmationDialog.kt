@@ -10,15 +10,15 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 internal fun LogoutConfirmationDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
-  AlertDialog(
-    onDismissRequest = onDismiss,
-    title = { Text(stringResource(R.string.logout_title)) },
-    text = { Text(stringResource(R.string.logout_body)) },
-    confirmButton = {
-      TextButton(onClick = onConfirm) { Text(stringResource(R.string.logout)) }
-    },
-    dismissButton = {
-      TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
-    },
-  )
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.logout_title)) },
+        text = { Text(stringResource(R.string.logout_body)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) { Text(stringResource(R.string.logout)) }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
+        },
+    )
 }

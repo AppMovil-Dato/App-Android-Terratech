@@ -14,16 +14,16 @@ import com.novatech.terratech.ui.theme.*
 
 @Composable
 fun Notice(error: String?, retry: (() -> Unit)? = null) {
-  if (error == null) return
-  val warning = error == "OFFLINE" || error == "UNAUTHENTICATED"
-  Surface(
-    color = if (warning) AmberLight else MaterialTheme.colorScheme.errorContainer,
-    shape = RoundedCornerShape(14.dp),
-    modifier = Modifier.fillMaxWidth(),
-  ) {
-    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-      Text(errorText(error))
-      retry?.let { TextButton(onClick = it) { Text(stringResource(R.string.retry)) } }
+    if (error == null) return
+    val warning = error == "OFFLINE" || error == "UNAUTHENTICATED"
+    Surface(
+        color = if (warning) AmberLight else MaterialTheme.colorScheme.errorContainer,
+        shape = RoundedCornerShape(14.dp),
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(errorText(error))
+            retry?.let { TextButton(onClick = it) { Text(stringResource(R.string.retry)) } }
+        }
     }
-  }
 }

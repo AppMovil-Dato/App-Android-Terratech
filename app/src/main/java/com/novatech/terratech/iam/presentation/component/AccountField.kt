@@ -16,36 +16,38 @@ import com.novatech.terratech.core.presentation.format.errorText
 
 @Composable
 fun AccountField(
-  value: String,
-  onChange: (String) -> Unit,
-  label: Int,
-  error: String?,
-  email: Boolean = false,
-  enabled: Boolean = true,
+    value: String,
+    onChange: (String) -> Unit,
+    label: Int,
+    error: String?,
+    email: Boolean = false,
+    enabled: Boolean = true,
 ) {
-  val focus = LocalFocusManager.current
-  OutlinedTextField(
-    value,
-    onChange,
-    modifier =
-      Modifier.fillMaxWidth()
-        .then(
-          if (email) Modifier.semantics { contentType = ContentType.EmailAddress } else Modifier
-        ),
-    label = { Text(stringResource(label)) },
-    singleLine = true,
-    isError = error != null,
-    enabled = enabled,
-    supportingText =
-      if (error != null) {
-        { Text(errorText(error)) }
-      } else null,
-    keyboardOptions =
-      KeyboardOptions(
-        keyboardType = if (email) KeyboardType.Email else KeyboardType.Text,
-        capitalization = if (email) KeyboardCapitalization.None else KeyboardCapitalization.Words,
-        imeAction = ImeAction.Next,
-      ),
-    keyboardActions = KeyboardActions(onNext = { focus.moveFocus(FocusDirection.Down) }),
-  )
+    val focus = LocalFocusManager.current
+    OutlinedTextField(
+        value,
+        onChange,
+        modifier =
+            Modifier.fillMaxWidth()
+                .then(
+                    if (email) Modifier.semantics { contentType = ContentType.EmailAddress }
+                    else Modifier
+                ),
+        label = { Text(stringResource(label)) },
+        singleLine = true,
+        isError = error != null,
+        enabled = enabled,
+        supportingText =
+            if (error != null) {
+                { Text(errorText(error)) }
+            } else null,
+        keyboardOptions =
+            KeyboardOptions(
+                keyboardType = if (email) KeyboardType.Email else KeyboardType.Text,
+                capitalization =
+                    if (email) KeyboardCapitalization.None else KeyboardCapitalization.Words,
+                imeAction = ImeAction.Next,
+            ),
+        keyboardActions = KeyboardActions(onNext = { focus.moveFocus(FocusDirection.Down) }),
+    )
 }

@@ -15,9 +15,10 @@ import kotlinx.coroutines.*
 @Module
 @InstallIn(SingletonComponent::class)
 object UseCaseModule {
-  @Provides fun accountActions(repository: AccountRepository) = AccountActions(repository)
+    @Provides fun accountActions(repository: AccountRepository) = AccountActions(repository)
 
-  @Provides fun profileActions(repository: ProfileRepository) = ProfileActions(repository)
+    @Provides fun profileActions(repository: ProfileRepository) = ProfileActions(repository)
 
-  @Provides fun monitoringActions(repository: MonitoringRepository) = MonitoringActions(repository)
+    @Provides
+    fun monitoringActions(repository: MonitoringRepository) = MonitoringActions(repository)
 }
