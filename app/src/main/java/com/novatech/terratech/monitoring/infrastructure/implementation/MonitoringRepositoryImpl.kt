@@ -37,9 +37,12 @@ class MonitoringRepositoryImpl(
 
   override suspend fun refreshFields(user: Int) {
     val rows = apiCall { api.fields() }.map { it.row(user) }
+    val sensors = apiCall { api.allSensors() }.map { it.row(user) }
     db.withTransaction {
       dao.deleteFields(user)
       dao.putFields(rows)
+      dao.deleteAllSensors(user)
+      dao.putSensors(sensors)
     }
   }
 
@@ -60,21 +63,41 @@ class MonitoringRepositoryImpl(
     soil: String,
     latitude: Double,
     longitude: Double,
-  ) {
-    dao.putFields(
-      listOf(
-        apiCall {
-            api.createField(CreateFieldDto(profile, name, area, soil, latitude, longitude, crop))
-          }
-          .row(user)
+    boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates>,
+  ): com.novatech.terratech.monitoring.domain.entity.Field {
+    val row = apiCall {
+      api.createField(
+        CreateFieldDto(
+          profile,
+          name,
+          area,
+          soil,
+          latitude,
+          longitude,
+          crop,
+          boundary.map {
+            com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldVertexDto(
+              it.latitude,
+              it.longitude,
+            )
+          },
+        )
       )
-    )
+    }
+      .row(user)
+    dao.putFields(listOf(row))
+    return row.domain()
   }
 
-  override suspend fun registerSensor(user: Int, field: Int, code: String, name: String) {
-    dao.putSensors(
-      listOf(apiCall { api.registerSensor(RegisterSensorDto(code, field, name)) }.row(user))
-    )
+  override suspend fun registerSensor(
+    user: Int,
+    field: Int,
+    code: String,
+    name: String,
+  ): com.novatech.terratech.monitoring.domain.entity.Sensor {
+    val row = apiCall { api.registerSensor(RegisterSensorDto(code, field, name)) }.row(user)
+    dao.putSensors(listOf(row))
+    return row.domain()
   }
 
   override suspend fun refreshReadings(user: Int, device: Int, days: Int) {

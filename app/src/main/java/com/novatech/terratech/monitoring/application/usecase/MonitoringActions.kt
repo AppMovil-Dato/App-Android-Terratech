@@ -39,9 +39,10 @@ class MonitoringActions(private val repository: MonitoringRepository) {
     soil: String,
     latitude: Double,
     longitude: Double,
-  ) {
-    val draft = FieldDraft.of(name, crop, hectares, soil, latitude, longitude)
-    repository.createField(
+    boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> = emptyList(),
+  ): com.novatech.terratech.monitoring.domain.entity.Field {
+    val draft = FieldDraft.of(name, crop, hectares, soil, latitude, longitude, boundary)
+    return repository.createField(
       user,
       profile,
       draft.name.value,
@@ -50,11 +51,17 @@ class MonitoringActions(private val repository: MonitoringRepository) {
       draft.soil,
       draft.coordinates.latitude,
       draft.coordinates.longitude,
+      draft.boundary,
     )
   }
 
-  suspend fun registerSensor(user: Int, field: Int, code: String, name: String) {
+  suspend fun registerSensor(
+    user: Int,
+    field: Int,
+    code: String,
+    name: String,
+  ): com.novatech.terratech.monitoring.domain.entity.Sensor {
     val sensorName = FieldName.of(name)
-    repository.registerSensor(user, field, SensorCode.of(code).value, sensorName.value)
+    return repository.registerSensor(user, field, SensorCode.of(code).value, sensorName.value)
   }
 }

@@ -24,9 +24,9 @@ if DRIVER not in ["compose", "artemis"]:
 ARTEMIS = pathlib.Path(
     os.environ.get("TB1_ARTEMIS_ROOT", str(ROOT.parents[2] / ".tools/artemis"))
 )
-OUT = ROOT / (
+OUT = ROOT / os.environ.get("TB1_EVIDENCE_DIR", (
     "docs/evidence/artemis" if DRIVER == "artemis" else "docs/evidence/backend-journey"
-)
+))
 OUT.mkdir(parents=True, exist_ok=True)
 # This harness targets the dedicated local review runtime; no external/Production target is accepted.
 env = os.environ.copy()
@@ -89,11 +89,9 @@ try:
         [ADB, "-s", SERIAL, "emu", "avd", "name"], check=True, stdout=subprocess.DEVNULL
     )
     # Reset only the explicit emulator test app; repeated journeys start from an anonymous session.
-    subprocess.run(
-        [ADB, "-s", SERIAL, "shell", "pm", "clear", "com.novatech.terratech"],
-        check=True,
-        stdout=subprocess.DEVNULL,
-    )
+    installed = subprocess.run([ADB, "-s", SERIAL, "shell", "pm", "path", "com.novatech.terratech"], capture_output=True, text=True, check=False).stdout.strip()
+    if installed:
+        subprocess.run([ADB, "-s", SERIAL, "shell", "pm", "clear", "com.novatech.terratech"], check=True, stdout=subprocess.DEVNULL)
     sql(f"CREATE DATABASE `{DB}`")
     with (OUT / "catalog.log").open("w") as log:
         subprocess.run(
@@ -268,6 +266,9 @@ try:
         shutil.copy2(reports[0], OUT / "instrumented-results.xml")
         for name in [
             "login",
+            "registered-home",
+            "map-polygon",
+            "field-review",
             "profile",
             "fields",
             "sensor",
@@ -290,6 +291,10 @@ try:
                 check=True,
                 stdout=subprocess.DEVNULL,
             )
+    # The drawn boundary must be saved by HTTP, not only rendered in local state.
+    boundary_points = int(sql("SELECT JSON_LENGTH(boundary) FROM fields ORDER BY id LIMIT 1", DB))
+    if boundary_points != 4:
+        raise RuntimeError("Drawn polygon was not persisted by the backend")
     # Actual cold process restart, with radios off and the database/saved session intact.
     subprocess.run([ADB, "-s", SERIAL, "shell", "svc", "wifi", "disable"], check=True)
     subprocess.run([ADB, "-s", SERIAL, "shell", "svc", "data", "disable"], check=True)
@@ -363,6 +368,7 @@ try:
         "device": "emulator",
         "journeyPassed": True,
         "coldProcessRestartOfflinePassed": True,
+        "savedBoundaryPoints": boundary_points,
         "readingCount": int(sql("SELECT COUNT(*) FROM sensor_readings", DB)),
         "credentialsRecorded": False,
         "timestampUtc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),

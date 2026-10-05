@@ -30,6 +30,9 @@ fun HomeScreen(
   onProfile: () -> Unit,
   onHistory: () -> Unit,
   onSensor: () -> Unit,
+  onCreateField: () -> Unit = onFields,
+  onConnectSensor: () -> Unit = onFields,
+  onSwitchSensor: () -> Unit = onFields,
 ) {
   LazyColumn(
     Modifier.fillMaxSize(),
@@ -42,13 +45,15 @@ fun HomeScreen(
         stringResource(R.string.farm_summary),
       )
     }
-    if (!hasProfile)
+    if (state.fields.isEmpty()) {
       item {
-        EmptyCard(
-          stringResource(R.string.complete_profile),
-          action = { PrimaryButton(stringResource(R.string.use_profile), onClick = onProfile) },
-        )
+        FarmCard {
+          Text(stringResource(R.string.no_fields), style = MaterialTheme.typography.titleLarge)
+          PrimaryButton(stringResource(R.string.new_field), !state.busy, onCreateField)
+        }
       }
+      return@LazyColumn
+    }
     item {
       FarmCard {
         Text(stringResource(R.string.active_field), color = Muted)
@@ -56,12 +61,18 @@ fun HomeScreen(
           state.selectedField?.name ?: stringResource(R.string.choose_field),
           style = MaterialTheme.typography.titleLarge,
         )
-        state.selectedSensor?.let { Text(it.name ?: it.sensorCode.orEmpty(), color = Muted) }
+        if (state.selectedSensor == null)
+          PrimaryButton(stringResource(R.string.associate), !state.busy, onConnectSensor)
+        state.selectedSensor?.let {
+          Text(it.name ?: it.sensorCode.orEmpty(), color = Muted)
+          TextButton(onClick = onSwitchSensor) { Text(stringResource(R.string.choose_sensor)) }
+        }
         OutlinedButton(onClick = onFields, modifier = Modifier.fillMaxWidth()) {
           Text(stringResource(R.string.choose_field))
         }
       }
     }
+    if (state.selectedSensor == null) return@LazyColumn
     val latest = state.latest
     if (latest != null) {
       item { ReadingSummary(latest, state) }

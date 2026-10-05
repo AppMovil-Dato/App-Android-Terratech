@@ -70,7 +70,9 @@ constructor(private val actions: MonitoringActions, private val account: Account
   }
 
   fun clearMessage() {
-    mutable.update { it.copy(error = null, created = false) }
+    mutable.update {
+      it.copy(error = null, created = false, createdFieldId = null, createdSensorId = null)
+    }
   }
 
   fun selectField(id: Int) {
@@ -158,15 +160,39 @@ constructor(private val actions: MonitoringActions, private val account: Account
     soil: String,
     lat: Double,
     lon: Double,
+    boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> = emptyList(),
   ) = request {
-    actions.createField(it, profile, name, crop, ha, soil, lat, lon)
-    mutable.update { it.copy(created = true) }
+    readingsJob?.cancel()
+    downloadJob?.cancel()
+    val field = actions.createField(it, profile, name, crop, ha, soil, lat, lon, boundary)
+    mutable.update {
+      it.copy(
+        fields = (it.fields.filterNot { old -> old.id == field.id } + field),
+        fieldId = field.id,
+        deviceId = null,
+        readings = emptyList(),
+        download = null,
+        created = true,
+        createdFieldId = field.id,
+      )
+    }
+    persistSelection()
   }
 
   fun registerSensor(code: String, name: String) = request { user ->
     val field = mutable.value.fieldId ?: throw Failure("FIELD_NOT_FOUND")
-    actions.registerSensor(user, field, code, name)
-    mutable.update { it.copy(created = true) }
+    val sensor = actions.registerSensor(user, field, code, name)
+    mutable.update {
+      it.copy(
+        sensors = (it.sensors.filterNot { old -> old.id == sensor.id } + sensor),
+        deviceId = sensor.id,
+        created = true,
+        createdSensorId = sensor.id,
+      )
+    }
+    persistSelection()
+    observeReadings()
+    pendingRefresh = true
   }
 
   private fun request(block: suspend (Int) -> Unit) {

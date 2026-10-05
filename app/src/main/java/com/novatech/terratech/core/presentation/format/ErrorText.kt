@@ -12,6 +12,8 @@ import com.novatech.terratech.ui.theme.*
 fun errorText(code: String): String =
   stringResource(
     when (code) {
+      "ACCOUNT_CREATED_LOGIN_REQUIRED" -> R.string.account_created_login_required
+      "INVALID_BOUNDARY" -> R.string.map_invalid_boundary
       "INVALID_EMAIL" -> R.string.error_email
       "INVALID_PASSWORD" -> R.string.error_password
       "INVALID_NAME" -> R.string.error_name

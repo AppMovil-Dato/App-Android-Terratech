@@ -36,6 +36,8 @@ interface MonitoringDao {
   @Query("DELETE FROM sensors WHERE userId=:user AND fieldId=:field")
   suspend fun deleteSensors(user: Int, field: Int)
 
+  @Query("DELETE FROM sensors WHERE userId=:user") suspend fun deleteAllSensors(user: Int)
+
   @Query("DELETE FROM fields") suspend fun clearFields()
 
   @Query("DELETE FROM sensors") suspend fun clearSensors()

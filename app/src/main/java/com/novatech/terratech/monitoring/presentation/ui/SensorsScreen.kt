@@ -30,8 +30,39 @@ fun SensorsScreen(state: MonitoringState, onChoose: (Int) -> Unit, onRegister: (
         stringResource(R.string.choose_sensor),
       )
     }
+    state.selectedField?.let { field ->
+      item {
+        com.novatech.terratech.monitoring.presentation.component.FieldMapView(
+          field.boundary.ifEmpty {
+            listOf(
+              com.novatech.terratech.monitoring.domain.valueobject.Coordinates.of(
+                field.latitude,
+                field.longitude,
+              )
+            )
+          },
+          field.boundary.isNotEmpty(),
+          Modifier.fillMaxWidth().height(210.dp),
+          interactive = false,
+        )
+      }
+      item {
+        Text(
+          com.novatech.terratech.core.presentation.format.areaNumber(field.sizeM2 / 10000) +
+            " ha · " +
+            field.cropName.orEmpty(),
+          color = Muted,
+        )
+      }
+    }
     item { PrimaryButton(stringResource(R.string.associate), !state.busy, onRegister) }
-    if (state.fieldSensors.isEmpty()) item { EmptyCard(stringResource(R.string.no_sensors)) }
+    if (state.fieldSensors.isEmpty())
+      item {
+        EmptyCard(
+          stringResource(R.string.no_sensors),
+          stringResource(R.string.field_sensor_empty_help),
+        )
+      }
     items(state.fieldSensors, key = { it.id }) { sensor ->
       FarmCard {
         Text(

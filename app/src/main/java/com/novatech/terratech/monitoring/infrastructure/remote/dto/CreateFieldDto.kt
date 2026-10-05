@@ -8,4 +8,5 @@ data class CreateFieldDto(
   val latitude: Double,
   val longitude: Double,
   val cropName: String,
+  val boundary: List<FieldVertexDto>? = null,
 )

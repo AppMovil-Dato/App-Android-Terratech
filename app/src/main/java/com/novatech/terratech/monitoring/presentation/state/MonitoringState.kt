@@ -15,6 +15,8 @@ data class MonitoringState(
   val busy: Boolean = false,
   val error: String? = null,
   val created: Boolean = false,
+  val createdFieldId: Int? = null,
+  val createdSensorId: Int? = null,
   val offline: Boolean = false,
   val now: Instant = Instant.now(),
 ) {

@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.novatech.terratech.iam.presentation.viewmodel.AccountViewModel
 import com.novatech.terratech.monitoring.presentation.ui.*
+import com.novatech.terratech.monitoring.presentation.viewmodel.FieldLocationViewModel
 import com.novatech.terratech.monitoring.presentation.viewmodel.MonitoringViewModel
 import com.novatech.terratech.profile.presentation.ui.ProfileScreen
 import com.novatech.terratech.profile.presentation.viewmodel.ProfileViewModel
@@ -21,6 +23,7 @@ internal fun TerraTechNavHost(
   account: AccountViewModel,
   profile: ProfileViewModel,
   monitoring: MonitoringViewModel,
+  fieldLocation: FieldLocationViewModel = viewModel(),
 ) {
   NavHost(navController = nav, startDestination = "home") {
     composable("home") {
@@ -32,6 +35,11 @@ internal fun TerraTechNavHost(
         { nav.navigate("profile") },
         { nav.navigate("history") },
         { nav.navigate("sensor") },
+        onCreateField = { nav.navigate(if (p.profile != null) "new-field" else "profile") },
+        onConnectSensor = {
+          if (m.selectedField != null) nav.navigate("register-sensor") else nav.navigate("fields")
+        },
+        onSwitchSensor = { nav.navigate("sensors") },
       )
     }
     composable("fields") {
@@ -47,12 +55,38 @@ internal fun TerraTechNavHost(
       )
     }
     composable("profile") {
-      ProfileScreen(p, session, profile::save, profile::refresh, account::logout)
+      ProfileScreen(
+        p,
+        session,
+        profile::save,
+        profile::refresh,
+        account::logout,
+        if (m.fields.isEmpty()) ({ nav.navigate("new-field") }) else null,
+      )
     }
     composable("new-field") {
-      CreateFieldScreen(m.busy) { name, crop, area, soil, lat, lon ->
-        p.profile?.let { monitoring.createField(it.id, name, crop, area, soil, lat, lon) }
-      }
+      CreateFieldScreen(
+        m.busy,
+        location = fieldLocation,
+        onCancel = {
+          nav.popBackStack()
+          monitoring.clearMessage()
+        },
+        onSave = { draft ->
+          p.profile?.let {
+            monitoring.createField(
+              it.id,
+              draft.name.value,
+              draft.crop,
+              draft.area.value / 10000,
+              draft.soil,
+              draft.coordinates.latitude,
+              draft.coordinates.longitude,
+              draft.boundary,
+            )
+          }
+        },
+      )
     }
     composable("sensors") {
       SensorsScreen(
@@ -64,7 +98,15 @@ internal fun TerraTechNavHost(
         { nav.navigate("register-sensor") },
       )
     }
-    composable("register-sensor") { RegisterSensorScreen(m.busy, monitoring::registerSensor) }
+    composable("register-sensor") {
+      RegisterSensorScreen(
+        m.busy,
+        monitoring::registerSensor,
+        m.selectedField?.name.orEmpty(),
+        m.error,
+        monitoring::clearMessage,
+      )
+    }
     composable("sensor") { SensorScreen(m) { nav.navigate("history") } }
     composable("history") {
       HistoryScreen(

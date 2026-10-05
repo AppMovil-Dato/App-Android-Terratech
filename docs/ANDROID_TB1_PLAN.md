@@ -4,7 +4,7 @@ Fecha: 4 de octubre de 2026, America/Lima. Estado: recorrido implementado. El ci
 
 ## Resultado que presentaremos
 
-Registro → login → completar perfil → crear/elegir parcela → asociar sensor por código → consultar indicadores → histórico 7/30 días → detalle de lectura → volver a consultar los datos descargados sin conexión.
+Registro con sesión inmediata → perfil → crear/elegir parcela → asociar sensor por código → consultar indicadores → histórico 7/30 días → detalle de lectura → volver a consultar los datos descargados sin conexión.
 
 Historias: US06, US07, US09, US17, US11, US10, US12 y nueva HU de consulta sin conexión. El backend ya cubre el recorrido; ver [contrato](BACKEND_CONTRACT.md) y [OpenAPI](backend-openapi.snapshot.json). Almacenamiento y pantallas implementados; verificar el alcance real con la matriz y resultados actuales.
 
@@ -102,3 +102,7 @@ La familia exacta de fuente requiere el archivo de diseño o metadatos originale
 - [Arquitectura offline-first oficial](https://developer.android.com/topic/architecture/data-layer/offline-first).
 - [Hilt oficial](https://developer.android.com/training/dependency-injection/hilt-android).
 - [Fuentes en Compose](https://developer.android.com/develop/ui/compose/text/fonts).
+
+## Actualización UX
+
+La implementación actual no tiene onboarding ni checklist. Consultar [UX_REFACTOR.md](UX_REFACTOR.md) para el formulario de parcelas con mapa, sesión de registro y validación actual.

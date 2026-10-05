@@ -70,14 +70,20 @@ class FakeMonitoringRepository : MonitoringRepository {
     soil: String,
     latitude: Double,
     longitude: Double,
-  ) {
+    boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates>,
+  ): Field {
     connected()
-    plots.value = plots.value + Field(2, profile, name, area, soil, latitude, longitude, crop)
+    val created = Field(2, profile, name, area, soil, latitude, longitude, crop, boundary)
+    plots.value = plots.value + created
+    return created
   }
 
-  override suspend fun registerSensor(user: Int, field: Int, code: String, name: String) {
+  override suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor {
     connected()
     registerCalls++
     if (occupied) throw Failure("SENSOR_OCCUPIED", 409)
+    val created = Sensor(12, field, name, code, "02:00:00:00:00:02", "OFFLINE")
+    devices.value = devices.value + created
+    return created
   }
 }

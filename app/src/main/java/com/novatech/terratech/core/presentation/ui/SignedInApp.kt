@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.*
@@ -44,23 +43,32 @@ internal fun SignedInApp(
     LaunchedEffect(session.token) { if (session.token != reauthToken) reauth = false }
     return
   }
+  val snackbar = remember { SnackbarHostState() }
+  val createdFieldMessage = stringResource(R.string.field_created)
+  val createdSensorMessage = stringResource(R.string.sensor_created)
   LaunchedEffect(m.created) {
     if (m.created) {
-      if (route == "new-field") nav.popBackStack("fields", false)
-      else if (route == "register-sensor") nav.popBackStack("sensors", false)
+      val fieldCreated = m.createdFieldId != null
+      nav.navigate(if (fieldCreated) "sensors" else "sensor") {
+        popUpTo(if (fieldCreated) "new-field" else "register-sensor") { inclusive = true }
+        launchSingleTop = true
+      }
       monitoring.clearMessage()
+      snackbar.showSnackbar(if (fieldCreated) createdFieldMessage else createdSensorMessage)
     }
   }
   Scaffold(
+    snackbarHost = { SnackbarHost(snackbar) },
     bottomBar = {
-      TerraTechBottomBar(route) { destination ->
-        monitoring.clearMessage()
-        nav.navigate(destination) {
-          popUpTo("home")
-          launchSingleTop = true
+      if (route !in listOf("new-field", "register-sensor"))
+        TerraTechBottomBar(route) { destination ->
+          monitoring.clearMessage()
+          nav.navigate(destination) {
+            popUpTo("home")
+            launchSingleTop = true
+          }
         }
-      }
-    }
+    },
   ) { padding ->
     Column(Modifier.padding(padding).fillMaxSize()) {
       if (m.busy) LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -74,22 +82,27 @@ internal fun SignedInApp(
         ) {
           Text(stringResource(R.string.reauth))
         }
-      Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-        if (route !in listOf("home", "fields", "profile"))
-          TextButton(
-            onClick = {
-              nav.popBackStack()
-              monitoring.clearMessage()
-            }
-          ) {
-            Text(stringResource(R.string.back))
-          }
-        Spacer(Modifier.weight(1f))
-        if (route !in listOf("profile", "new-field", "register-sensor"))
-          TextButton(onClick = monitoring::refresh, enabled = !m.busy) {
-            Text(stringResource(R.string.retry))
-          }
-      }
+      if (route != "new-field")
+        com.novatech.terratech.core.presentation.component.TerraTechToolbar(
+          title =
+            when (route) {
+              "sensors" -> m.selectedField?.name.orEmpty()
+              "sensor",
+              "history" -> m.selectedSensor?.name.orEmpty()
+              "register-sensor" -> stringResource(R.string.associate)
+              else -> p.profile?.fundoName ?: "TerraTech"
+            },
+          busy = m.busy,
+          onBack =
+            if (route !in listOf("home", "fields", "profile"))
+              ({
+                nav.popBackStack()
+                monitoring.clearMessage()
+              })
+            else null,
+          onRefresh =
+            if (route !in listOf("profile", "register-sensor")) monitoring::refresh else null,
+        )
       Box(Modifier.weight(1f)) {
         TerraTechNavHost(nav, session, p, m, account, profile, monitoring)
       }

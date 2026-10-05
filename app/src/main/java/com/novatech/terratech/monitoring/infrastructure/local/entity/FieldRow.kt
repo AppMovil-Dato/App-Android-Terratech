@@ -13,4 +13,5 @@ data class FieldRow(
   val latitude: Double,
   val longitude: Double,
   val cropName: String?,
+  @androidx.room.ColumnInfo(defaultValue = "'[]'") val boundaryJson: String = "[]",
 )

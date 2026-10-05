@@ -23,12 +23,8 @@ fun AccountScreen(
   var password by remember { mutableStateOf("") }
   var confirmation by remember { mutableStateOf("") }
   var visible by remember { mutableStateOf(false) }
-  LaunchedEffect(state.registered) {
-    if (state.registered) {
-      registering = false
-      password = ""
-      confirmation = ""
-    }
+  LaunchedEffect(state.error) {
+    if (state.error == "ACCOUNT_CREATED_LOGIN_REQUIRED") registering = false
   }
   AccountContent(
     state,
@@ -39,10 +35,22 @@ fun AccountScreen(
     confirmation,
     visible,
     reauth,
-    onNameChange = { name = it },
-    onEmailChange = { email = it },
-    onPasswordChange = { password = it },
-    onConfirmationChange = { confirmation = it },
+    onNameChange = {
+      name = it
+      onClear()
+    },
+    onEmailChange = {
+      email = it
+      onClear()
+    },
+    onPasswordChange = {
+      password = it
+      onClear()
+    },
+    onConfirmationChange = {
+      confirmation = it
+      onClear()
+    },
     onVisibilityChange = { visible = it },
     onToggleMode = {
       registering = !registering

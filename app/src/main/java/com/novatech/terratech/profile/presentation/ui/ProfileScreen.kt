@@ -17,6 +17,7 @@ fun ProfileScreen(
   onSave: (String, String, String, String, Double) -> Unit,
   onRefresh: () -> Unit,
   onLogout: () -> Unit,
+  onContinue: (() -> Unit)? = null,
 ) {
   var editing by rememberSaveable { mutableStateOf(false) }
   var confirmLogout by remember { mutableStateOf(false) }
@@ -27,6 +28,7 @@ fun ProfileScreen(
     editing,
     onEditingChange = { editing = it },
     onSave = onSave,
+    onContinue = onContinue,
     onRefresh = onRefresh,
     onRequestLogout = { confirmLogout = true },
   )

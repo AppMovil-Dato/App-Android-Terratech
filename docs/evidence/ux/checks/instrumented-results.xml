@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<testsuites tests="19" failures="0" errors="0" skipped="0" time="0.000" timestamp="2026-10-05T02:02:58" hostname="localhost">
+  <testsuite name="com.novatech.terratech.ComposeScreensTest" tests="6" failures="0" errors="0" skipped="0" time="4.596" timestamp="2026-10-05T02:02:58" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="spanishResourcesAreRendered" classname="com.novatech.terratech.ComposeScreensTest" time="0.842" />
+    <testcase name="historySwitchesThirtyDaysWithoutFakeReadings" classname="com.novatech.terratech.ComposeScreensTest" time="0.605" />
+    <testcase name="emptyFieldsExplainsFirstStep" classname="com.novatech.terratech.ComposeScreensTest" time="0.364" />
+    <testcase name="sensorDoesNotInventThresholdWithoutDownloadedReference" classname="com.novatech.terratech.ComposeScreensTest" time="0.439" />
+    <testcase name="largeTextStillAllowsFieldSelection" classname="com.novatech.terratech.ComposeScreensTest" time="1.067" />
+    <testcase name="accountScreenSubmitsExactPassword" classname="com.novatech.terratech.ComposeScreensTest" time="1.279" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.FieldBoundaryMigrationTest" tests="1" failures="0" errors="0" skipped="0" time="0.190" timestamp="2026-10-05T02:02:58" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="oldFieldsSurviveMigrationWithEmptyBoundary" classname="com.novatech.terratech.FieldBoundaryMigrationTest" time="0.190" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.FieldEditorInteractionTest" tests="1" failures="0" errors="0" skipped="0" time="1.719" timestamp="2026-10-05T02:02:58" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="cancelPreservesDraftUntilDiscardIsConfirmed" classname="com.novatech.terratech.FieldEditorInteractionTest" time="1.719" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.RegistrationSessionTest" tests="3" failures="0" errors="0" skipped="0" time="0.423" timestamp="2026-10-05T02:02:58" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="failedLegacyLoginReportsCreatedAccountAndDoesNotRepeatSignup" classname="com.novatech.terratech.RegistrationSessionTest" time="0.200" />
+    <testcase name="legacySignupAutomaticallyLogsInWithExactEnteredCredentials" classname="com.novatech.terratech.RegistrationSessionTest" time="0.138" />
+    <testcase name="signupSessionIsSavedWithoutAnotherLoginRequest" classname="com.novatech.terratech.RegistrationSessionTest" time="0.085" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.RoomCacheTest" tests="5" failures="0" errors="0" skipped="0" time="0.120" timestamp="2026-10-05T02:02:58" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="userScopedIdsNeverLeakBetweenAccounts" classname="com.novatech.terratech.RoomCacheTest" time="0.033" />
+    <testcase name="chronologicalOrderHandlesMixedIsoUtcPrecision" classname="com.novatech.terratech.RoomCacheTest" time="0.036" />
+    <testcase name="logoutClearsAllPrivateTables" classname="com.novatech.terratech.RoomCacheTest" time="0.023" />
+    <testcase name="rangeDownloadMetadataIsSeparateForSevenAndThirty" classname="com.novatech.terratech.RoomCacheTest" time="0.017" />
+    <testcase name="readingsUpsertWithoutDuplicatesAndKeepLongerHistory" classname="com.novatech.terratech.RoomCacheTest" time="0.011" />
+  </testsuite>
+  <testsuite name="com.novatech.terratech.SessionAndPersistenceTest" tests="3" failures="0" errors="0" skipped="0" time="0.111" timestamp="2026-10-05T02:02:58" hostname="localhost">
+    <properties>
+      <property name="device" value="emulator-5554" />
+    </properties>
+    <testcase name="diskCacheSurvivesDatabaseReopen" classname="com.novatech.terratech.SessionAndPersistenceTest" time="0.012" />
+    <testcase name="encryptedSessionAndSelectionRestoreAndLogoutClear" classname="com.novatech.terratech.SessionAndPersistenceTest" time="0.026" />
+    <testcase name="reauthenticationKeepsOwnCacheButSwitchingAccountClearsIt" classname="com.novatech.terratech.SessionAndPersistenceTest" time="0.073" />
+  </testsuite>
+</testsuites>

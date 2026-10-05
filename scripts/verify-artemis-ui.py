@@ -22,7 +22,7 @@ from PIL import Image
 from artemis.mcp.adb_server import _get_controller
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-OUT = ROOT / "docs/evidence/artemis"
+OUT = ROOT / os.environ.get("TB1_EVIDENCE_DIR", "docs/evidence/artemis")
 OUT.mkdir(parents=True, exist_ok=True)
 SERIAL = os.environ.get("TB1_ANDROID_SERIAL", "emulator-5554")
 if not SERIAL.startswith("emulator-") or os.environ.get("TB1_E2E_DRIVER") != "artemis":
@@ -120,7 +120,7 @@ class Journey:
 
     async def click(self, key, scroll=True, last=False):
         e = await self.node(
-            STRINGS.get(key, key), scroll=scroll, last=last, clickable=True
+            STRINGS.get(key, key), scroll=scroll, last=last, clickable=key not in ("home", "fields", "profile")
         )
         result = await self.controller.tap_at(*self.center(e))
         if result.error:
@@ -298,53 +298,65 @@ class Journey:
         await self.expect("error_confirmation")
         await self.input("confirmation", password)
         await self.click("register")
-        await self.expect("registered")
+        await self.expect("new_field")
+        assert not any(e.get("text") == STRINGS["welcome"] for e in await self.screen())
+        self.steps.append({"assert": "signupEntersAppWithoutOnboarding", "passed": True})
+        await self.capture("registered-home")
+        await self.logout()
         await self.click("no_account")
-        await self.input("password", password)
-        await self.input("confirmation", password)
+        for key, value in [("full_name", "Ana Torres"), ("email", email), ("password", password), ("confirmation", password)]:
+            await self.input(key, value)
         await self.click("register")
         await self.expect("error_duplicate")
         await self.click("have_account")
         await self.input("email", email)
         await self.input("password", "wrong-password")
-        await self.click("login")
+        await self.click("login", last=True)
         await self.expect("error_credentials")
         await self.input("password", password)
-        await self.click("login")
-        await self.expect("use_profile")
-        await self.click("use_profile")
-        for key, value in [
-            ("farm_name", "Fundo Artemis"),
-            ("phone", "999888777"),
-            ("location", "Huaral, Lima"),
-            ("area_ha", "1.25"),
-        ]:
-            await self.input(key, value)
-        await self.click("save")
-        await self.expect("profile_saved")
-        await self.click("edit_profile")
-        await self.input("full_name", "Ana Torres Vega")
-        await self.input("area_ha", "2.25")
-        await self.click("save")
-        await self.expect("profile_saved")
-        await self.expect("Ana Torres Vega")
-        await self.capture("profile")
-        await self.click("fields")
+        await self.click("login", last=True)
+        await self.expect("new_field")
         await self.click("new_field")
-        for key, value in [
-            ("field_name", "Parcela Norte"),
-            ("crop", "Papa"),
-            ("area_ha", "0.5"),
-            ("soil", "Franco"),
-            ("latitude", "-11.5"),
-            ("longitude", "-77.2"),
-        ]:
+        await self.input("phone", "999888777")
+        await self.click("continue_action")
+        for key, value in [("farm_name", "Fundo Artemis"), ("location", "Huaral, Lima"), ("area_ha", "1.25")]:
             await self.input(key, value)
-        await self.click("save")
-        await self.expect("my_fields")
+        await self.click("profile_finish")
+        await self.expect("profile_saved")
+        await self.capture("profile")
+        await self.click("profile_continue_fields")
+        await self.input("field_name", "Parcela Norte")
+        await self.input("crop", "Papa")
+        await self.click("continue_action")
+        await self.click("map_draw")
+        # Native taps on the map surface, no test semantics or injected coordinates.
+        deadline = time.monotonic() + 30
+        while time.monotonic() < deadline:
+            rows = await self.screen()
+            maps = [e for e in rows if e.get("content-desc") == STRINGS["field_map"]]
+            if maps:
+                break
+            await asyncio.sleep(.3)
+        else:
+            raise AssertionError("Google Maps surface was not exposed")
+        b = max(maps, key=lambda e: e["parsed_bounds"]["bottom"] - e["parsed_bounds"]["top"])["parsed_bounds"]
+        if b["bottom"] >= self.last.height - 190:
+            await self.controller.swipe_coords(self.last.width // 2, int(self.last.height * .72), self.last.width // 2, int(self.last.height * .4), 350)
+            maps = [e for e in await self.screen() if e.get("content-desc") == STRINGS["field_map"]]
+            b = max(maps, key=lambda e: e["parsed_bounds"]["bottom"] - e["parsed_bounds"]["top"])["parsed_bounds"]
+        await asyncio.sleep(3)
+        for x, y in [(.25, .25), (.70, .25), (.70, .65), (.25, .65)]:
+            result = await self.controller.tap_at(int(b["left"] + (b["right"] - b["left"]) * x), int(b["top"] + (b["bottom"] - b["top"]) * y))
+            assert not result.error, result.error
+            self.steps.append({"action": "mapTap", "passed": True})
+            await asyncio.sleep(.5)
+        await self.expect(STRINGS["map_points"].replace("%1$d", "4").replace("%d", "4"))
+        await self.capture("map-polygon")
+        await self.click("continue_action")
+        await self.capture("field-review")
+        await self.click("create_field")
         await self.expect("Parcela Norte")
         await self.capture("fields")
-        await self.click("choose_field")
         await self.click("associate")
         await self.input("sensor_code", "BAD")
         await self.input("sensor_name", "Sensor Norte")
@@ -355,6 +367,8 @@ class Journey:
         await self.expect("error_sensor")
         await self.input("sensor_code", "TT-ZZZ001")
         await self.click("associate")
+        await self.expect("view_history")
+        await self.click("back")
         await self.expect("view_sensor")
         await self.click("associate")
         await self.input("sensor_code", "TT-ZZZ001")
@@ -415,10 +429,7 @@ class Journey:
         ]:
             await self.input(key, value)
         await self.click("register")
-        await self.expect("registered")
-        await self.input("password", password)
-        await self.click("login")
-        await self.expect("use_profile")
+        await self.expect("new_field")
         await self.click("fields")
         await self.expect("no_fields")
         assert not any(e.get("text") == "Parcela Norte" for e in await self.screen())
@@ -429,7 +440,7 @@ class Journey:
         await self.logout()
         await self.input("email", email)
         await self.input("password", password)
-        await self.click("login")
+        await self.click("login", last=True)
         await self.expect("SIMULATED", 40)
         await self.click("view_history")
         await self.click("days_30")
@@ -459,7 +470,8 @@ async def main():
                     "deviceSerial": SERIAL,
                     "passed": error is None,
                     "error": error,
-                    "assertionsPassed": sum(x.get("passed", False) for x in j.steps),
+                    "assertionsPassed": sum(x.get("passed", False) for x in j.steps if "assert" in x),
+                    "checksPassed": sum(x.get("passed", False) for x in j.steps),
                     "steps": j.steps,
                     "timestampUtc": datetime.datetime.now(
                         datetime.timezone.utc

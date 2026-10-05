@@ -17,7 +17,13 @@ internal fun TerraTechBottomBar(route: String, onNavigate: (String) -> Unit) {
     listOf("home" to R.string.home, "fields" to R.string.fields, "profile" to R.string.profile)
       .forEach { (destination, label) ->
         NavigationBarItem(
-          selected = route == destination,
+          selected =
+            when (destination) {
+              "fields" ->
+                route in listOf("fields", "new-field", "sensors", "register-sensor", "sensor")
+              "home" -> route == "home" || route == "history" || route.startsWith("reading/")
+              else -> route == destination
+            },
           onClick = {
             onNavigate(destination)
           },

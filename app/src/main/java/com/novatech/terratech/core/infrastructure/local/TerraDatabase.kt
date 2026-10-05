@@ -11,7 +11,7 @@ import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
 @Database(
   entities =
     [ProfileRow::class, FieldRow::class, SensorRow::class, ReadingRow::class, DownloadRow::class],
-  version = 1,
+  version = 2,
   exportSchema = true,
 )
 abstract class TerraDatabase : RoomDatabase() {

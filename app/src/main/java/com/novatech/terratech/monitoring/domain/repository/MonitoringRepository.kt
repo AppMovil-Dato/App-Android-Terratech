@@ -29,9 +29,10 @@ interface MonitoringRepository {
     soil: String,
     latitude: Double,
     longitude: Double,
-  )
+    boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> = emptyList(),
+  ): Field
 
-  suspend fun registerSensor(user: Int, field: Int, code: String, name: String)
+  suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor
 
   suspend fun refreshReadings(user: Int, device: Int, days: Int)
 

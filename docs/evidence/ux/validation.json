@@ -1,0 +1,46 @@
+{
+  "variant": "Debug",
+  "apiBaseUrl": "https://terratech-api.lucemz.com/",
+  "cloudRunRevision": "backend-terratech-git-00007-qb5",
+  "androidUnit": {
+    "tests": 39,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "androidInstrumented": {
+    "tests": 19,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "backendTestsPassed": 69,
+  "lintPassed": true,
+  "composeJourney": {
+    "driver": "compose",
+    "database": "terratech_android_5216c2adf3f44b6db5e0035332ec910f",
+    "environment": "Development",
+    "configuration": "Debug",
+    "device": "emulator",
+    "journeyPassed": true,
+    "coldProcessRestartOfflinePassed": true,
+    "savedBoundaryPoints": 4,
+    "readingCount": 720,
+    "credentialsRecorded": false,
+    "timestampUtc": "2026-10-05T01:41:55Z"
+  },
+  "artemisJourney": {
+    "driver": "artemis",
+    "database": "terratech_android_d391aa659bd14dd39937300182d9342e",
+    "environment": "Development",
+    "configuration": "Debug",
+    "device": "emulator",
+    "journeyPassed": true,
+    "coldProcessRestartOfflinePassed": true,
+    "savedBoundaryPoints": 4,
+    "readingCount": 720,
+    "credentialsRecorded": false,
+    "timestampUtc": "2026-10-05T02:01:51Z"
+  },
+  "apkSha256": "4edc834f5e86a4e1185b3e82214acd7f8f7d0d8a04cad29e42759ef40c4df5e6"
+}

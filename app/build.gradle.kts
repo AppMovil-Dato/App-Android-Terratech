@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
   alias(libs.plugins.android.application)
   alias(libs.plugins.kotlin.compose)
@@ -28,12 +30,31 @@ android {
     }
   }
 
+  sourceSets.getByName("androidTest").assets.srcDir("$projectDir/schemas")
   buildFeatures { buildConfig = true }
   defaultConfig {
     val apiUrl =
-      providers.gradleProperty("TERRATECH_API_URL").orElse("https://terratech-api.lucemz.com/").get()
+      providers
+        .gradleProperty("TERRATECH_API_URL")
+        .orElse("https://terratech-api.lucemz.com/")
+        .get()
     require(apiUrl.endsWith("/")) { "TERRATECH_API_URL must end with /" }
     buildConfigField("String", "API_URL", "\"$apiUrl\"")
+    val local =
+      Properties().apply {
+        rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use { load(it) }
+      }
+    val mapsKey =
+      providers
+        .environmentVariable("TERRATECH_MAPS_API_KEY")
+        .orElse(local.getProperty("MAPS_API_KEY", ""))
+        .get()
+    manifestPlaceholders["MAPS_API_KEY"] = ""
+    buildConfigField("boolean", "MAPS_CONFIGURED", "false")
+    buildTypes.getByName("debug") {
+      manifestPlaceholders["MAPS_API_KEY"] = mapsKey
+      buildConfigField("boolean", "MAPS_CONFIGURED", mapsKey.isNotBlank().toString())
+    }
   }
   buildTypes {
     release {
@@ -43,8 +64,8 @@ android {
     }
   }
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
   }
   buildFeatures {
     compose = true
@@ -54,6 +75,7 @@ android {
 ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 
 dependencies {
+  implementation("com.google.maps.android:maps-compose:9.0.0")
   implementation("androidx.compose.material:material-icons-core:1.7.8")
   implementation(libs.androidx.lifecycle.viewmodel.compose)
   implementation(libs.androidx.lifecycle.runtime.compose)

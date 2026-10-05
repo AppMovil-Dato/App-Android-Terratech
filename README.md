@@ -2,7 +2,7 @@
 
 App nativa para el TB1 de Aplicaciones para Dispositivos Móviles, equipo NovaTech. Paquete `com.novatech.terratech`.
 
-Recorrido implementado: registro/confirmación → login → perfil → parcela → asociación de sensor → indicadores → histórico 7/30 → detalle → consulta offline de datos descargados.
+Recorrido implementado: registro/confirmación con sesión inmediata → perfil → parcela → asociación de sensor → indicadores → histórico 7/30 → detalle → consulta offline de datos descargados.
 
 Arquitectura DDD con contextos en raíz y cuatro capas; Compose/Material 3, MVVM/StateFlow, Hilt/KSP, Retrofit/OkHttp/Gson, Room y DataStore con sesión cifrada mediante Android Keystore. La interfaz conserva la paleta y composición de las referencias del equipo. Las mediciones de demostración se identifican como `SIMULATED`.
 
@@ -66,3 +66,5 @@ JWT cifrado con clave de Android Keystore; contraseñas no persistidas. Reautent
 Repositorio: https://github.com/AppMovil-Dato/App-Android-Terratech.git. Ramas `main`, `develop` y `feature/tb1-android`. Usar Codegraph para explorar y compilar exclusivamente Debug.
 
 IA, electroválvulas, clima, mercado, push, verificación de correo y recuperación de contraseña no forman parte de este TB1. El backend publicado está disponible en https://terratech-api.lucemz.com/; Swagger en https://terratech-api.lucemz.com/swagger/index.html. Los requisitos de servicio externo, recurso interno y aprendizaje autónomo del proyecto completo se revisan en la guía; no se presentan como implementados por este recorrido.
+
+Refactor de experiencia sin onboarding y Google Maps Debug: [UX_REFACTOR.md](docs/UX_REFACTOR.md).

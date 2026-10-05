@@ -59,7 +59,7 @@ fun FieldsScreen(
           stringResource(R.string.sensor_count, state.sensors.count { it.fieldId == field.id }),
           color = Muted,
         )
-        PrimaryButton(stringResource(R.string.choose_field), !state.busy) { onChoose(field.id) }
+        PrimaryButton(stringResource(R.string.view_field), !state.busy) { onChoose(field.id) }
       }
     }
   }

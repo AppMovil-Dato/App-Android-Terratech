@@ -33,6 +33,7 @@ internal fun ProfileContent(
   onSave: (String, String, String, String, Double) -> Unit,
   onRefresh: () -> Unit,
   onRequestLogout: () -> Unit,
+  onContinue: (() -> Unit)? = null,
 ) {
   val profile = state.profile
   Column(
@@ -96,11 +97,16 @@ internal fun ProfileContent(
         }
       }
     }
-    if (state.saved) Pill(stringResource(R.string.profile_saved))
-    FarmCard {
-      Text(stringResource(R.string.cache), style = MaterialTheme.typography.titleMedium)
-      Text(stringResource(R.string.sync_status), color = Muted)
+    if (state.saved) {
+      Pill(stringResource(R.string.profile_saved))
+      if (onContinue != null)
+        PrimaryButton(stringResource(R.string.profile_continue_fields), !state.busy, onContinue)
     }
+    if (profile != null && !editing)
+      FarmCard {
+        Text(stringResource(R.string.cache), style = MaterialTheme.typography.titleMedium)
+        Text(stringResource(R.string.sync_status), color = Muted)
+      }
     TextButton(onClick = onRequestLogout, modifier = Modifier.fillMaxWidth()) {
       Text(stringResource(R.string.logout), color = MaterialTheme.colorScheme.error)
     }

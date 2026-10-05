@@ -12,6 +12,8 @@ import retrofit2.http.*
 interface MonitoringApi {
   @GET("api/v1/fields") suspend fun fields(): List<FieldDto>
 
+  @GET("api/v1/devices") suspend fun allSensors(): List<SensorDto>
+
   @POST("api/v1/fields") suspend fun createField(@Body body: CreateFieldDto): FieldDto
 
   @GET("api/v1/fields/{id}/devices") suspend fun sensors(@Path("id") field: Int): List<SensorDto>

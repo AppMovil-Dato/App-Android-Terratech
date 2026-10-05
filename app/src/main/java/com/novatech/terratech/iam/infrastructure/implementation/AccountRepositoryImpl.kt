@@ -39,13 +39,32 @@ class AccountRepositoryImpl(
     password: String,
     confirmation: String,
   ) {
-    apiCall { api.register(RegisterDto(name, email, password, confirmation)) }
+    val result = apiCall { api.register(RegisterDto(name, email, password, confirmation)) }
+    if (!result.token.isNullOrBlank() && !result.expiresAt.isNullOrBlank()) {
+      persistSession(
+        Session(
+          result.id,
+          result.emailAddress,
+          result.fullName.orEmpty(),
+          result.token,
+          Instant.parse(result.expiresAt),
+        )
+      )
+    } else {
+      // Compatibility with servers deployed before signup returned a session.
+      try {
+        login(email, password)
+      } catch (e: CancellationException) {
+        throw e
+      } catch (e: Exception) {
+        throw com.novatech.terratech.core.domain.Failure("ACCOUNT_CREATED_LOGIN_REQUIRED")
+      }
+    }
   }
 
   override suspend fun login(email: String, password: String) {
     val dto = apiCall { api.login(LoginDto(email, password)) }
-    val previous = current.value
-    val s =
+    persistSession(
       Session(
         dto.id,
         dto.emailAddress,
@@ -53,6 +72,11 @@ class AccountRepositoryImpl(
         dto.token,
         Instant.parse(dto.expiresAt),
       )
+    )
+  }
+
+  private suspend fun persistSession(s: Session) {
+    val previous = current.value
     if (previous?.userId != s.userId) {
       current.value = null
       store.clear()

@@ -32,10 +32,10 @@ class BackendJourneyTest {
   }
 
   private fun click(id: Int) {
-    val matcher = hasText(text(id)) and hasClickAction()
+    val matcher = (hasText(text(id)) or hasContentDescription(text(id))) and hasClickAction()
     if (compose.onAllNodes(matcher).fetchSemanticsNodes().isEmpty())
       compose.onAllNodes(hasScrollToIndexAction()).onLast().performScrollToNode(matcher)
-    val node = compose.onNode(matcher)
+    val node = compose.onAllNodes(matcher).onLast()
     scroll(node)
     compose.waitUntil(15000) { runCatching { node.assertIsEnabled() }.isSuccess }
     node.performClick()
@@ -78,8 +78,18 @@ class BackendJourneyTest {
     visible(R.string.error_confirmation)
     input(R.string.confirmation, password)
     click(R.string.register)
-    visible(R.string.registered)
+    // Successful signup enters the app directly; no login or onboarding screen follows.
+    visible(R.string.new_field)
+    compose.onAllNodesWithText(text(R.string.welcome)).assertCountEquals(0)
+    capture("registered-home")
+    click(R.string.profile)
+    click(R.string.logout)
+    visible(R.string.logout_title)
+    compose.onAllNodesWithText(text(R.string.logout)).onLast().performClick()
+    visible(R.string.welcome)
     click(R.string.no_account)
+    input(R.string.full_name, "Ana Torres")
+    input(R.string.email, email)
     input(R.string.password, password)
     input(R.string.confirmation, password)
     click(R.string.register)
@@ -91,39 +101,61 @@ class BackendJourneyTest {
     visible(R.string.error_credentials)
     input(R.string.password, password)
     click(R.string.login)
-    visible(R.string.use_profile)
-    click(R.string.use_profile)
-    visible(R.string.farm_name)
-    input(R.string.farm_name, "Fundo Android")
+    visible(R.string.new_field)
+    click(R.string.new_field)
+    visible(R.string.phone)
     input(R.string.phone, "999888777")
+    click(R.string.continue_action)
+    input(R.string.farm_name, "Fundo Android")
     input(R.string.location, "Huaral, Lima")
     input(R.string.area_ha, "1.25")
-    click(R.string.save)
+    click(R.string.profile_finish)
     visible(R.string.profile_saved)
     click(R.string.edit_profile)
     input(R.string.full_name, "Ana Torres Vega")
+    click(R.string.continue_action)
     input(R.string.area_ha, "2.25")
-    click(R.string.save)
+    click(R.string.profile_finish)
     visible(R.string.profile_saved)
     compose.onNodeWithText("Ana Torres Vega").assertExists()
     capture("profile")
-    click(R.string.fields)
-    visible(R.string.new_field)
-    click(R.string.new_field)
+    click(R.string.profile_continue_fields)
     input(R.string.field_name, "Parcela Norte")
     input(R.string.crop, "Papa")
-    input(R.string.area_ha, "0.5")
-    input(R.string.soil, "Franco")
-    input(R.string.latitude, "-11.5")
-    input(R.string.longitude, "-77.2")
-    click(R.string.save)
-    visible(R.string.my_fields)
+    compose.activityRule.scenario.recreate()
+    compose.onNodeWithText("Parcela Norte").assertExists()
+    click(R.string.continue_action)
+    click(R.string.map_draw)
+    val map = compose.onNodeWithTag("parcel-map")
+    scroll(map)
+    compose.waitUntil(30000) {
+      runCatching { map.assert(hasStateDescription(text(R.string.map_ready))) }.isSuccess
+    }
+    listOf(.25f to .25f, .70f to .25f, .70f to .65f, .25f to .65f).forEachIndexed { index, (x, y) ->
+      map.performTouchInput { click(androidx.compose.ui.geometry.Offset(width * x, height * y)) }
+      capture("map-tap-${index + 1}")
+      compose.waitUntil(10000) {
+        compose
+          .onAllNodesWithText(compose.activity.getString(R.string.map_points, index + 1))
+          .fetchSemanticsNodes()
+          .isNotEmpty()
+      }
+    }
+    capture("map-polygon")
+    click(R.string.continue_action)
+    compose.waitUntil(30000) {
+      runCatching {
+        compose.onNodeWithTag("parcel-map").assert(hasStateDescription(text(R.string.map_ready)))
+      }
+        .isSuccess
+    }
+    capture("field-review")
+    click(R.string.create_field)
+    visible(R.string.associate)
     compose.waitUntil(10000) {
       compose.onAllNodesWithText("Parcela Norte").fetchSemanticsNodes().isNotEmpty()
     }
     capture("fields")
-    click(R.string.choose_field)
-    visible(R.string.associate)
     click(R.string.associate)
     input(R.string.sensor_code, "BAD")
     input(R.string.sensor_name, "Sensor Norte")
@@ -134,6 +166,8 @@ class BackendJourneyTest {
     visible(R.string.error_sensor)
     input(R.string.sensor_code, "TT-ZZZ001")
     click(R.string.associate)
+    visible(R.string.view_history)
+    click(R.string.back)
     visible(R.string.view_sensor)
     click(R.string.associate)
     input(R.string.sensor_code, "TT-ZZZ001")
@@ -147,10 +181,10 @@ class BackendJourneyTest {
       compose.onAllNodesWithText("SIMULATED").fetchSemanticsNodes().isNotEmpty().also { found ->
         if (!found)
           compose
-            .onAllNodesWithText(text(R.string.retry))
+            .onAllNodesWithContentDescription(text(R.string.retry))
             .fetchSemanticsNodes()
             .firstOrNull()
-            ?.let { compose.onNodeWithText(text(R.string.retry)).performClick() }
+            ?.let { compose.onNodeWithContentDescription(text(R.string.retry)).performClick() }
       }
     }
     capture("sensor")
@@ -202,10 +236,7 @@ class BackendJourneyTest {
     input(R.string.password, password)
     input(R.string.confirmation, password)
     click(R.string.register)
-    visible(R.string.registered)
-    input(R.string.password, password)
-    click(R.string.login)
-    visible(R.string.use_profile)
+    visible(R.string.new_field)
     click(R.string.fields)
     visible(R.string.no_fields)
     compose.onAllNodesWithText("Parcela Norte").assertCountEquals(0)

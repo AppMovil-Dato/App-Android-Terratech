@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.novatech.terratech.DomainRulesTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2026-10-05T02:00:08.205Z" hostname="Fitzgeralds-MacBook-Pro.local" time="0.004">
+  <properties/>
+  <testcase name="profileValidationLivesInDomainAndPreservesTerrainUnits" classname="com.novatech.terratech.DomainRulesTest" time="0.001"/>
+  <testcase name="invalidEmailsFail" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="sensorCodeNormalizationAndValidation" classname="com.novatech.terratech.DomainRulesTest" time="0.001"/>
+  <testcase name="invalidAreasFail" classname="com.novatech.terratech.DomainRulesTest" time="0.001"/>
+  <testcase name="passwordLimits" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="rangesIncludeUtcEndpointsAndExcludeFuture" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="coordinatesRejectInvalidOrNonFiniteValues" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="emailNormalizesWithoutChangingPassword" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="tokenExpirationIsStrictAndNeverPrinted" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="readingStaleBoundaryIncludesFractions" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <testcase name="hectaresConvertPreciselyToBackendUnits" classname="com.novatech.terratech.DomainRulesTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

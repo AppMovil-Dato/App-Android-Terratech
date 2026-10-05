@@ -9,4 +9,6 @@ data class Field(
   val latitude: Double,
   val longitude: Double,
   val cropName: String?,
+  val boundary: List<com.novatech.terratech.monitoring.domain.valueobject.Coordinates> =
+    emptyList(),
 )

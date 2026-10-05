@@ -31,7 +31,7 @@ Las capturas usan una familia sans serif con títulos y cifras en peso semibold/
 | Referencia | Conservar | Adaptar a TB1 |
 |---|---|---|
 | [Inicio](reference/home.png) | Saludo, tarjetas, tendencia y barra inferior | Humedad, temperatura del suelo, N/P/K y sensor elegido; acceso al histórico |
-| [Parcelas](reference/fields.png) | Tarjetas, cultivo, indicadores, botón de alta | Lista y detalle propios; sustituir mapa ornamental por información real hasta tener un mapa soportado |
+| [Parcelas](reference/fields.png) | Tarjetas, cultivo, indicadores, botón de alta | Lista y detalle propios; Google Maps nativo para ubicación, dibujo y consulta de contornos persistidos |
 | [Sensor](reference/sensor-detail.png) | Anillo, fecha, badges y botón de histórico | SIMULATED, unidades, lectura antigua; no batería, señal LoRa, confianza IA o control de riego |
 | [Perfil](reference/profile.png) | Jerarquía, tarjeta personal, lista de opciones y logout | Nombre real, iniciales si no hay foto, terreno y caché; sin certificación ficticia |
 | [Offline](reference/offline.png) | Banner ámbar, tarjetas y reintentar | Texto simple «Sin conexión · datos guardados»; fecha de lectura/descarga; sin riego en cola, tanque o clima |

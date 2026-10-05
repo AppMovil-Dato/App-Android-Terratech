@@ -39,7 +39,7 @@ class ComposeScreensTest {
     }
     compose.onNodeWithText("Email").performTextInput("a@example.com")
     compose.onNodeWithText("Password").performTextInput(" secret ")
-    compose.onNodeWithText("Sign in", useUnmergedTree = true).performClick()
+    compose.onAllNodes(hasText("Sign in") and hasClickAction()).onLast().performClick()
     compose.runOnIdle { assertEquals("a@example.com" to " secret ", received) }
   }
 
@@ -111,7 +111,7 @@ class ComposeScreensTest {
         }
       }
     }
-    compose.onNodeWithText("Choose a field").performScrollTo().performClick()
+    compose.onNodeWithText("Open field").performScrollTo().performClick()
     compose.runOnIdle { assertEquals(1, selection) }
   }
 
