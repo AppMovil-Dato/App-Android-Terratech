@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">TerraTech</string>
     <string name="tagline">Your land, connected</string>
     <string name="login">Sign in</string>
@@ -170,4 +170,15 @@
     <string name="map_ready">Map ready</string>
     <string name="field_map">Field map</string>
     <string name="map_unavailable">Map unavailable</string>
+    <string name="alert_thresholds">Agricultural alert thresholds</string>
+    <string name="thresholds_help">Set reference limits to receive alerts when soil conditions become critical.</string>
+    <string name="min_moisture_label">Minimum soil moisture</string>
+    <string name="max_temp_label">Maximum soil temperature</string>
+    <string name="edit_thresholds">Configure thresholds</string>
+    <string name="thresholds_saved">Alert thresholds updated</string>
+    <string name="moisture_threshold_dialog_title">Configure alert thresholds</string>
+    <string name="moisture_threshold_help">Recommended: 30%%. Below this level, soil dryness alert will be shown.</string>
+    <string name="temp_threshold_help">Recommended: 35°C. Above this level, thermal stress alert will be shown.</string>
+    <string name="error_moisture_threshold" formatted="false">Moisture must be between 0% and 100%.</string>
+    <string name="error_temp_threshold">Temperature must be between 0°C and 60°C.</string>
 </resources>

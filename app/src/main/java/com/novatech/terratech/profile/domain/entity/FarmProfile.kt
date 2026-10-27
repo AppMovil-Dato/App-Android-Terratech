@@ -10,4 +10,5 @@ data class FarmProfile(
     val location: String,
     val sizeM2: Double?,
     val minimumMoisture: Double = 30.0,
+    val temperatureThreshold: Double = 35.0,
 )

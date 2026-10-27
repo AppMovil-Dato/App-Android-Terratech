@@ -10,10 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -29,15 +27,15 @@ constructor(private val actions: ProfileActions, private val account: AccountRep
 
     init {
         viewModelScope.launch {
-            account.session.collect { s ->
+            account.session.collect { session ->
                 requestJob?.cancel()
                 observeJob?.cancel()
-                mutable.value = ProfileState(userId = s?.userId)
-                if (s != null) {
+                mutable.value = ProfileState(userId = session?.userId)
+                if (session != null) {
                     observeJob =
                         viewModelScope.launch {
-                            actions.observe(s.userId).collect { p ->
-                                mutable.update { it.copy(profile = p) }
+                            actions.observe(session.userId).collect { profile ->
+                                mutable.update { it.copy(profile = profile) }
                             }
                         }
                     refresh()
@@ -51,6 +49,13 @@ constructor(private val actions: ProfileActions, private val account: AccountRep
     fun save(name: String, farm: String, phone: String, location: String, hectares: Double) =
         request {
             actions.save(it, name, farm, phone, location, hectares)
+            mutable.update { it.copy(saved = true) }
+        }
+
+    fun saveThresholds(moisture: Double, temperature: Double) =
+        request { userId ->
+            val currentProfile = mutable.value.profile ?: return@request
+            actions.saveThresholds(userId, currentProfile, moisture, temperature)
             mutable.update { it.copy(saved = true) }
         }
 

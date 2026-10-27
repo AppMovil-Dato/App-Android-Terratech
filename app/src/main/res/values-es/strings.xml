@@ -1,4 +1,4 @@
-<resources>
+﻿<resources>
     <string name="app_name">TerraTech</string>
     <string name="tagline">Tu tierra, conectada</string>
     <string name="login">Iniciar sesión</string>
@@ -170,4 +170,15 @@
     <string name="map_ready">Mapa listo</string>
     <string name="field_map">Mapa de la parcela</string>
     <string name="map_unavailable">Mapa no disponible</string>
+    <string name="alert_thresholds">Umbrales de alerta agronómica</string>
+    <string name="thresholds_help">Configura los límites de referencia para recibir alertas preventivas ante condiciones críticas.</string>
+    <string name="min_moisture_label">Humedad mínima del suelo</string>
+    <string name="max_temp_label">Temperatura máxima del suelo</string>
+    <string name="edit_thresholds">Configurar umbrales</string>
+    <string name="thresholds_saved">Umbrales de alerta actualizados</string>
+    <string name="moisture_threshold_dialog_title">Configurar umbrales de alerta</string>
+    <string name="moisture_threshold_help">Recomendado: 30%%. Por debajo de este nivel, se alertará sobre sequedad del suelo.</string>
+    <string name="temp_threshold_help">Recomendado: 35°C. Por encima de este nivel, se alertará sobre estrés térmico.</string>
+    <string name="error_moisture_threshold" formatted="false">La humedad debe estar entre 0% y 100%.</string>
+    <string name="error_temp_threshold">La temperatura debe estar entre 0°C y 60°C.</string>
 </resources>

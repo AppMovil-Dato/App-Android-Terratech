@@ -15,5 +15,7 @@ interface ProfileRepository {
         phone: String,
         location: String,
         sizeM2: Double,
+        moistureThreshold: Double? = null,
+        tempThreshold: Double? = null,
     )
 }

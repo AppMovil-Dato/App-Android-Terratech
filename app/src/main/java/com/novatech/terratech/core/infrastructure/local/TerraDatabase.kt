@@ -17,7 +17,7 @@ import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
             ReadingRow::class,
             DownloadRow::class,
         ],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 abstract class TerraDatabase : RoomDatabase() {
