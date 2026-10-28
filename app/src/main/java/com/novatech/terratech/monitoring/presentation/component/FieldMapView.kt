@@ -1,3 +1,4 @@
+
 package com.novatech.terratech.monitoring.presentation.component
 
 import androidx.compose.foundation.layout.Box
@@ -11,9 +12,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toString
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -37,6 +38,8 @@ import com.google.maps.android.compose.rememberUpdatedMarkerState
 import com.novatech.terratech.BuildConfig
 import com.novatech.terratech.R
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
+import com.novatech.terratech.monitoring.domain.valueobject.FertilityLevel
+import com.novatech.terratech.ui.theme.Amber
 import com.novatech.terratech.ui.theme.FarmGreen
 import kotlinx.coroutines.delay
 
@@ -47,90 +50,188 @@ fun FieldMapView(
     modifier: Modifier = Modifier,
     target: Coordinates? = null,
     interactive: Boolean = true,
+    fertilityZones: List<FertilityZoneOverlay> = emptyList(),
+    onZoneClick: (FertilityZoneOverlay) -> Unit = {},
     onPoint: (Coordinates) -> Unit = {},
 ) {
     if (!BuildConfig.MAPS_CONFIGURED) {
-        Box(modifier) { Text(stringResource(R.string.map_not_configured)) }
+        Box(modifier) {
+            Text(stringResource(R.string.map_not_configured))
+        }
         return
     }
-    val first = points.firstOrNull() ?: target ?: Coordinates.of(-14.0678, -75.7286)
+
+    val first = points.firstOrNull()
+        ?: target
+        ?: Coordinates.of(-14.0678, -75.7286)
+
     val camera = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(LatLng(first.latitude, first.longitude), 16f)
+        position = CameraPosition.fromLatLngZoom(
+            LatLng(first.latitude, first.longitude),
+            16f
+        )
     }
+
     var loaded by remember { mutableStateOf(false) }
     var unavailable by remember { mutableStateOf(false) }
+
     LaunchedEffect(loaded) {
         if (!loaded) {
             delay(15000)
             unavailable = true
         }
     }
+
     LaunchedEffect(target, loaded) {
-        if (loaded && target != null)
+        if (loaded && target != null) {
             camera.animate(
-                CameraUpdateFactory.newLatLngZoom(LatLng(target.latitude, target.longitude), 16f)
+                CameraUpdateFactory.newLatLngZoom(
+                    LatLng(target.latitude, target.longitude),
+                    16f
+                )
             )
+        }
     }
+
     val mapLabel = stringResource(R.string.field_map)
-    val mapDescription = stringResource(if (loaded) R.string.map_ready else R.string.map_loading)
-    val vertices = points.map { LatLng(it.latitude, it.longitude) }
+
+    val mapDescription = stringResource(
+        if (loaded) R.string.map_ready
+        else R.string.map_loading
+    )
+
+    val vertices = points.map {
+        LatLng(it.latitude, it.longitude)
+    }
+
     LaunchedEffect(points, interactive, loaded) {
         if (loaded && !interactive && vertices.isNotEmpty()) {
             val update =
                 if (vertices.size > 1) {
-                    val bounds =
-                        LatLngBounds.Builder().apply { vertices.forEach { include(it) } }.build()
-                    CameraUpdateFactory.newLatLngBounds(bounds, 48)
-                } else CameraUpdateFactory.newLatLngZoom(vertices.first(), 16f)
+                    val bounds = LatLngBounds.Builder().apply {
+                        vertices.forEach { include(it) }
+                    }.build()
+
+                    CameraUpdateFactory.newLatLngBounds(
+                        bounds,
+                        48
+                    )
+                } else {
+                    CameraUpdateFactory.newLatLngZoom(
+                        vertices.first(),
+                        16f
+                    )
+                }
+
             camera.move(update)
         }
     }
 
     Box(
-        modifier.testTag("parcel-map").semantics {
-            stateDescription = mapDescription
-            contentDescription = mapLabel
-        }
+        modifier
+            .testTag("parcel-map")
+            .semantics {
+                stateDescription = mapDescription
+                contentDescription = mapLabel
+            }
     ) {
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = camera,
-            properties = MapProperties(mapType = MapType.HYBRID),
-            uiSettings =
-                MapUiSettings(
-                    zoomControlsEnabled = interactive,
-                    mapToolbarEnabled = false,
-                    scrollGesturesEnabled = interactive,
-                    zoomGesturesEnabled = interactive,
-                    rotationGesturesEnabled = false,
-                    tiltGesturesEnabled = false,
-                ),
-            onMapLoaded = { loaded = true },
+            properties = MapProperties(
+                mapType = MapType.HYBRID
+            ),
+            uiSettings = MapUiSettings(
+                zoomControlsEnabled = interactive,
+                mapToolbarEnabled = false,
+                scrollGesturesEnabled = interactive,
+                zoomGesturesEnabled = interactive,
+                rotationGesturesEnabled = false,
+                tiltGesturesEnabled = false,
+            ),
+            onMapLoaded = {
+                loaded = true
+            },
             onMapClick = {
-                if (interactive && loaded) onPoint(Coordinates.of(it.latitude, it.longitude))
+                if (interactive && loaded) {
+                    onPoint(
+                        Coordinates.of(
+                            it.latitude,
+                            it.longitude
+                        )
+                    )
+                }
             },
         ) {
             vertices.forEachIndexed { i, point ->
                 Marker(
                     state = rememberUpdatedMarkerState(point),
                     title = (i + 1).toString(),
-                    icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN),
+                    icon = BitmapDescriptorFactory.defaultMarker(
+                        BitmapDescriptorFactory.HUE_GREEN
+                    ),
                 )
             }
-            if (drawing && vertices.size >= 3)
+
+            if (drawing && vertices.size >= 3) {
                 Polygon(
                     points = vertices,
                     fillColor = FarmGreen.copy(alpha = .25f),
                     strokeColor = FarmGreen,
                     strokeWidth = 5f,
                 )
-            else if (drawing && vertices.size >= 2)
-                Polyline(points = vertices, color = FarmGreen, width = 5f)
+            } else if (drawing && vertices.size >= 2) {
+                Polyline(
+                    points = vertices,
+                    color = FarmGreen,
+                    width = 5f,
+                )
+            }
+
+            // US13: zonas geográficas de fertilidad
+            fertilityZones.forEach { zone ->
+                if (zone.boundary.size >= 3) {
+
+                    val zoneColor = when (zone.level) {
+                        FertilityLevel.OPTIMAL -> FarmGreen
+                        FertilityLevel.MODERATE -> Amber
+                        FertilityLevel.CRITICAL -> Color(0xFFC62828)
+                    }
+
+                    Polygon(
+                        points = zone.boundary.map {
+                            LatLng(
+                                it.latitude,
+                                it.longitude
+                            )
+                        },
+                        fillColor = zoneColor.copy(
+                            alpha = 0.35f
+                        ),
+                        strokeColor = zoneColor,
+                        strokeWidth = 4f,
+                        clickable = interactive,
+                        onClick = {
+                            onZoneClick(zone)
+                        },
+                    )
+                }
+            }
         }
+
         if (!loaded) {
-            if (unavailable)
-                Text(stringResource(R.string.map_unavailable), Modifier.align(Alignment.Center))
-            else CircularProgressIndicator(Modifier.size(32.dp).align(Alignment.Center))
+            if (unavailable) {
+                Text(
+                    stringResource(R.string.map_unavailable),
+                    Modifier.align(Alignment.Center)
+                )
+            } else {
+                CircularProgressIndicator(
+                    Modifier
+                        .size(32.dp)
+                        .align(Alignment.Center)
+                )
+            }
         }
     }
 }
