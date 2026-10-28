@@ -1,6 +1,8 @@
+
 package com.novatech.terratech.monitoring.domain.repository
 
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
+import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.domain.entity.Sensor
@@ -23,6 +25,9 @@ interface MonitoringRepository {
     suspend fun refreshFields(user: Int)
 
     suspend fun refreshSensors(user: Int, field: Int)
+
+    // US13: consultar las zonas de fertilidad de una parcela
+    suspend fun fertilityZones(user: Int, field: Int): List<FertilityZone>
 
     suspend fun createField(
         user: Int,

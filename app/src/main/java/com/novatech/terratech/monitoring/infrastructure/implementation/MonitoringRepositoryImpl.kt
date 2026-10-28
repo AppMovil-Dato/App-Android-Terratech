@@ -1,3 +1,4 @@
+
 package com.novatech.terratech.monitoring.infrastructure.implementation
 
 import androidx.room.withTransaction
@@ -5,6 +6,7 @@ import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
+import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
@@ -24,6 +26,7 @@ class MonitoringRepositoryImpl(
     private val db: TerraDatabase,
     private val store: SessionStore,
 ) : MonitoringRepository {
+
     private val dao = db.dao()
 
     override fun selection(user: Int) = store.selection(user)
@@ -31,9 +34,11 @@ class MonitoringRepositoryImpl(
     override suspend fun select(user: Int, field: Int?, device: Int?) =
         store.select(user, field, device)
 
-    override fun fields(user: Int) = dao.fields(user).map { rows -> rows.map { it.domain() } }
+    override fun fields(user: Int) =
+        dao.fields(user).map { rows -> rows.map { it.domain() } }
 
-    override fun sensors(user: Int) = dao.sensors(user).map { rows -> rows.map { it.domain() } }
+    override fun sensors(user: Int) =
+        dao.sensors(user).map { rows -> rows.map { it.domain() } }
 
     override fun readings(user: Int, device: Int) =
         dao.readings(user, device).map { rows -> rows.map { it.domain() } }
@@ -44,6 +49,7 @@ class MonitoringRepositoryImpl(
     override suspend fun refreshFields(user: Int) {
         val rows = apiCall { api.fields() }.map { it.row(user) }
         val sensors = apiCall { api.allSensors() }.map { it.row(user) }
+
         db.withTransaction {
             dao.deleteFields(user)
             dao.putFields(rows)
@@ -54,9 +60,31 @@ class MonitoringRepositoryImpl(
 
     override suspend fun refreshSensors(user: Int, field: Int) {
         val rows = apiCall { api.sensors(field) }.map { it.row(user) }
+
         db.withTransaction {
             dao.deleteSensors(user, field)
             dao.putSensors(rows)
+        }
+    }
+
+    // US13: obtener zonas de fertilidad desde el backend
+    override suspend fun fertilityZones(
+        user: Int,
+        field: Int
+    ): List<FertilityZone> {
+        return apiCall { api.fertilityZones(field) }.map { zone ->
+            FertilityZone(
+                id = zone.id,
+                fieldId = zone.fieldId,
+                deviceId = zone.deviceId,
+                name = zone.name,
+                boundary = zone.boundary.map { vertex ->
+                    Coordinates.of(
+                        vertex.latitude,
+                        vertex.longitude
+                    )
+                }
+            )
         }
     }
 
@@ -73,41 +101,66 @@ class MonitoringRepositoryImpl(
     ): Field {
         val row =
             apiCall {
-                    api.createField(
-                        CreateFieldDto(
-                            profile,
-                            name,
-                            area,
-                            soil,
-                            latitude,
-                            longitude,
-                            crop,
-                            boundary.map { FieldVertexDto(it.latitude, it.longitude) },
-                        )
+                api.createField(
+                    CreateFieldDto(
+                        profile,
+                        name,
+                        area,
+                        soil,
+                        latitude,
+                        longitude,
+                        crop,
+                        boundary.map {
+                            FieldVertexDto(it.latitude, it.longitude)
+                        },
                     )
-                }
-                .row(user)
+                )
+            }.row(user)
+
         dao.putFields(listOf(row))
         return row.domain()
     }
 
-    override suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor {
-        val row = apiCall { api.registerSensor(RegisterSensorDto(code, field, name)) }.row(user)
+    override suspend fun registerSensor(
+        user: Int,
+        field: Int,
+        code: String,
+        name: String
+    ): Sensor {
+        val row =
+            apiCall {
+                api.registerSensor(
+                    RegisterSensorDto(code, field, name)
+                )
+            }.row(user)
+
         dao.putSensors(listOf(row))
         return row.domain()
     }
 
-    override suspend fun refreshReadings(user: Int, device: Int, days: Int) {
+    override suspend fun refreshReadings(
+        user: Int,
+        device: Int,
+        days: Int
+    ) {
         val latest =
             try {
                 apiCall { api.latest(device) }.reading
             } catch (exception: Failure) {
-                if (exception.code == "NO_READINGS" && exception.status == 404) null
+                if (
+                    exception.code == "NO_READINGS" &&
+                    exception.status == 404
+                ) null
                 else throw exception
             }
+
         val history = apiCall { api.history(device, days) }
+
         val rows =
-            (history.readings + listOfNotNull(latest)).distinctBy { it.id }.map { it.row(user) }
+            (history.readings + listOfNotNull(latest))
+                .distinctBy { it.id }
+                .map { it.row(user) }
+
         db.withTransaction {
             dao.putReadings(rows)
             dao.putDownload(
@@ -124,7 +177,17 @@ class MonitoringRepositoryImpl(
         }
     }
 
-    override suspend fun refreshDetail(user: Int, device: Int, reading: Int) {
-        dao.putReadings(listOf(apiCall { api.detail(device, reading) }.row(user)))
+    override suspend fun refreshDetail(
+        user: Int,
+        device: Int,
+        reading: Int
+    ) {
+        dao.putReadings(
+            listOf(
+                apiCall {
+                    api.detail(device, reading)
+                }.row(user)
+            )
+        )
     }
 }
