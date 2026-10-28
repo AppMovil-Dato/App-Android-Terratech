@@ -7,6 +7,7 @@ import com.novatech.terratech.core.infrastructure.local.TerraDatabase
 import com.novatech.terratech.core.infrastructure.remote.apiCall
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
 import com.novatech.terratech.monitoring.domain.entity.FertilityZone
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
@@ -16,8 +17,10 @@ import com.novatech.terratech.monitoring.infrastructure.mapper.domain
 import com.novatech.terratech.monitoring.infrastructure.mapper.row
 import com.novatech.terratech.monitoring.infrastructure.remote.MonitoringApi
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.CreateFieldDto
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.FertilityZoneThresholdsDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldVertexDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.RegisterSensorDto
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.UpdateFertilityZoneThresholdsDto
 import java.time.Instant
 import kotlinx.coroutines.flow.map
 
@@ -67,7 +70,7 @@ class MonitoringRepositoryImpl(
         }
     }
 
-    // US13: obtener zonas de fertilidad desde el backend
+    // US13: consultar las zonas de fertilidad
     override suspend fun fertilityZones(
         user: Int,
         field: Int
@@ -86,6 +89,72 @@ class MonitoringRepositoryImpl(
                 }
             )
         }
+    }
+
+    // US18: obtener umbrales del backend
+    override suspend fun fertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ): FertilityZoneThresholds {
+        val response = apiCall {
+            api.fertilityZoneThresholds(field, zone)
+        }
+
+        return response.toDomain()
+    }
+
+    // US18: guardar umbrales en MySQL mediante la API
+    override suspend fun updateFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        thresholds: FertilityZoneThresholds
+    ): FertilityZoneThresholds {
+        val body = UpdateFertilityZoneThresholdsDto(
+            moistureMin = thresholds.moistureMin,
+            moistureMax = thresholds.moistureMax,
+            nitrogenMin = thresholds.nitrogenMin,
+            nitrogenMax = thresholds.nitrogenMax,
+            phosphorusMin = thresholds.phosphorusMin,
+            phosphorusMax = thresholds.phosphorusMax,
+            potassiumMin = thresholds.potassiumMin,
+            potassiumMax = thresholds.potassiumMax
+        )
+
+        val response = apiCall {
+            api.updateFertilityZoneThresholds(
+                field,
+                thresholds.zoneId,
+                body
+            )
+        }
+
+        return response.toDomain()
+    }
+
+    // US18: recuperar los valores predeterminados
+    override suspend fun resetFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ) {
+        apiCall {
+            api.resetFertilityZoneThresholds(field, zone)
+        }
+    }
+
+    private fun FertilityZoneThresholdsDto.toDomain(): FertilityZoneThresholds {
+        return FertilityZoneThresholds(
+            zoneId = zoneId,
+            moistureMin = moistureMin,
+            moistureMax = moistureMax,
+            nitrogenMin = nitrogenMin,
+            nitrogenMax = nitrogenMax,
+            phosphorusMin = phosphorusMin,
+            phosphorusMax = phosphorusMax,
+            potassiumMin = potassiumMin,
+            potassiumMax = potassiumMax
+        )
     }
 
     override suspend fun createField(

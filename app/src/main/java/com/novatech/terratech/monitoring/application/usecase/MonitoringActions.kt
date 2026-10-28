@@ -3,6 +3,7 @@ package com.novatech.terratech.monitoring.application.usecase
 
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.monitoring.domain.entity.FertilityZone
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
@@ -32,9 +33,39 @@ class MonitoringActions(private val repository: MonitoringRepository) {
     suspend fun refreshSensors(user: Int, field: Int) =
         repository.refreshSensors(user, field)
 
-    // US13: consultar zonas de fertilidad de una parcela
-    suspend fun fertilityZones(user: Int, field: Int): List<FertilityZone> =
+    // US13: consultar zonas de fertilidad
+    suspend fun fertilityZones(
+        user: Int,
+        field: Int
+    ): List<FertilityZone> =
         repository.fertilityZones(user, field)
+
+    // US18: consultar umbrales
+    suspend fun fertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ): FertilityZoneThresholds =
+        repository.fertilityZoneThresholds(user, field, zone)
+
+    // US18: actualizar umbrales
+    suspend fun updateFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        thresholds: FertilityZoneThresholds
+    ): FertilityZoneThresholds =
+        repository.updateFertilityZoneThresholds(
+            user,
+            field,
+            thresholds
+        )
+
+    // US18: restablecer umbrales
+    suspend fun resetFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ) = repository.resetFertilityZoneThresholds(user, field, zone)
 
     suspend fun refreshReadings(user: Int, device: Int, days: Int) {
         if (days !in listOf(7, 30)) throw Failure("INVALID_RANGE")

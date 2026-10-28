@@ -3,6 +3,7 @@ package com.novatech.terratech.monitoring.domain.repository
 
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
 import com.novatech.terratech.monitoring.domain.entity.FertilityZone
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.domain.entity.Sensor
@@ -26,8 +27,29 @@ interface MonitoringRepository {
 
     suspend fun refreshSensors(user: Int, field: Int)
 
-    // US13: consultar las zonas de fertilidad de una parcela
+    // US13: consultar zonas de fertilidad
     suspend fun fertilityZones(user: Int, field: Int): List<FertilityZone>
+
+    // US18: consultar umbrales de una zona
+    suspend fun fertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ): FertilityZoneThresholds
+
+    // US18: guardar umbrales personalizados
+    suspend fun updateFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        thresholds: FertilityZoneThresholds
+    ): FertilityZoneThresholds
+
+    // US18: restablecer umbrales
+    suspend fun resetFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    )
 
     suspend fun createField(
         user: Int,
@@ -41,7 +63,12 @@ interface MonitoringRepository {
         boundary: List<Coordinates> = emptyList(),
     ): Field
 
-    suspend fun registerSensor(user: Int, field: Int, code: String, name: String): Sensor
+    suspend fun registerSensor(
+        user: Int,
+        field: Int,
+        code: String,
+        name: String
+    ): Sensor
 
     suspend fun refreshReadings(user: Int, device: Int, days: Int)
 

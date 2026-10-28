@@ -4,6 +4,7 @@ package com.novatech.terratech
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
 import com.novatech.terratech.monitoring.domain.entity.FertilityZone
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.domain.entity.Sensor
@@ -58,6 +59,21 @@ class FakeMonitoringRepository : MonitoringRepository {
     var occupied = false
     var selected: Pair<Int?, Int?> = null to null
 
+    // US18: valores iniciales para las pruebas
+    private val initialThresholds = FertilityZoneThresholds(
+        zoneId = 1,
+        moistureMin = 25.0,
+        moistureMax = 75.0,
+        nitrogenMin = 20.0,
+        nitrogenMax = 40.0,
+        phosphorusMin = 15.0,
+        phosphorusMax = 30.0,
+        potassiumMin = 30.0,
+        potassiumMax = 50.0
+    )
+
+    private var savedThresholds = initialThresholds
+
     private fun connected() {
         if (offline) throw Failure("OFFLINE")
     }
@@ -109,13 +125,93 @@ class FakeMonitoringRepository : MonitoringRepository {
         connected()
     }
 
-    // US13: implementación de prueba de zonas de fertilidad
+    // US13: zonas de fertilidad
     override suspend fun fertilityZones(
         user: Int,
         field: Int
     ): List<FertilityZone> {
         connected()
         return emptyList()
+    }
+
+    // US18: consultar umbrales guardados
+    override suspend fun fertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ): FertilityZoneThresholds {
+        connected()
+
+        if (field != 1 || zone != 1) {
+            throw Failure("ZONE_NOT_FOUND", 404)
+        }
+
+        return savedThresholds
+    }
+
+    // US18: guardar nuevos umbrales
+    override suspend fun updateFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        thresholds: FertilityZoneThresholds
+    ): FertilityZoneThresholds {
+        connected()
+
+        if (field != 1 || thresholds.zoneId != 1) {
+            throw Failure("ZONE_NOT_FOUND", 404)
+        }
+
+        if (
+            !validRange(
+                thresholds.moistureMin,
+                thresholds.moistureMax,
+                100.0
+            ) ||
+            !validRange(
+                thresholds.nitrogenMin,
+                thresholds.nitrogenMax
+            ) ||
+            !validRange(
+                thresholds.phosphorusMin,
+                thresholds.phosphorusMax
+            ) ||
+            !validRange(
+                thresholds.potassiumMin,
+                thresholds.potassiumMax
+            )
+        ) {
+            throw Failure("INVALID_THRESHOLDS", 400)
+        }
+
+        savedThresholds = thresholds
+        return savedThresholds
+    }
+
+    // US18: restablecer valores
+    override suspend fun resetFertilityZoneThresholds(
+        user: Int,
+        field: Int,
+        zone: Int
+    ) {
+        connected()
+
+        if (field != 1 || zone != 1) {
+            throw Failure("ZONE_NOT_FOUND", 404)
+        }
+
+        savedThresholds = initialThresholds
+    }
+
+    private fun validRange(
+        minimum: Double,
+        maximum: Double,
+        limit: Double = Double.MAX_VALUE
+    ): Boolean {
+        return minimum.isFinite() &&
+            maximum.isFinite() &&
+            minimum >= 0.0 &&
+            maximum <= limit &&
+            minimum < maximum
     }
 
     override suspend fun refreshReadings(
