@@ -13,6 +13,8 @@ import com.novatech.terratech.R
 import com.novatech.terratech.core.presentation.component.FarmCard
 import com.novatech.terratech.core.presentation.format.number
 import com.novatech.terratech.core.presentation.format.timestamp
+import com.novatech.terratech.monitoring.domain.valueobject.MoistureLevel
+import com.novatech.terratech.monitoring.domain.valueobject.classifyMoisture
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.ui.theme.Amber
 import com.novatech.terratech.ui.theme.FarmGreen
@@ -77,7 +79,8 @@ fun FertilityStatusCard(state: MonitoringState) {
                     color = Muted,
                 )
 
-                if (reading.source.equals(
+                if (
+                    reading.source.equals(
                         "SIMULATED",
                         ignoreCase = true,
                     )
@@ -103,10 +106,11 @@ fun FertilityStatusCard(state: MonitoringState) {
                     style = MaterialTheme.typography.titleMedium,
                 )
 
-                if (
-                    !reading.moisturePercent.isFinite() ||
-                    reading.moisturePercent !in 0.0..100.0
-                ) {
+                val moistureLevel = classifyMoisture(
+                    reading.moisturePercent
+                )
+
+                if (moistureLevel == null) {
                     Text(
                         stringResource(R.string.fertility_invalid),
                         color = Amber,
@@ -117,8 +121,11 @@ fun FertilityStatusCard(state: MonitoringState) {
                         color = Amber,
                     )
                 } else {
-                    val critical = reading.moisturePercent < 30.0
-                    val moderate = reading.moisturePercent <= 60.0
+                    val critical =
+                        moistureLevel == MoistureLevel.CRITICAL
+
+                    val moderate =
+                        moistureLevel == MoistureLevel.MODERATE
 
                     val statusRes = when {
                         critical -> R.string.fertility_critical
@@ -144,7 +151,9 @@ fun FertilityStatusCard(state: MonitoringState) {
                         color = statusColor,
                     )
 
-                    Text(stringResource(actionRes))
+                    Text(
+                        stringResource(actionRes)
+                    )
                 }
 
                 Text(
