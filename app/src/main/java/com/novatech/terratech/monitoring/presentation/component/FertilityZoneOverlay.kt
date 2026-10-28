@@ -10,5 +10,5 @@ data class FertilityZoneOverlay(
     val deviceId: Int,
     val name: String,
     val boundary: List<Coordinates>,
-    val level: FertilityLevel,
+    val level: FertilityLevel? = null,
 )

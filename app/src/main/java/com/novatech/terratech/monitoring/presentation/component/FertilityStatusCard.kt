@@ -1,4 +1,3 @@
-
 package com.novatech.terratech.monitoring.presentation.component
 
 import androidx.compose.foundation.layout.Arrangement
@@ -195,10 +194,5 @@ fun FertilityStatusCard(state: MonitoringState) {
                 color = Color(0xFFC62828),
             )
         }
-
-        Text(
-            stringResource(R.string.fertility_geo_limit),
-            color = Muted,
-        )
     }
 }

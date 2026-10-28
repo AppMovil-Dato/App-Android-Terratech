@@ -188,7 +188,7 @@ fun FieldMapView(
                 )
             }
 
-            // US13: zonas geográficas de fertilidad
+            // US13: zonas de fertilidad obtenidas del backend
             fertilityZones.forEach { zone ->
                 if (zone.boundary.size >= 3) {
 
@@ -196,6 +196,7 @@ fun FieldMapView(
                         FertilityLevel.OPTIMAL -> FarmGreen
                         FertilityLevel.MODERATE -> Amber
                         FertilityLevel.CRITICAL -> Color(0xFFC62828)
+                        null -> Color(0xFF607D8B)
                     }
 
                     Polygon(

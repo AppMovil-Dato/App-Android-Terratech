@@ -1,3 +1,4 @@
+
 package com.novatech.terratech.monitoring.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -10,6 +11,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -22,6 +27,7 @@ import com.novatech.terratech.core.presentation.format.areaNumber
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.presentation.component.FieldMapView
 import com.novatech.terratech.monitoring.presentation.component.FertilityStatusCard
+import com.novatech.terratech.monitoring.presentation.component.FertilityZoneOverlay
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.ui.theme.Muted
 
@@ -31,6 +37,25 @@ fun SensorsScreen(
     onChoose: (Int) -> Unit,
     onRegister: () -> Unit,
 ) {
+    var selectedZoneName by remember(state.fieldId) {
+        mutableStateOf<String?>(null)
+    }
+
+    val zones = state.selectedField?.let { field ->
+        state.fertilityZones
+            .filter { it.fieldId == field.id }
+            .map { zone ->
+                FertilityZoneOverlay(
+                    zoneId = zone.id,
+                    fieldId = zone.fieldId,
+                    deviceId = zone.deviceId,
+                    name = zone.name,
+                    boundary = zone.boundary,
+                    level = null
+                )
+            }
+    } ?: emptyList()
+
     LazyColumn(
         Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
@@ -47,18 +72,60 @@ fun SensorsScreen(
         state.selectedField?.let { field ->
             item {
                 FieldMapView(
-                    field.boundary.ifEmpty {
+                    points = field.boundary.ifEmpty {
                         listOf(
                             Coordinates.of(
                                 field.latitude,
-                                field.longitude,
+                                field.longitude
                             )
                         )
                     },
-                    field.boundary.isNotEmpty(),
-                    Modifier.fillMaxWidth().height(210.dp),
+                    drawing = field.boundary.isNotEmpty(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(210.dp),
                     interactive = true,
+                    fertilityZones = zones,
+                    onZoneClick = { zone ->
+                        selectedZoneName = zone.name
+                    }
                 )
+            }
+
+            // US13: mostrar las zonas recibidas del backend
+            item {
+                Text(
+                    text = "Fertility zones: ${zones.size}",
+                    style = MaterialTheme.typography.titleSmall
+                )
+            }
+
+            items(
+                zones,
+                key = { "fertility-zone-${it.zoneId}" }
+            ) { zone ->
+                Text(
+                    text = zone.name,
+                    color = Muted
+                )
+            }
+
+            if (selectedZoneName != null) {
+                item {
+                    Text(
+                        text = "Selected zone: $selectedZoneName",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
+            }
+
+            state.fertilityZonesError?.let { error ->
+                item {
+                    Text(
+                        text = "Error loading fertility zones: $error",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
 
             item {
