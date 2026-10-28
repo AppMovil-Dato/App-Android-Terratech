@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="app_name">TerraTech</string>
     <string name="tagline">Your land, connected</string>
     <string name="login">Sign in</string>
@@ -181,4 +181,33 @@
     <string name="temp_threshold_help">Recommended: 35°C. Above this level, thermal stress alert will be shown.</string>
     <string name="error_moisture_threshold" formatted="false">Moisture must be between 0% and 100%.</string>
     <string name="error_temp_threshold">Temperature must be between 0°C and 60°C.</string>
+    <string name="weather_forecast">Weather forecast</string>
+    <string name="precipitation_24h">Rain 24h: %1$.0f%%</string>
+    <string name="expected_rain">Expected: %1$.1f mm</string>
+    <string name="temperature_val">%1$.1f °C</string>
+    <string name="humidity_val">Humidity: %1$.0f%%</string>
+    <string name="wind_speed_val">Wind: %1$.1f km/h</string>
+    <string name="weather_offline_badge">Offline data</string>
+    <string name="weather_service_unavailable">Weather service temporarily unavailable</string>
+    <string name="refresh_weather">Refresh weather</string>
+    <string name="irrigation_recommendation_title">Irrigation suspension recommended</string>
+    <string name="water_savings_label">Estimated water savings: %1$d L</string>
+    <string name="satellite_view">Satellite view</string>
+    <string name="map_view">Map view</string>
+    <string name="captured_at">Captured: %1$s</string>
+    <string name="ndvi_label">NDVI: %1$.2f</string>
+    <string name="cloud_coverage">Cloud: %1$.1f%%</string>
+    <string name="ndvi_low">Low vigor</string>
+    <string name="ndvi_moderate">Moderate vigor</string>
+    <string name="ndvi_high">High vigor</string>
+    <string name="select_date">Select date</string>
+    <string name="no_satellite_image">No satellite image available for this date</string>
+    <string name="compare_vegetation">Compare vegetation</string>
+    <string name="vegetation_comparison_title">Vegetation comparison</string>
+    <string name="select_period_a">First date (YYYY-MM-DD)</string>
+    <string name="select_period_b">Second date (YYYY-MM-DD)</string>
+    <string name="compare_action">Compare periods</string>
+    <string name="ndvi_variation">NDVI variation: %1$.2f (%2$.1f%%)</string>
+    <string name="earlier_capture">Earlier period</string>
+    <string name="later_capture">Later period</string>
 </resources>

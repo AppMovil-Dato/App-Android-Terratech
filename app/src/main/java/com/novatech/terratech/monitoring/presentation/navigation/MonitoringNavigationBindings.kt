@@ -12,4 +12,8 @@ fun MonitoringViewModel.navigationActions() =
         readDetail = ::detail,
         refresh = ::refresh,
         clearMessage = ::clearMessage,
+        refreshWeather = ::refreshWeather,
+        loadSatelliteByDate = ::loadSatelliteByDate,
+        toggleSatelliteMode = ::toggleSatelliteMode,
+        compareVegetation = ::compareVegetation,
     )

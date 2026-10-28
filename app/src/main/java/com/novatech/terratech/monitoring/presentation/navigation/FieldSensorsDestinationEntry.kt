@@ -23,6 +23,10 @@ fun NavGraphBuilder.fieldSensorsDestination(
             state = state.forField(destination.fieldId),
             onChoose = { deviceId -> navigator.sensor(deviceId) },
             onRegister = { navigator.registerSensor(destination.fieldId) },
+            onRefreshWeather = actions.refreshWeather,
+            onSelectSatelliteDate = actions.loadSatelliteByDate,
+            onToggleSatelliteMode = actions.toggleSatelliteMode,
+            onCompareVegetation = { navigator.vegetationComparison(destination.fieldId) },
         )
     }
 }

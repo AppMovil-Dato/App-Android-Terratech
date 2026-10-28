@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.domain.repository.AccountRepository
+import com.novatech.terratech.monitoring.application.usecase.CompareVegetationPeriod
+import com.novatech.terratech.monitoring.application.usecase.GetFieldWeather
+import com.novatech.terratech.monitoring.application.usecase.GetSatelliteImage
 import com.novatech.terratech.monitoring.application.usecase.MonitoringActions
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.domain.valueobject.FieldDraft
@@ -29,8 +32,13 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class MonitoringViewModel
 @Inject
-constructor(private val actions: MonitoringActions, private val account: AccountRepository) :
-    ViewModel() {
+constructor(
+    private val actions: MonitoringActions,
+    private val account: AccountRepository,
+    private val getFieldWeather: GetFieldWeather? = null,
+    private val getSatelliteImage: GetSatelliteImage? = null,
+    private val compareVegetationPeriod: CompareVegetationPeriod? = null,
+) : ViewModel() {
     private val mutable = MutableStateFlow(MonitoringState())
     val state = mutable.asStateFlow()
     private var pendingRefresh = false
@@ -67,7 +75,7 @@ constructor(private val actions: MonitoringActions, private val account: Account
                                     )
                                         selectField(
                                             fields.find { it.id == savedSelection.first }?.id
-                                                ?: fields.first().id
+                                                ?: fields.first().id,
                                         )
                                 }
                             }
@@ -81,7 +89,7 @@ constructor(private val actions: MonitoringActions, private val account: Account
                                     )
                                         selectDevice(
                                             candidates.find { it.id == savedSelection.second }?.id
-                                                ?: candidates.first().id
+                                                ?: candidates.first().id,
                                         )
                                 }
                             }
@@ -94,7 +102,15 @@ constructor(private val actions: MonitoringActions, private val account: Account
 
     fun clearMessage() {
         mutable.update {
-            it.copy(error = null, created = false, createdFieldId = null, createdSensorId = null)
+            it.copy(
+                error = null,
+                created = false,
+                createdFieldId = null,
+                createdSensorId = null,
+                weatherError = null,
+                satelliteError = null,
+                comparisonError = null,
+            )
         }
     }
 
@@ -110,6 +126,8 @@ constructor(private val actions: MonitoringActions, private val account: Account
             mutable.value.fieldSensors.find { it.id == savedSelection.second }
                 ?: mutable.value.fieldSensors.firstOrNull()
         if (cached != null) selectDevice(cached.id)
+        loadWeather(id)
+        loadLatestSatellite(id)
         refresh()
     }
 
@@ -184,6 +202,11 @@ constructor(private val actions: MonitoringActions, private val account: Account
             pendingRefresh = true
             return
         }
+        val currentField = mutable.value.fieldId
+        if (currentField != null) {
+            loadWeather(currentField)
+            loadLatestSatellite(currentField)
+        }
         request {
             actions.refreshFields(it)
             mutable.value.fieldId?.let { field -> actions.refreshSensors(it, field) }
@@ -195,6 +218,93 @@ constructor(private val actions: MonitoringActions, private val account: Account
 
     fun detail(id: Int) = request { user ->
         mutable.value.deviceId?.let { actions.refreshDetail(user, it, id) }
+    }
+
+    fun refreshWeather() {
+        val fieldId = mutable.value.fieldId ?: return
+        val weatherUseCase = getFieldWeather ?: return
+        viewModelScope.launch {
+            mutable.update { it.copy(weatherBusy = true, weatherError = null) }
+            val result = weatherUseCase(fieldId, forceRefresh = true)
+            result
+                .onSuccess { weather ->
+                    mutable.update { it.copy(weather = weather, weatherBusy = false) }
+                }
+                .onFailure { error ->
+                    mutable.update { it.copy(weatherBusy = false, weatherError = error.message) }
+                }
+        }
+    }
+
+    fun loadWeather(fieldId: Int) {
+        val weatherUseCase = getFieldWeather ?: return
+        viewModelScope.launch {
+            mutable.update { it.copy(weatherBusy = true, weatherError = null) }
+            val result = weatherUseCase(fieldId, forceRefresh = false)
+            result
+                .onSuccess { weather ->
+                    mutable.update { it.copy(weather = weather, weatherBusy = false) }
+                }
+                .onFailure { error ->
+                    mutable.update { it.copy(weatherBusy = false, weatherError = error.message) }
+                }
+        }
+    }
+
+    fun loadLatestSatellite(fieldId: Int) {
+        val satelliteUseCase = getSatelliteImage ?: return
+        viewModelScope.launch {
+            mutable.update { it.copy(satelliteBusy = true, satelliteError = null) }
+            val result = satelliteUseCase.latest(fieldId, forceRefresh = false)
+            result
+                .onSuccess { image ->
+                    mutable.update { it.copy(satelliteImage = image, satelliteBusy = false) }
+                }
+                .onFailure { error ->
+                    mutable.update { it.copy(satelliteBusy = false, satelliteError = error.message) }
+                }
+        }
+    }
+
+    fun loadSatelliteByDate(date: String) {
+        val fieldId = mutable.value.fieldId ?: return
+        val satelliteUseCase = getSatelliteImage ?: return
+        viewModelScope.launch {
+            mutable.update { it.copy(satelliteBusy = true, satelliteError = null) }
+            val result = satelliteUseCase.byDate(fieldId, date)
+            result
+                .onSuccess { image ->
+                    mutable.update { it.copy(satelliteImage = image, satelliteBusy = false) }
+                }
+                .onFailure { error ->
+                    mutable.update { it.copy(satelliteBusy = false, satelliteError = error.message) }
+                }
+        }
+    }
+
+    fun toggleSatelliteMode() {
+        mutable.update { it.copy(isSatelliteView = !it.isSatelliteView) }
+    }
+
+    fun compareVegetation(dateA: String, dateB: String) {
+        val fieldId = mutable.value.fieldId ?: return
+        val satelliteUseCase = getSatelliteImage ?: return
+        val comparisonUseCase = compareVegetationPeriod ?: return
+        viewModelScope.launch {
+            mutable.update { it.copy(comparisonBusy = true, comparisonError = null) }
+            val resA = satelliteUseCase.byDate(fieldId, dateA)
+            val resB = satelliteUseCase.byDate(fieldId, dateB)
+            if (resA.isSuccess && resB.isSuccess) {
+                val comparison = comparisonUseCase(resA.getOrThrow(), resB.getOrThrow())
+                mutable.update { it.copy(comparisonResult = comparison, comparisonBusy = false) }
+            } else {
+                val error =
+                    resA.exceptionOrNull()?.message
+                        ?: resB.exceptionOrNull()?.message
+                        ?: "Error comparing vegetation periods"
+                mutable.update { it.copy(comparisonBusy = false, comparisonError = error) }
+            }
+        }
     }
 
     fun createField(

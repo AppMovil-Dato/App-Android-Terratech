@@ -2,11 +2,13 @@ package com.novatech.terratech.core.infrastructure.local
 
 import androidx.room.Dao
 import androidx.room.Transaction
+import com.novatech.terratech.monitoring.infrastructure.local.dao.FieldWeatherDao
 import com.novatech.terratech.monitoring.infrastructure.local.dao.MonitoringDao
+import com.novatech.terratech.monitoring.infrastructure.local.dao.SatelliteImageDao
 import com.novatech.terratech.profile.infrastructure.local.dao.ProfileDao
 
 @Dao
-interface TerraDao : ProfileDao, MonitoringDao {
+interface TerraDao : ProfileDao, MonitoringDao, FieldWeatherDao, SatelliteImageDao {
     @Transaction
     suspend fun clearPrivateData() {
         clearProfiles()
@@ -14,5 +16,7 @@ interface TerraDao : ProfileDao, MonitoringDao {
         clearSensors()
         clearReadings()
         clearDownloads()
+        clearWeather()
+        clearSatelliteImages()
     }
 }
