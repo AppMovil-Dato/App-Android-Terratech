@@ -170,4 +170,52 @@
     <string name="map_ready">Map ready</string>
     <string name="field_map">Field map</string>
     <string name="map_unavailable">Map unavailable</string>
+
+
+    <string name="fertility_title">Soil fertility assessment</string>
+
+    <string name="fertility_scope">Soil moisture status for the selected sensor. This is not a fertility classification of the entire field.</string>
+
+    <string name="fertility_no_sensors">No sensors are associated with this field. Fertility measurements are not available yet.</string>
+
+    <string name="fertility_select_sensor">Select a sensor to see its available measurements.</string>
+
+    <string name="fertility_no_readings">The selected sensor has no readings yet.</string>
+
+    <string name="fertility_sensor_name">Sensor: %1$s</string>
+
+    <string name="fertility_measured_at">Reading: %1$s</string>
+
+    <string name="fertility_moisture_value">Soil moisture: %1$s%%</string>
+
+    <string name="fertility_stale">This reading is older than 30 minutes. Its status is not classified as current.</string>
+
+    <string name="fertility_invalid">This moisture measurement is out of range and cannot be classified.</string>
+
+    <string name="fertility_critical">Critical moisture</string>
+
+    <string name="fertility_moderate">Moderate moisture</string>
+
+    <string name="fertility_optimal">Optimal moisture (project threshold)</string>
+
+    <string name="fertility_action_critical">US13 guideline: assess irrigation and fertilization within the next 2 hours. Confirm the sensor data and crop needs first.</string>
+
+    <string name="fertility_action_moderate">US13 guideline: monitor soil conditions again within 12 hours.</string>
+
+    <string name="fertility_action_optimal">US13 guideline: maintain the current plan and continue monitoring.</string>
+
+    <string name="fertility_nutrients">Measured nutrients: N %1$s ppm · P %2$s ppm · K %3$s ppm</string>
+
+    <string name="fertility_nutrients_note">NPK values are shown without a fertility rating because crop-specific reference ranges have not been defined.</string>
+
+    <string name="fertility_legend_title">Moisture thresholds</string>
+
+    <string name="fertility_legend_optimal" formatted="false">Green: above 60% · Maintain the current plan</string>
+
+    <string name="fertility_legend_moderate" formatted="false">Yellow: 30% to 60% · Monitor in 12 hours</string>
+
+    <string name="fertility_legend_critical" formatted="false">Red: below 30% · Assess irrigation and fertilization in 2 hours</string>
+
+    <string name="fertility_geo_limit">Geographic fertility zones cannot be drawn yet: the available sensor records do not contain their position within the field.</string>
+
 </resources>
