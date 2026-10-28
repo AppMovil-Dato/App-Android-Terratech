@@ -72,6 +72,7 @@ ksp { arg("room.schemaLocation", "$projectDir/schemas") }
 
 dependencies {
     implementation("com.google.maps.android:maps-compose:9.0.0")
+    implementation(libs.coil.compose)
     implementation("androidx.compose.material:material-icons-core:1.7.8")
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
