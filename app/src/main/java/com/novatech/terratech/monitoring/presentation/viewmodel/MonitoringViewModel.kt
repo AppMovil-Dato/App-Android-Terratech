@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.domain.repository.AccountRepository
 import com.novatech.terratech.monitoring.application.usecase.MonitoringActions
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.domain.valueobject.FieldDraft
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
@@ -45,6 +46,9 @@ constructor(
     // US13: consulta de zonas de fertilidad
     private var fertilityZonesJob: Job? = null
 
+    // US18: operaciones de umbrales
+    private var thresholdsJob: Job? = null
+
     init {
         viewModelScope.launch {
             while (isActive) {
@@ -62,6 +66,7 @@ constructor(
                 downloadJob?.cancel()
                 requestJob?.cancel()
                 fertilityZonesJob?.cancel()
+                thresholdsJob?.cancel()
 
                 mutable.value = MonitoringState(userId = s?.userId)
 
@@ -140,6 +145,7 @@ constructor(
         readingsJob?.cancel()
         downloadJob?.cancel()
         fertilityZonesJob?.cancel()
+        thresholdsJob?.cancel()
 
         mutable.update {
             it.copy(
@@ -148,7 +154,12 @@ constructor(
                 readings = emptyList(),
                 download = null,
                 fertilityZones = emptyList(),
-                fertilityZonesError = null
+                fertilityZonesError = null,
+                thresholdZoneId = null,
+                zoneThresholds = null,
+                thresholdsBusy = false,
+                thresholdsError = null,
+                thresholdsSaved = false
             )
         }
 
@@ -324,6 +335,230 @@ constructor(
             }
     }
 
+    // US18: consultar umbrales de una zona
+    fun loadZoneThresholds(zoneId: Int) {
+        val user = account.session.value?.userId ?: return
+        val field = mutable.value.fieldId ?: return
+
+        if (
+            mutable.value.fertilityZones.none {
+                it.id == zoneId && it.fieldId == field
+            }
+        ) return
+
+        thresholdsJob?.cancel()
+
+        mutable.update {
+            it.copy(
+                thresholdZoneId = zoneId,
+                zoneThresholds = null,
+                thresholdsBusy = true,
+                thresholdsError = null,
+                thresholdsSaved = false
+            )
+        }
+
+        thresholdsJob = viewModelScope.launch {
+            try {
+                val thresholds = actions.fertilityZoneThresholds(
+                    user,
+                    field,
+                    zoneId
+                )
+
+                mutable.update { current ->
+                    if (
+                        current.userId == user &&
+                        current.fieldId == field &&
+                        current.thresholdZoneId == zoneId
+                    ) {
+                        current.copy(
+                            zoneThresholds = thresholds,
+                            thresholdsBusy = false,
+                            thresholdsError = null
+                        )
+                    } else {
+                        current
+                    }
+                }
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                val code =
+                    (exception as? Failure)?.code
+                        ?: "UNKNOWN_ERROR"
+
+                mutable.update { current ->
+                    if (
+                        current.userId == user &&
+                        current.fieldId == field &&
+                        current.thresholdZoneId == zoneId
+                    ) {
+                        current.copy(
+                            thresholdsBusy = false,
+                            thresholdsError = code
+                        )
+                    } else {
+                        current
+                    }
+                }
+            }
+        }
+    }
+
+    // US18: guardar los umbrales editados
+    fun saveZoneThresholds(thresholds: FertilityZoneThresholds) {
+        val user = account.session.value?.userId ?: return
+        val field = mutable.value.fieldId ?: return
+        val zoneId = mutable.value.thresholdZoneId ?: return
+
+        if (thresholds.zoneId != zoneId) return
+
+        thresholdsJob?.cancel()
+
+        mutable.update {
+            it.copy(
+                thresholdsBusy = true,
+                thresholdsError = null,
+                thresholdsSaved = false
+            )
+        }
+
+        thresholdsJob = viewModelScope.launch {
+            try {
+                val saved = actions.updateFertilityZoneThresholds(
+                    user,
+                    field,
+                    thresholds
+                )
+
+                mutable.update { current ->
+                    if (
+                        current.userId == user &&
+                        current.fieldId == field &&
+                        current.thresholdZoneId == zoneId
+                    ) {
+                        current.copy(
+                            zoneThresholds = saved,
+                            thresholdsBusy = false,
+                            thresholdsError = null,
+                            thresholdsSaved = true
+                        )
+                    } else {
+                        current
+                    }
+                }
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                val code =
+                    (exception as? Failure)?.code
+                        ?: "UNKNOWN_ERROR"
+
+                mutable.update { current ->
+                    if (
+                        current.userId == user &&
+                        current.fieldId == field &&
+                        current.thresholdZoneId == zoneId
+                    ) {
+                        current.copy(
+                            thresholdsBusy = false,
+                            thresholdsError = code
+                        )
+                    } else {
+                        current
+                    }
+                }
+            }
+        }
+    }
+
+    // US18: restablecer los valores predeterminados
+    fun resetZoneThresholds() {
+        val user = account.session.value?.userId ?: return
+        val field = mutable.value.fieldId ?: return
+        val zoneId = mutable.value.thresholdZoneId ?: return
+
+        thresholdsJob?.cancel()
+
+        mutable.update {
+            it.copy(
+                thresholdsBusy = true,
+                thresholdsError = null,
+                thresholdsSaved = false
+            )
+        }
+
+        thresholdsJob = viewModelScope.launch {
+            try {
+                actions.resetFertilityZoneThresholds(
+                    user,
+                    field,
+                    zoneId
+                )
+
+                val defaults = actions.fertilityZoneThresholds(
+                    user,
+                    field,
+                    zoneId
+                )
+
+                mutable.update { current ->
+                    if (
+                        current.userId == user &&
+                        current.fieldId == field &&
+                        current.thresholdZoneId == zoneId
+                    ) {
+                        current.copy(
+                            zoneThresholds = defaults,
+                            thresholdsBusy = false,
+                            thresholdsError = null,
+                            thresholdsSaved = true
+                        )
+                    } else {
+                        current
+                    }
+                }
+            } catch (exception: CancellationException) {
+                throw exception
+            } catch (exception: Exception) {
+                val code =
+                    (exception as? Failure)?.code
+                        ?: "UNKNOWN_ERROR"
+
+                mutable.update { current ->
+                    if (
+                        current.userId == user &&
+                        current.fieldId == field &&
+                        current.thresholdZoneId == zoneId
+                    ) {
+                        current.copy(
+                            thresholdsBusy = false,
+                            thresholdsError = code
+                        )
+                    } else {
+                        current
+                    }
+                }
+            }
+        }
+    }
+
+    // US18: cerrar la configuracion de la zona
+    fun closeZoneThresholds() {
+        thresholdsJob?.cancel()
+
+        mutable.update {
+            it.copy(
+                thresholdZoneId = null,
+                zoneThresholds = null,
+                thresholdsBusy = false,
+                thresholdsError = null,
+                thresholdsSaved = false
+            )
+        }
+    }
+
     fun refresh() {
         // US13: actualizar las zonas de la parcela
         refreshFertilityZones()
@@ -370,6 +605,7 @@ constructor(
         readingsJob?.cancel()
         downloadJob?.cancel()
         fertilityZonesJob?.cancel()
+        thresholdsJob?.cancel()
 
         val field = actions.createField(
             user,
@@ -386,9 +622,7 @@ constructor(
         mutable.update {
             it.copy(
                 fields = (
-                    it.fields.filterNot {
-                            old -> old.id == field.id
-                    } + field
+                    it.fields.filterNot { old -> old.id == field.id } + field
                     ),
                 fieldId = field.id,
                 deviceId = null,
@@ -396,6 +630,11 @@ constructor(
                 download = null,
                 fertilityZones = emptyList(),
                 fertilityZonesError = null,
+                thresholdZoneId = null,
+                zoneThresholds = null,
+                thresholdsBusy = false,
+                thresholdsError = null,
+                thresholdsSaved = false,
                 created = true,
                 createdFieldId = field.id
             )
@@ -424,9 +663,7 @@ constructor(
         mutable.update {
             it.copy(
                 sensors = (
-                    it.sensors.filterNot {
-                            old -> old.id == sensor.id
-                    } + sensor
+                    it.sensors.filterNot { old -> old.id == sensor.id } + sensor
                     ),
                 deviceId = sensor.id,
                 created = true,

@@ -3,6 +3,7 @@ package com.novatech.terratech.monitoring.presentation.state
 
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
 import com.novatech.terratech.monitoring.domain.entity.FertilityZone
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.domain.entity.Sensor
@@ -17,6 +18,13 @@ data class MonitoringState(
     // US13: zonas obtenidas del backend
     val fertilityZones: List<FertilityZone> = emptyList(),
     val fertilityZonesError: String? = null,
+
+    // US18: configuracion de umbrales de la zona seleccionada
+    val thresholdZoneId: Int? = null,
+    val zoneThresholds: FertilityZoneThresholds? = null,
+    val thresholdsBusy: Boolean = false,
+    val thresholdsError: String? = null,
+    val thresholdsSaved: Boolean = false,
 
     val fieldId: Int? = null,
     val deviceId: Int? = null,
@@ -43,5 +51,6 @@ data class MonitoringState(
         get() = readings.maxByOrNull { it.recordedAt }
 
     val history
-        get() = readings.filter { it.inRange(days, now) }.sortedBy { it.recordedAt }
+        get() = readings.filter { it.inRange(days, now) }
+            .sortedBy { it.recordedAt }
 }
