@@ -24,10 +24,13 @@ import com.novatech.terratech.core.presentation.component.FarmCard
 import com.novatech.terratech.core.presentation.component.PageTitle
 import com.novatech.terratech.core.presentation.component.PrimaryButton
 import com.novatech.terratech.core.presentation.format.areaNumber
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.presentation.component.FieldMapView
 import com.novatech.terratech.monitoring.presentation.component.FertilityStatusCard
 import com.novatech.terratech.monitoring.presentation.component.FertilityZoneOverlay
+import com.novatech.terratech.monitoring.presentation.component.FertilityZoneThresholdsContent
+import com.novatech.terratech.monitoring.presentation.component.FertilityThresholdAlertsCard
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.ui.theme.Muted
 
@@ -36,6 +39,10 @@ fun SensorsScreen(
     state: MonitoringState,
     onChoose: (Int) -> Unit,
     onRegister: () -> Unit,
+    onLoadZoneThresholds: (Int) -> Unit = {},
+    onSaveZoneThresholds: (FertilityZoneThresholds) -> Unit = {},
+    onResetZoneThresholds: () -> Unit = {},
+    onCloseZoneThresholds: () -> Unit = {}
 ) {
     var selectedZoneName by remember(state.fieldId) {
         mutableStateOf<String?>(null)
@@ -59,13 +66,13 @@ fun SensorsScreen(
     LazyColumn(
         Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
             PageTitle(
                 state.selectedField?.name
                     ?: stringResource(R.string.fields),
-                stringResource(R.string.choose_sensor),
+                stringResource(R.string.choose_sensor)
             )
         }
 
@@ -88,11 +95,11 @@ fun SensorsScreen(
                     fertilityZones = zones,
                     onZoneClick = { zone ->
                         selectedZoneName = zone.name
+                        onLoadZoneThresholds(zone.zoneId)
                     }
                 )
             }
 
-            // US13: mostrar las zonas recibidas del backend
             item {
                 Text(
                     text = "Fertility zones: ${zones.size}",
@@ -104,18 +111,106 @@ fun SensorsScreen(
                 zones,
                 key = { "fertility-zone-${it.zoneId}" }
             ) { zone ->
-                Text(
-                    text = zone.name,
-                    color = Muted
-                )
+                FarmCard {
+                    Text(
+                        text = zone.name,
+                        color = Muted
+                    )
+
+                    PrimaryButton(
+                        "Configurar umbrales",
+                        !state.thresholdsBusy
+                    ) {
+                        selectedZoneName = zone.name
+                        onLoadZoneThresholds(zone.zoneId)
+                    }
+                }
             }
 
-            if (selectedZoneName != null) {
+            selectedZoneName?.let { zoneName ->
                 item {
                     Text(
-                        text = "Selected zone: $selectedZoneName",
+                        text = "Selected zone: $zoneName",
                         style = MaterialTheme.typography.bodyMedium
                     )
+                }
+            }
+
+            // US18: umbrales y alertas de la zona
+            state.thresholdZoneId?.let { zoneId ->
+
+                item {
+                    Text(
+                        text = "Umbrales de la zona $zoneId",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
+                item {
+                    val thresholds = state.zoneThresholds
+
+                    if (thresholds == null) {
+                        Text(
+                            text = if (state.thresholdsBusy) {
+                                "Cargando umbrales..."
+                            } else {
+                                "No se pudieron cargar los umbrales."
+                            }
+                        )
+
+                        state.thresholdsError?.let { error ->
+                            Text(
+                                text = "Error: $error",
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    } else {
+                        FertilityZoneThresholdsContent(
+                            thresholds = thresholds,
+                            busy = state.thresholdsBusy,
+                            error = state.thresholdsError,
+                            saved = state.thresholdsSaved,
+                            onSave = onSaveZoneThresholds,
+                            onReset = onResetZoneThresholds,
+                            onClose = onCloseZoneThresholds
+                        )
+                    }
+                }
+
+                // US18: comparar la lectura del sensor
+                // asociado con los umbrales guardados
+                state.zoneThresholds?.let { thresholds ->
+
+                    val selectedZone = zones.find {
+                        it.zoneId == zoneId
+                    }
+
+                    val zoneDeviceId = selectedZone?.deviceId
+
+                    val zoneReading = state.readings
+                        .filter { it.deviceId == zoneDeviceId }
+                        .maxByOrNull { it.recordedAt }
+
+                    item {
+                        if (
+                            zoneDeviceId != null &&
+                            state.deviceId != zoneDeviceId
+                        ) {
+                            FarmCard {
+                                Text(
+                                    "Selecciona el sensor asociado " +
+                                        "a esta zona para consultar sus alertas.",
+                                    color = Muted
+                                )
+                            }
+                        } else {
+                            FertilityThresholdAlertsCard(
+                                reading = zoneReading,
+                                thresholds = thresholds,
+                                now = state.now
+                            )
+                        }
+                    }
                 }
             }
 
@@ -133,7 +228,7 @@ fun SensorsScreen(
                     areaNumber(field.sizeM2 / 10000) +
                         " ha · " +
                         field.cropName.orEmpty(),
-                    color = Muted,
+                    color = Muted
                 )
             }
 
@@ -146,7 +241,7 @@ fun SensorsScreen(
             PrimaryButton(
                 stringResource(R.string.associate),
                 !state.busy,
-                onRegister,
+                onRegister
             )
         }
 
@@ -154,30 +249,30 @@ fun SensorsScreen(
             item {
                 EmptyCard(
                     stringResource(R.string.no_sensors),
-                    stringResource(R.string.field_sensor_empty_help),
+                    stringResource(R.string.field_sensor_empty_help)
                 )
             }
         }
 
         items(
             state.fieldSensors,
-            key = { it.id },
+            key = { it.id }
         ) { sensor ->
             FarmCard {
                 Text(
                     sensor.name
                         ?: stringResource(R.string.sensor),
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleLarge
                 )
 
                 Text(
                     sensor.sensorCode ?: sensor.macAddress,
-                    color = Muted,
+                    color = Muted
                 )
 
                 PrimaryButton(
                     stringResource(R.string.view_sensor),
-                    !state.busy,
+                    !state.busy
                 ) {
                     onChoose(sensor.id)
                 }
