@@ -45,7 +45,7 @@ fun SensorsScreen(state: MonitoringState, onChoose: (Int) -> Unit, onRegister: (
                     },
                     field.boundary.isNotEmpty(),
                     Modifier.fillMaxWidth().height(210.dp),
-                    interactive = false,
+                    interactive = true,
                 )
             }
             item {
