@@ -1,6 +1,8 @@
+
 package com.novatech.terratech.monitoring.presentation.state
 
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
+import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.domain.entity.Sensor
@@ -11,6 +13,11 @@ data class MonitoringState(
     val fields: List<Field> = emptyList(),
     val sensors: List<Sensor> = emptyList(),
     val readings: List<Reading> = emptyList(),
+
+    // US13: zonas obtenidas del backend
+    val fertilityZones: List<FertilityZone> = emptyList(),
+    val fertilityZonesError: String? = null,
+
     val fieldId: Int? = null,
     val deviceId: Int? = null,
     val days: Int = 7,
