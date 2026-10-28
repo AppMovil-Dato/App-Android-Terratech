@@ -1,0 +1,8 @@
+package com.novatech.terratech.monitoring.presentation.navigation
+
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class VegetationComparisonDestination(
+    val fieldId: Int,
+)

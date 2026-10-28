@@ -1,4 +1,4 @@
-﻿<resources>
+<resources>
     <string name="app_name">TerraTech</string>
     <string name="tagline">Tu tierra, conectada</string>
     <string name="login">Iniciar sesión</string>
@@ -181,4 +181,33 @@
     <string name="temp_threshold_help">Recomendado: 35°C. Por encima de este nivel, se alertará sobre estrés térmico.</string>
     <string name="error_moisture_threshold" formatted="false">La humedad debe estar entre 0% y 100%.</string>
     <string name="error_temp_threshold">La temperatura debe estar entre 0°C y 60°C.</string>
+    <string name="weather_forecast">Pronóstico del clima</string>
+    <string name="precipitation_24h">Lluvia 24h: %1$.0f%%</string>
+    <string name="expected_rain">Esperada: %1$.1f mm</string>
+    <string name="temperature_val">%1$.1f °C</string>
+    <string name="humidity_val">Humedad: %1$.0f%%</string>
+    <string name="wind_speed_val">Viento: %1$.1f km/h</string>
+    <string name="weather_offline_badge">Datos sin conexión</string>
+    <string name="weather_service_unavailable">Servicio de clima temporalmente no disponible</string>
+    <string name="refresh_weather">Actualizar clima</string>
+    <string name="irrigation_recommendation_title">Recomendación de suspender riego</string>
+    <string name="water_savings_label">Ahorro estimado de agua: %1$d L</string>
+    <string name="satellite_view">Vista satelital</string>
+    <string name="map_view">Vista mapa</string>
+    <string name="captured_at">Capturado: %1$s</string>
+    <string name="ndvi_label">NDVI: %1$.2f</string>
+    <string name="cloud_coverage">Nubosidad: %1$.1f%%</string>
+    <string name="ndvi_low">Vigor bajo</string>
+    <string name="ndvi_moderate">Vigor moderado</string>
+    <string name="ndvi_high">Vigor alto</string>
+    <string name="select_date">Seleccionar fecha</string>
+    <string name="no_satellite_image">No se encontraron imágenes satelitales para esta fecha</string>
+    <string name="compare_vegetation">Comparar vegetación</string>
+    <string name="vegetation_comparison_title">Comparación de vegetación</string>
+    <string name="select_period_a">Primera fecha (AAAA-MM-DD)</string>
+    <string name="select_period_b">Segunda fecha (AAAA-MM-DD)</string>
+    <string name="compare_action">Comparar periodos</string>
+    <string name="ndvi_variation">Variación NDVI: %1$.2f (%2$.1f%%)</string>
+    <string name="earlier_capture">Periodo anterior</string>
+    <string name="later_capture">Periodo posterior</string>
 </resources>
