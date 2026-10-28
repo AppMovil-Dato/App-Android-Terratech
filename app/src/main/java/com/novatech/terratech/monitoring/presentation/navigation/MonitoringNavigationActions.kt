@@ -11,4 +11,8 @@ data class MonitoringNavigationActions(
     val readDetail: (Int) -> Unit,
     val refresh: () -> Unit,
     val clearMessage: () -> Unit,
+    val refreshWeather: () -> Unit = {},
+    val loadSatelliteByDate: (String) -> Unit = {},
+    val toggleSatelliteMode: () -> Unit = {},
+    val compareVegetation: (String, String) -> Unit = { _, _ -> },
 )
