@@ -30,6 +30,7 @@ import com.novatech.terratech.core.presentation.component.Notice
 import com.novatech.terratech.core.presentation.component.PrimaryButton
 import com.novatech.terratech.iam.presentation.component.AccountField
 import com.novatech.terratech.iam.presentation.component.AccountPasswordField
+import com.novatech.terratech.iam.presentation.component.AuthModeSelector
 import com.novatech.terratech.iam.presentation.state.AccountFormErrors
 import com.novatech.terratech.iam.presentation.state.AccountState
 import com.novatech.terratech.ui.theme.Muted
@@ -52,6 +53,7 @@ internal fun AccountContent(
     onToggleMode: () -> Unit,
     onLogin: (String, String) -> Unit,
     onRegister: (String, String, String, String) -> Unit,
+    onLogout: (() -> Unit)? = null,
 ) {
     var attempted by rememberSaveable(registering) { mutableStateOf(false) }
     val validation = AccountFormErrors.validate(name, email, password, confirmation, registering)
@@ -85,6 +87,15 @@ internal fun AccountContent(
                 ),
                 color = Muted,
             )
+            if (!reauth) {
+                AuthModeSelector(
+                    registering = registering,
+                    onSelectMode = { targetRegistering ->
+                        if (registering != targetRegistering) onToggleMode()
+                    },
+                    enabled = !state.busy,
+                )
+            }
             FarmCard {
                 if (registering)
                     AccountField(
@@ -136,19 +147,28 @@ internal fun AccountContent(
                     !state.busy,
                     submit,
                 )
-            }
-            if (!reauth)
-                TextButton(
-                    onClick = onToggleMode,
-                    enabled = !state.busy,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        stringResource(
-                            if (registering) R.string.have_account else R.string.no_account
+                if (!reauth) {
+                    TextButton(
+                        onClick = onToggleMode,
+                        enabled = !state.busy,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(
+                            stringResource(
+                                if (registering) R.string.have_account else R.string.no_account
+                            )
                         )
-                    )
+                    }
+                } else if (onLogout != null) {
+                    TextButton(
+                        onClick = onLogout,
+                        enabled = !state.busy,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Text(stringResource(R.string.logout))
+                    }
                 }
+            }
         }
     }
 }

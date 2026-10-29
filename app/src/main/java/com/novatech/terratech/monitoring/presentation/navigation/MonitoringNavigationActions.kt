@@ -1,5 +1,7 @@
+
 package com.novatech.terratech.monitoring.presentation.navigation
 
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.valueobject.FieldDraft
 
 data class MonitoringNavigationActions(
@@ -11,4 +13,16 @@ data class MonitoringNavigationActions(
     val readDetail: (Int) -> Unit,
     val refresh: () -> Unit,
     val clearMessage: () -> Unit,
+
+    // US18: acciones de configuracion de umbrales
+    val loadZoneThresholds: (Int) -> Unit,
+    val saveZoneThresholds: (FertilityZoneThresholds) -> Unit,
+    val resetZoneThresholds: () -> Unit,
+    val closeZoneThresholds: () -> Unit,
+
+    // Acciones de clima e imagenes satelitales
+    val refreshWeather: () -> Unit = {},
+    val loadSatelliteByDate: (String) -> Unit = {},
+    val toggleSatelliteMode: () -> Unit = {},
+    val compareVegetation: (String, String) -> Unit = { _, _ -> },
 )

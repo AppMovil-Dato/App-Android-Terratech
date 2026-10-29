@@ -8,6 +8,9 @@ import com.novatech.terratech.iam.infrastructure.remote.dto.RegisterDto
 import com.novatech.terratech.monitoring.infrastructure.mapper.domain
 import com.novatech.terratech.monitoring.infrastructure.mapper.row
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldDto
+import com.novatech.terratech.profile.infrastructure.mapper.domain
+import com.novatech.terratech.profile.infrastructure.mapper.row
+import com.novatech.terratech.profile.infrastructure.remote.dto.SaveProfileDto
 import java.io.IOException
 import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
@@ -98,6 +101,39 @@ class ApiContractTest {
             assertEquals(18.0, reading.phosphorusPpm, 0.0)
             assertEquals(60.0, reading.potassiumPpm, 0.0)
             assertEquals("SIMULATED", reading.source)
+        }
+    }
+
+    @Test
+    fun profileThresholdsSerializedAndDeserializedAccurately() = runTest {
+        server { s, api ->
+            val body =
+                """{"id":1,"userId":10,"fullName":"Carlos Silva","emailAddress":"carlos@terratech.com","fundoName":"Fundo Los Pinos","contactPhone":"+51987654321","location":"Ica, Peru","sizeM2":15000.0,"moistureThreshold":35.5,"tempThreshold":32.0}"""
+            s.enqueue(MockResponse().setBody(body))
+            val profile = api.profile().row(10).domain()
+            val req = s.takeRequest()
+            assertEquals("/api/v1/profiles/me", req.path)
+            assertEquals(35.5, profile.minimumMoisture, 0.0)
+            assertEquals(32.0, profile.temperatureThreshold, 0.0)
+
+            s.enqueue(MockResponse().setBody(body))
+            api.saveProfile(
+                SaveProfileDto(
+                    fullName = "Carlos Silva",
+                    fundoName = "Fundo Los Pinos",
+                    contactPhone = "+51987654321",
+                    location = "Ica, Peru",
+                    sizeM2 = 15000.0,
+                    moistureThreshold = 35.5,
+                    tempThreshold = 32.0,
+                ),
+            )
+            val putReq = s.takeRequest()
+            assertEquals("PUT", putReq.method)
+            assertEquals("/api/v1/profiles/me", putReq.path)
+            val json = JsonParser.parseString(putReq.body.readUtf8()).asJsonObject
+            assertEquals(35.5, json["moistureThreshold"].asDouble, 0.0)
+            assertEquals(32.0, json["tempThreshold"].asDouble, 0.0)
         }
     }
 

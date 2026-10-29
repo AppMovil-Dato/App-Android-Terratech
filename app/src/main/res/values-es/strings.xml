@@ -1,3 +1,4 @@
+
 <resources>
     <string name="app_name">TerraTech</string>
     <string name="tagline">Tu tierra, conectada</string>
@@ -106,7 +107,7 @@
     <string name="units_note" formatted="false">N/P/K en ppm · temperatura en °C · humedad en %</string>
     <string name="use_profile">Ir al perfil</string>
     <string name="sensor_registered">Sensor registrado</string>
-<string name="reading_count">Lecturas: %1$d</string>
+    <string name="reading_count">Lecturas: %1$d</string>
     <string name="step_of">Paso %1$d de %2$d</string>
     <string name="continue_action">Continuar</string>
     <string name="create_field">Crear parcela</string>
@@ -170,4 +171,71 @@
     <string name="map_ready">Mapa listo</string>
     <string name="field_map">Mapa de la parcela</string>
     <string name="map_unavailable">Mapa no disponible</string>
+
+    <!-- US13: evaluacion de fertilidad -->
+    <string name="fertility_title">Evaluación de fertilidad del suelo</string>
+    <string name="fertility_scope">Estado de humedad del sensor seleccionado. No representa la fertilidad de toda la parcela.</string>
+    <string name="fertility_no_sensors">Esta parcela aún no tiene sensores asociados. No hay mediciones de fertilidad disponibles.</string>
+    <string name="fertility_select_sensor">Selecciona un sensor para consultar sus mediciones disponibles.</string>
+    <string name="fertility_no_readings">El sensor seleccionado aún no tiene lecturas.</string>
+    <string name="fertility_sensor_name">Sensor: %1$s</string>
+    <string name="fertility_measured_at">Medición: %1$s</string>
+    <string name="fertility_moisture_value">Humedad del suelo: %1$s%%</string>
+    <string name="fertility_stale">La lectura tiene más de 30 minutos. No se clasifica como estado actual.</string>
+    <string name="fertility_invalid">La medición de humedad está fuera de rango y no se puede clasificar.</string>
+    <string name="fertility_critical">Humedad crítica</string>
+    <string name="fertility_moderate">Humedad moderada</string>
+    <string name="fertility_optimal">Humedad óptima (umbral del proyecto)</string>
+    <string name="fertility_action_critical">Referencia US13: evalúa el riego y la fertilización dentro de las próximas 2 horas. Confirma antes los datos del sensor y las necesidades del cultivo.</string>
+    <string name="fertility_action_moderate">Referencia US13: vuelve a monitorear las condiciones del suelo dentro de 12 horas.</string>
+    <string name="fertility_action_optimal">Referencia US13: mantén el plan actual y continúa el monitoreo.</string>
+    <string name="fertility_nutrients">Nutrientes medidos: N %1$s ppm · P %2$s ppm · K %3$s ppm</string>
+    <string name="fertility_nutrients_note">Los valores NPK se muestran sin calificación de fertilidad porque todavía no se han definido rangos de referencia por cultivo.</string>
+    <string name="fertility_legend_title">Umbrales de humedad</string>
+    <string name="fertility_legend_optimal" formatted="false">Verde: más de 60% · Mantener el plan actual</string>
+    <string name="fertility_legend_moderate" formatted="false">Amarillo: de 30% a 60% · Monitorear en 12 horas</string>
+    <string name="fertility_legend_critical" formatted="false">Rojo: menos de 30% · Evaluar riego y fertilización en 2 horas</string>
+    <string name="fertility_geo_limit">Aún no se pueden dibujar zonas geográficas de fertilidad: los sensores disponibles no tienen una posición dentro de la parcela.</string>
+
+    <!-- Umbrales generales, clima e imagenes satelitales de develop -->
+    <string name="alert_thresholds">Umbrales de alerta agronómica</string>
+    <string name="thresholds_help">Configura los límites de referencia para recibir alertas preventivas ante condiciones críticas.</string>
+    <string name="min_moisture_label">Humedad mínima del suelo</string>
+    <string name="max_temp_label">Temperatura máxima del suelo</string>
+    <string name="edit_thresholds">Configurar umbrales</string>
+    <string name="thresholds_saved">Umbrales de alerta actualizados</string>
+    <string name="moisture_threshold_dialog_title">Configurar umbrales de alerta</string>
+    <string name="moisture_threshold_help">Recomendado: 30%%. Por debajo de este nivel, se alertará sobre sequedad del suelo.</string>
+    <string name="temp_threshold_help">Recomendado: 35°C. Por encima de este nivel, se alertará sobre estrés térmico.</string>
+    <string name="error_moisture_threshold" formatted="false">La humedad debe estar entre 0% y 100%.</string>
+    <string name="error_temp_threshold">La temperatura debe estar entre 0°C y 60°C.</string>
+    <string name="weather_forecast">Pronóstico del clima</string>
+    <string name="precipitation_24h">Lluvia 24h: %1$.0f%%</string>
+    <string name="expected_rain">Esperada: %1$.1f mm</string>
+    <string name="temperature_val">%1$.1f °C</string>
+    <string name="humidity_val">Humedad: %1$.0f%%</string>
+    <string name="wind_speed_val">Viento: %1$.1f km/h</string>
+    <string name="weather_offline_badge">Datos sin conexión</string>
+    <string name="weather_service_unavailable">Servicio de clima temporalmente no disponible</string>
+    <string name="refresh_weather">Actualizar clima</string>
+    <string name="irrigation_recommendation_title">Recomendación de suspender riego</string>
+    <string name="water_savings_label">Ahorro estimado de agua: %1$d L</string>
+    <string name="satellite_view">Vista satelital</string>
+    <string name="map_view">Vista mapa</string>
+    <string name="captured_at">Capturado: %1$s</string>
+    <string name="ndvi_label">NDVI: %1$.2f</string>
+    <string name="cloud_coverage">Nubosidad: %1$.1f%%</string>
+    <string name="ndvi_low">Vigor bajo</string>
+    <string name="ndvi_moderate">Vigor moderado</string>
+    <string name="ndvi_high">Vigor alto</string>
+    <string name="select_date">Seleccionar fecha</string>
+    <string name="no_satellite_image">No se encontraron imágenes satelitales para esta fecha</string>
+    <string name="compare_vegetation">Comparar vegetación</string>
+    <string name="vegetation_comparison_title">Comparación de vegetación</string>
+    <string name="select_period_a">Primera fecha (AAAA-MM-DD)</string>
+    <string name="select_period_b">Segunda fecha (AAAA-MM-DD)</string>
+    <string name="compare_action">Comparar periodos</string>
+    <string name="ndvi_variation">Variación NDVI: %1$.2f (%2$.1f%%)</string>
+    <string name="earlier_capture">Periodo anterior</string>
+    <string name="later_capture">Periodo posterior</string>
 </resources>

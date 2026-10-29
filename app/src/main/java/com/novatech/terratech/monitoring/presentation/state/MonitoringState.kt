@@ -1,10 +1,15 @@
 package com.novatech.terratech.monitoring.presentation.state
 
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
+import com.novatech.terratech.monitoring.domain.entity.FertilityZone
+import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.FieldWeather
 import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.SatelliteImage
 import com.novatech.terratech.monitoring.domain.entity.Recommendation
 import com.novatech.terratech.monitoring.domain.entity.Sensor
+import com.novatech.terratech.monitoring.domain.entity.VegetationComparison
 import java.time.Instant
 
 data class MonitoringState(
@@ -12,6 +17,18 @@ data class MonitoringState(
     val fields: List<Field> = emptyList(),
     val sensors: List<Sensor> = emptyList(),
     val readings: List<Reading> = emptyList(),
+
+    // US13: zonas obtenidas del backend
+    val fertilityZones: List<FertilityZone> = emptyList(),
+    val fertilityZonesError: String? = null,
+
+    // US18: configuracion de umbrales de la zona seleccionada
+    val thresholdZoneId: Int? = null,
+    val zoneThresholds: FertilityZoneThresholds? = null,
+    val thresholdsBusy: Boolean = false,
+    val thresholdsError: String? = null,
+    val thresholdsSaved: Boolean = false,
+
     val recommendations: List<Recommendation> = emptyList(),
     val fieldId: Int? = null,
     val deviceId: Int? = null,
@@ -24,6 +41,16 @@ data class MonitoringState(
     val createdSensorId: Int? = null,
     val offline: Boolean = false,
     val now: Instant = Instant.now(),
+    val weather: FieldWeather? = null,
+    val weatherBusy: Boolean = false,
+    val weatherError: String? = null,
+    val satelliteImage: SatelliteImage? = null,
+    val satelliteBusy: Boolean = false,
+    val satelliteError: String? = null,
+    val isSatelliteView: Boolean = false,
+    val comparisonResult: VegetationComparison? = null,
+    val comparisonBusy: Boolean = false,
+    val comparisonError: String? = null,
 ) {
     val selectedField
         get() = fields.find { it.id == fieldId }
@@ -38,7 +65,8 @@ data class MonitoringState(
         get() = readings.maxByOrNull { it.recordedAt }
 
     val history
-        get() = readings.filter { it.inRange(days, now) }.sortedBy { it.recordedAt }
+        get() = readings.filter { it.inRange(days, now) }
+            .sortedBy { it.recordedAt }
 
     val deviceRecommendations
         get() = recommendations.filter { it.deviceId == deviceId }.sortedByDescending { it.createdAt }
