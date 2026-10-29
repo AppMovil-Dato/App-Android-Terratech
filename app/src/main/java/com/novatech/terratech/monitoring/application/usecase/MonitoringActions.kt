@@ -65,4 +65,6 @@ class MonitoringActions(private val repository: MonitoringRepository) {
         val sensorName = FieldName.of(name)
         return repository.registerSensor(user, field, SensorCode.of(code).value, sensorName.value)
     }
+
+    fun recommendations(user: Int, deviceId: Int) = repository.recommendations(user, deviceId)
 }

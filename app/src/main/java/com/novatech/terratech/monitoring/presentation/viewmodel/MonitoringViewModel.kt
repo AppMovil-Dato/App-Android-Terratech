@@ -34,6 +34,7 @@ constructor(private val actions: MonitoringActions, private val account: Account
     private val mutable = MutableStateFlow(MonitoringState())
     val state = mutable.asStateFlow()
     private var pendingRefresh = false
+    private var recommendationsJob: Job? = null
     private var savedSelection: Pair<Int?, Int?> = null to null
     private var sessionJob: Job? = null
     private var readingsJob: Job? = null
@@ -118,6 +119,7 @@ constructor(private val actions: MonitoringActions, private val account: Account
         mutable.update { it.copy(deviceId = id, readings = emptyList(), download = null) }
         persistSelection()
         observeReadings()
+        observeRecommendations()
         refresh()
     }
 
@@ -175,6 +177,18 @@ constructor(private val actions: MonitoringActions, private val account: Account
             viewModelScope.launch {
                 actions.downloadState(user, device, days).collect { row ->
                     mutable.update { it.copy(download = row) }
+                }
+            }
+    }
+
+    private fun observeRecommendations() {
+        recommendationsJob?.cancel()
+        val user = account.session.value?.userId ?: return
+        val device = mutable.value.deviceId ?: return
+        recommendationsJob =
+            viewModelScope.launch {
+                actions.recommendations(user, device).collect { rows ->
+                    mutable.update { it.copy(recommendations = rows) }
                 }
             }
     }

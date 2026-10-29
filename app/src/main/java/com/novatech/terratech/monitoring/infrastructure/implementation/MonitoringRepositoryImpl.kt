@@ -16,6 +16,7 @@ import com.novatech.terratech.monitoring.infrastructure.remote.MonitoringApi
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.CreateFieldDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldVertexDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.RegisterSensorDto
+import kotlinx.coroutines.flow.firstOrNull
 import java.time.Instant
 import kotlinx.coroutines.flow.map
 
@@ -108,8 +109,23 @@ class MonitoringRepositoryImpl(
         val history = apiCall { api.history(device, days) }
         val rows =
             (history.readings + listOfNotNull(latest)).distinctBy { it.id }.map { it.row(user) }
+
+        val fieldId = dao.sensors(user).firstOrNull()?.find { it.id == device }?.fieldId
+        val fieldName = fieldId?.let { fid -> dao.fields(user).firstOrNull()?.find { it.id == fid }?.name } ?: "Zona"
+        val minMoisture = dao.download(user, device, days).firstOrNull()?.minimumMoisture ?: 30.0
+
+        val recommendations = rows.flatMap { readingRow ->
+            val reading = readingRow.domain()
+            com.novatech.terratech.monitoring.domain.service.RecommendationEngine.evaluate(
+                reading = reading,
+                zoneName = fieldName,
+                minimumMoisture = minMoisture
+            ).map { it.row(user) }
+        }
+
         db.withTransaction {
             dao.putReadings(rows)
+            dao.putRecommendations(recommendations)
             dao.putDownload(
                 DownloadRow(
                     user,
@@ -127,4 +143,7 @@ class MonitoringRepositoryImpl(
     override suspend fun refreshDetail(user: Int, device: Int, reading: Int) {
         dao.putReadings(listOf(apiCall { api.detail(device, reading) }.row(user)))
     }
+
+    override fun recommendations(user: Int, deviceId: Int) =
+        dao.recommendations(user, deviceId).map { rows -> rows.map { it.domain() } }
 }

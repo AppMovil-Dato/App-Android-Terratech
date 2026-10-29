@@ -3,6 +3,7 @@ package com.novatech.terratech.monitoring.presentation.state
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.Recommendation
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import java.time.Instant
 
@@ -11,6 +12,7 @@ data class MonitoringState(
     val fields: List<Field> = emptyList(),
     val sensors: List<Sensor> = emptyList(),
     val readings: List<Reading> = emptyList(),
+    val recommendations: List<Recommendation> = emptyList(),
     val fieldId: Int? = null,
     val deviceId: Int? = null,
     val days: Int = 7,
@@ -37,4 +39,7 @@ data class MonitoringState(
 
     val history
         get() = readings.filter { it.inRange(days, now) }.sortedBy { it.recordedAt }
+
+    val deviceRecommendations
+        get() = recommendations.filter { it.deviceId == deviceId }.sortedByDescending { it.createdAt }
 }
