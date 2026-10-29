@@ -1,3 +1,4 @@
+
 package com.novatech.terratech.monitoring.presentation.navigation
 
 import androidx.compose.runtime.LaunchedEffect
@@ -16,17 +17,36 @@ fun NavGraphBuilder.fieldSensorsDestination(
 ) {
     composable<FieldSensorsDestination> { entry ->
         val destination = entry.toRoute<FieldSensorsDestination>()
+
         LaunchedEffect(destination.fieldId, state.fields) {
-            if (state.fieldId != destination.fieldId) actions.selectField(destination.fieldId)
+            if (state.fieldId != destination.fieldId) {
+                actions.selectField(destination.fieldId)
+            }
         }
+
         SensorsScreen(
             state = state.forField(destination.fieldId),
-            onChoose = { deviceId -> navigator.sensor(deviceId) },
-            onRegister = { navigator.registerSensor(destination.fieldId) },
+
+            onChoose = { deviceId ->
+                navigator.sensor(deviceId)
+            },
+            onRegister = {
+                navigator.registerSensor(destination.fieldId)
+            },
+
+            // US18: acciones para configurar los umbrales
+            onLoadZoneThresholds = actions.loadZoneThresholds,
+            onSaveZoneThresholds = actions.saveZoneThresholds,
+            onResetZoneThresholds = actions.resetZoneThresholds,
+            onCloseZoneThresholds = actions.closeZoneThresholds,
+
+            // Acciones de clima e imágenes satelitales
             onRefreshWeather = actions.refreshWeather,
             onSelectSatelliteDate = actions.loadSatelliteByDate,
             onToggleSatelliteMode = actions.toggleSatelliteMode,
-            onCompareVegetation = { navigator.vegetationComparison(destination.fieldId) },
+            onCompareVegetation = {
+                navigator.vegetationComparison(destination.fieldId)
+            },
         )
     }
 }
