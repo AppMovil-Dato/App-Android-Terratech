@@ -29,11 +29,24 @@ class ProfileRepositoryImpl(private val api: ProfileApi, private val db: TerraDa
         phone: String,
         location: String,
         sizeM2: Double,
+        moistureThreshold: Double?,
+        tempThreshold: Double?,
     ) {
         db.dao()
             .putProfile(
-                apiCall { api.saveProfile(SaveProfileDto(name, farm, phone, location, sizeM2)) }
-                    .row(userId)
+                apiCall {
+                    api.saveProfile(
+                        SaveProfileDto(
+                            name,
+                            farm,
+                            phone,
+                            location,
+                            sizeM2,
+                            moistureThreshold,
+                            tempThreshold,
+                        )
+                    )
+                }.row(userId)
             )
     }
 }

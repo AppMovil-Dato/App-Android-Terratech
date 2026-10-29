@@ -19,4 +19,10 @@ data class MonitoringNavigationActions(
     val saveZoneThresholds: (FertilityZoneThresholds) -> Unit,
     val resetZoneThresholds: () -> Unit,
     val closeZoneThresholds: () -> Unit,
+
+    // Acciones de clima e imagenes satelitales
+    val refreshWeather: () -> Unit = {},
+    val loadSatelliteByDate: (String) -> Unit = {},
+    val toggleSatelliteMode: () -> Unit = {},
+    val compareVegetation: (String, String) -> Unit = { _, _ -> },
 )

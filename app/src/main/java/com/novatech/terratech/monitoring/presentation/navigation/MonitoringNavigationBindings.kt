@@ -19,4 +19,10 @@ fun MonitoringViewModel.navigationActions() =
         saveZoneThresholds = ::saveZoneThresholds,
         resetZoneThresholds = ::resetZoneThresholds,
         closeZoneThresholds = ::closeZoneThresholds,
+
+        // Acciones de clima e imagenes satelitales
+        refreshWeather = ::refreshWeather,
+        loadSatelliteByDate = ::loadSatelliteByDate,
+        toggleSatelliteMode = ::toggleSatelliteMode,
+        compareVegetation = ::compareVegetation,
     )

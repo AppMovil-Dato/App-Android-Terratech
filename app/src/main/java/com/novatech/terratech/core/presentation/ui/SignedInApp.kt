@@ -50,6 +50,7 @@ internal fun SignedInApp(
                 profileViewModel::save,
                 profileViewModel::refresh,
                 accountViewModel::logout,
+                profileViewModel::saveThresholds,
             )
         }
     var reauth by rememberSaveable { mutableStateOf(false) }
@@ -60,6 +61,7 @@ internal fun SignedInApp(
             previousToken,
             accountViewModel::login,
             accountViewModel::clearMessage,
+            onLogout = accountViewModel::logout,
         ) {
             reauth = false
         }

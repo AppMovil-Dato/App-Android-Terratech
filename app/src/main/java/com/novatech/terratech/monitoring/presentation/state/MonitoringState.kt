@@ -5,8 +5,11 @@ import com.novatech.terratech.monitoring.domain.entity.DownloadState
 import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
+import com.novatech.terratech.monitoring.domain.entity.FieldWeather
 import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.SatelliteImage
 import com.novatech.terratech.monitoring.domain.entity.Sensor
+import com.novatech.terratech.monitoring.domain.entity.VegetationComparison
 import java.time.Instant
 
 data class MonitoringState(
@@ -37,6 +40,16 @@ data class MonitoringState(
     val createdSensorId: Int? = null,
     val offline: Boolean = false,
     val now: Instant = Instant.now(),
+    val weather: FieldWeather? = null,
+    val weatherBusy: Boolean = false,
+    val weatherError: String? = null,
+    val satelliteImage: SatelliteImage? = null,
+    val satelliteBusy: Boolean = false,
+    val satelliteError: String? = null,
+    val isSatelliteView: Boolean = false,
+    val comparisonResult: VegetationComparison? = null,
+    val comparisonBusy: Boolean = false,
+    val comparisonError: String? = null,
 ) {
     val selectedField
         get() = fields.find { it.id == fieldId }

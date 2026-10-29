@@ -26,6 +26,7 @@ fun NavGraphBuilder.fieldSensorsDestination(
 
         SensorsScreen(
             state = state.forField(destination.fieldId),
+
             onChoose = { deviceId ->
                 navigator.sensor(deviceId)
             },
@@ -38,6 +39,14 @@ fun NavGraphBuilder.fieldSensorsDestination(
             onSaveZoneThresholds = actions.saveZoneThresholds,
             onResetZoneThresholds = actions.resetZoneThresholds,
             onCloseZoneThresholds = actions.closeZoneThresholds,
+
+            // Acciones de clima e imágenes satelitales
+            onRefreshWeather = actions.refreshWeather,
+            onSelectSatelliteDate = actions.loadSatelliteByDate,
+            onToggleSatelliteMode = actions.toggleSatelliteMode,
+            onCompareVegetation = {
+                navigator.vegetationComparison(destination.fieldId)
+            },
         )
     }
 }

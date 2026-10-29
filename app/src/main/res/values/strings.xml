@@ -1,3 +1,4 @@
+
 <resources>
     <string name="app_name">TerraTech</string>
     <string name="tagline">Your land, connected</string>
@@ -106,7 +107,7 @@
     <string name="units_note" formatted="false">N/P/K in ppm · temperature in °C · moisture in %</string>
     <string name="use_profile">Go to profile</string>
     <string name="sensor_registered">Sensor registered</string>
-<string name="reading_count">Readings: %1$d</string>
+    <string name="reading_count">Readings: %1$d</string>
     <string name="step_of">Step %1$d of %2$d</string>
     <string name="continue_action">Continue</string>
     <string name="create_field">Create field</string>
@@ -171,51 +172,70 @@
     <string name="field_map">Field map</string>
     <string name="map_unavailable">Map unavailable</string>
 
-
+    <!-- US13: soil fertility -->
     <string name="fertility_title">Soil fertility assessment</string>
-
     <string name="fertility_scope">Soil moisture status for the selected sensor. This is not a fertility classification of the entire field.</string>
-
     <string name="fertility_no_sensors">No sensors are associated with this field. Fertility measurements are not available yet.</string>
-
     <string name="fertility_select_sensor">Select a sensor to see its available measurements.</string>
-
     <string name="fertility_no_readings">The selected sensor has no readings yet.</string>
-
     <string name="fertility_sensor_name">Sensor: %1$s</string>
-
     <string name="fertility_measured_at">Reading: %1$s</string>
-
     <string name="fertility_moisture_value">Soil moisture: %1$s%%</string>
-
     <string name="fertility_stale">This reading is older than 30 minutes. Its status is not classified as current.</string>
-
     <string name="fertility_invalid">This moisture measurement is out of range and cannot be classified.</string>
-
     <string name="fertility_critical">Critical moisture</string>
-
     <string name="fertility_moderate">Moderate moisture</string>
-
     <string name="fertility_optimal">Optimal moisture (project threshold)</string>
-
     <string name="fertility_action_critical">US13 guideline: assess irrigation and fertilization within the next 2 hours. Confirm the sensor data and crop needs first.</string>
-
     <string name="fertility_action_moderate">US13 guideline: monitor soil conditions again within 12 hours.</string>
-
     <string name="fertility_action_optimal">US13 guideline: maintain the current plan and continue monitoring.</string>
-
     <string name="fertility_nutrients">Measured nutrients: N %1$s ppm · P %2$s ppm · K %3$s ppm</string>
-
     <string name="fertility_nutrients_note">NPK values are shown without a fertility rating because crop-specific reference ranges have not been defined.</string>
-
     <string name="fertility_legend_title">Moisture thresholds</string>
-
     <string name="fertility_legend_optimal" formatted="false">Green: above 60% · Maintain the current plan</string>
-
     <string name="fertility_legend_moderate" formatted="false">Yellow: 30% to 60% · Monitor in 12 hours</string>
-
     <string name="fertility_legend_critical" formatted="false">Red: below 30% · Assess irrigation and fertilization in 2 hours</string>
-
     <string name="fertility_geo_limit">Geographic fertility zones cannot be drawn yet: the available sensor records do not contain their position within the field.</string>
 
+    <!-- General alerts, weather and satellite features -->
+    <string name="alert_thresholds">Agricultural alert thresholds</string>
+    <string name="thresholds_help">Set reference limits to receive alerts when soil conditions become critical.</string>
+    <string name="min_moisture_label">Minimum soil moisture</string>
+    <string name="max_temp_label">Maximum soil temperature</string>
+    <string name="edit_thresholds">Configure thresholds</string>
+    <string name="thresholds_saved">Alert thresholds updated</string>
+    <string name="moisture_threshold_dialog_title">Configure alert thresholds</string>
+    <string name="moisture_threshold_help">Recommended: 30%%. Below this level, soil dryness alert will be shown.</string>
+    <string name="temp_threshold_help">Recommended: 35°C. Above this level, thermal stress alert will be shown.</string>
+    <string name="error_moisture_threshold" formatted="false">Moisture must be between 0% and 100%.</string>
+    <string name="error_temp_threshold">Temperature must be between 0°C and 60°C.</string>
+    <string name="weather_forecast">Weather forecast</string>
+    <string name="precipitation_24h">Rain 24h: %1$.0f%%</string>
+    <string name="expected_rain">Expected: %1$.1f mm</string>
+    <string name="temperature_val">%1$.1f °C</string>
+    <string name="humidity_val">Humidity: %1$.0f%%</string>
+    <string name="wind_speed_val">Wind: %1$.1f km/h</string>
+    <string name="weather_offline_badge">Offline data</string>
+    <string name="weather_service_unavailable">Weather service temporarily unavailable</string>
+    <string name="refresh_weather">Refresh weather</string>
+    <string name="irrigation_recommendation_title">Irrigation suspension recommended</string>
+    <string name="water_savings_label">Estimated water savings: %1$d L</string>
+    <string name="satellite_view">Satellite view</string>
+    <string name="map_view">Map view</string>
+    <string name="captured_at">Captured: %1$s</string>
+    <string name="ndvi_label">NDVI: %1$.2f</string>
+    <string name="cloud_coverage">Cloud: %1$.1f%%</string>
+    <string name="ndvi_low">Low vigor</string>
+    <string name="ndvi_moderate">Moderate vigor</string>
+    <string name="ndvi_high">High vigor</string>
+    <string name="select_date">Select date</string>
+    <string name="no_satellite_image">No satellite image available for this date</string>
+    <string name="compare_vegetation">Compare vegetation</string>
+    <string name="vegetation_comparison_title">Vegetation comparison</string>
+    <string name="select_period_a">First date (YYYY-MM-DD)</string>
+    <string name="select_period_b">Second date (YYYY-MM-DD)</string>
+    <string name="compare_action">Compare periods</string>
+    <string name="ndvi_variation">NDVI variation: %1$.2f (%2$.1f%%)</string>
+    <string name="earlier_capture">Earlier period</string>
+    <string name="later_capture">Later period</string>
 </resources>

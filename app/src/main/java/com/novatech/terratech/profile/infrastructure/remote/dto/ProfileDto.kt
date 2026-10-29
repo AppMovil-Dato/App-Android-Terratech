@@ -10,4 +10,5 @@ data class ProfileDto(
     val location: String?,
     val sizeM2: Double?,
     val moistureThreshold: Double?,
+    val tempThreshold: Double?,
 )

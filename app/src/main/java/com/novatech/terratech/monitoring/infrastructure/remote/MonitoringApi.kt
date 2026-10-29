@@ -6,11 +6,14 @@ import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FertilityZoneDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.FertilityZoneThresholdsDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.UpdateFertilityZoneThresholdsDto
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.FieldWeatherDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.HistoryDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.LatestDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.ReadingDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.RegisterSensorDto
+import com.novatech.terratech.monitoring.infrastructure.remote.dto.SatelliteImageDto
 import com.novatech.terratech.monitoring.infrastructure.remote.dto.SensorDto
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -86,4 +89,20 @@ interface MonitoringApi {
         @Path("device") device: Int,
         @Path("id") id: Int
     ): ReadingDto
+
+    @GET("api/v1/fields/{fieldId}/weather")
+    suspend fun getFieldWeather(
+        @Path("fieldId") fieldId: Int
+    ): Response<FieldWeatherDto>
+
+    @GET("api/v1/fields/{fieldId}/satellite-images/latest")
+    suspend fun getLatestSatelliteImage(
+        @Path("fieldId") fieldId: Int
+    ): Response<SatelliteImageDto>
+
+    @GET("api/v1/fields/{fieldId}/satellite-images")
+    suspend fun getSatelliteImageByDate(
+        @Path("fieldId") fieldId: Int,
+        @Query("targetDate") targetDate: String,
+    ): Response<SatelliteImageDto>
 }

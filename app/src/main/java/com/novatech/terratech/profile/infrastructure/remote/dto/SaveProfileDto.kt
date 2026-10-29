@@ -6,4 +6,6 @@ data class SaveProfileDto(
     val contactPhone: String,
     val location: String,
     val sizeM2: Double,
+    val moistureThreshold: Double? = null,
+    val tempThreshold: Double? = null,
 )

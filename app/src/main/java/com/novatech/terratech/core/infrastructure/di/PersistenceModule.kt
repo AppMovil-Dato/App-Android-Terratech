@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.novatech.terratech.core.infrastructure.local.FieldBoundaryMigration
 import com.novatech.terratech.core.infrastructure.local.TerraDatabase
+import com.novatech.terratech.core.infrastructure.local.ThresholdsMigration
+import com.novatech.terratech.core.infrastructure.local.WeatherAndSatelliteMigration
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
 import dagger.Module
 import dagger.Provides
@@ -23,7 +25,7 @@ object PersistenceModule {
     @Singleton
     fun database(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, TerraDatabase::class.java, "terratech.db")
-            .addMigrations(FieldBoundaryMigration)
+            .addMigrations(FieldBoundaryMigration, ThresholdsMigration, WeatherAndSatelliteMigration)
             .build()
 
     @Provides @Singleton fun store(@ApplicationContext context: Context) = SessionStore(context)

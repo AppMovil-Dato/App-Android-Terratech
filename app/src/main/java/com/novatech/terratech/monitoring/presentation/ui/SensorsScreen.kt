@@ -2,7 +2,9 @@
 package com.novatech.terratech.monitoring.presentation.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -10,11 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,6 +35,9 @@ import com.novatech.terratech.monitoring.presentation.component.FertilityStatusC
 import com.novatech.terratech.monitoring.presentation.component.FertilityZoneOverlay
 import com.novatech.terratech.monitoring.presentation.component.FertilityZoneThresholdsContent
 import com.novatech.terratech.monitoring.presentation.component.FertilityThresholdAlertsCard
+import com.novatech.terratech.monitoring.presentation.component.IrrigationSuspensionBanner
+import com.novatech.terratech.monitoring.presentation.component.SatelliteOverlayViewer
+import com.novatech.terratech.monitoring.presentation.component.WeatherForecastCard
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 import com.novatech.terratech.ui.theme.Muted
 
@@ -39,15 +46,25 @@ fun SensorsScreen(
     state: MonitoringState,
     onChoose: (Int) -> Unit,
     onRegister: () -> Unit,
+
+    // US18: configuracion de umbrales
     onLoadZoneThresholds: (Int) -> Unit = {},
     onSaveZoneThresholds: (FertilityZoneThresholds) -> Unit = {},
     onResetZoneThresholds: () -> Unit = {},
-    onCloseZoneThresholds: () -> Unit = {}
+    onCloseZoneThresholds: () -> Unit = {},
+
+    // Clima e imagenes satelitales
+    onRefreshWeather: () -> Unit = {},
+    onSelectSatelliteDate: (String) -> Unit = {},
+    onToggleSatelliteMode: () -> Unit = {},
+    onCompareVegetation: () -> Unit = {},
 ) {
+
     var selectedZoneName by remember(state.fieldId) {
         mutableStateOf<String?>(null)
     }
 
+    // US13: zonas de fertilidad de la parcela
     val zones = state.selectedField?.let { field ->
         state.fertilityZones
             .filter { it.fieldId == field.id }
@@ -64,10 +81,11 @@ fun SensorsScreen(
     } ?: emptyList()
 
     LazyColumn(
-        Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+
         item {
             PageTitle(
                 state.selectedField?.name
@@ -77,29 +95,104 @@ fun SensorsScreen(
         }
 
         state.selectedField?.let { field ->
+
+            // Recomendacion de suspension del riego
+            if (
+                state.weather
+                    ?.combinedRecommendation
+                    ?.suspensionRecommended == true
+            ) {
+                item {
+                    IrrigationSuspensionBanner(
+                        state.weather.combinedRecommendation
+                    )
+                }
+            }
+
+            // Pronostico del clima
             item {
-                FieldMapView(
-                    points = field.boundary.ifEmpty {
-                        listOf(
-                            Coordinates.of(
-                                field.latitude,
-                                field.longitude
-                            )
-                        )
-                    },
-                    drawing = field.boundary.isNotEmpty(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(210.dp),
-                    interactive = true,
-                    fertilityZones = zones,
-                    onZoneClick = { zone ->
-                        selectedZoneName = zone.name
-                        onLoadZoneThresholds(zone.zoneId)
-                    }
+                WeatherForecastCard(
+                    weather = state.weather,
+                    isLoading = state.weatherBusy,
+                    errorMessage = state.weatherError,
+                    onRefresh = onRefreshWeather,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
 
+            // Mapa de la parcela e imagenes satelitales
+            item {
+
+                if (state.isSatelliteView) {
+
+                    SatelliteOverlayViewer(
+                        satelliteImage = state.satelliteImage,
+                        isSatelliteMode = true,
+                        isLoading = state.satelliteBusy,
+                        errorMessage = state.satelliteError,
+                        onToggleMode = onToggleSatelliteMode,
+                        onSelectDate = onSelectSatelliteDate,
+                        onNavigateToCompare = onCompareVegetation,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                } else {
+
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            Text(
+                                text = stringResource(
+                                    R.string.map_view
+                                ),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+
+                            TextButton(
+                                onClick = onToggleSatelliteMode
+                            ) {
+                                Text(
+                                    stringResource(
+                                        R.string.satellite_view
+                                    )
+                                )
+                            }
+                        }
+
+                        // US13: mapa interactivo de fertilidad
+                        FieldMapView(
+                            points = field.boundary.ifEmpty {
+                                listOf(
+                                    Coordinates.of(
+                                        field.latitude,
+                                        field.longitude
+                                    )
+                                )
+                            },
+                            drawing = field.boundary.isNotEmpty(),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(210.dp),
+                            interactive = true,
+                            fertilityZones = zones,
+                            onZoneClick = { zone ->
+                                selectedZoneName = zone.name
+                                onLoadZoneThresholds(zone.zoneId)
+                            }
+                        )
+                    }
+                }
+            }
+
+            // US13: cantidad de zonas de fertilidad
             item {
                 Text(
                     text = "Fertility zones: ${zones.size}",
@@ -107,11 +200,14 @@ fun SensorsScreen(
                 )
             }
 
+            // US18: seleccionar zona para configurar umbrales
             items(
-                zones,
+                items = zones,
                 key = { "fertility-zone-${it.zoneId}" }
             ) { zone ->
+
                 FarmCard {
+
                     Text(
                         text = zone.name,
                         color = Muted
@@ -136,7 +232,7 @@ fun SensorsScreen(
                 }
             }
 
-            // US18: umbrales y alertas de la zona
+            // US18: configuracion de umbrales de la zona
             state.thresholdZoneId?.let { zoneId ->
 
                 item {
@@ -147,9 +243,11 @@ fun SensorsScreen(
                 }
 
                 item {
+
                     val thresholds = state.zoneThresholds
 
                     if (thresholds == null) {
+
                         Text(
                             text = if (state.thresholdsBusy) {
                                 "Cargando umbrales..."
@@ -164,7 +262,9 @@ fun SensorsScreen(
                                 color = MaterialTheme.colorScheme.error
                             )
                         }
+
                     } else {
+
                         FertilityZoneThresholdsContent(
                             thresholds = thresholds,
                             busy = state.thresholdsBusy,
@@ -177,8 +277,8 @@ fun SensorsScreen(
                     }
                 }
 
-                // US18: comparar la lectura del sensor
-                // asociado con los umbrales guardados
+                // US18: comparar lectura del sensor
+                // con los umbrales de fertilidad
                 state.zoneThresholds?.let { thresholds ->
 
                     val selectedZone = zones.find {
@@ -188,22 +288,30 @@ fun SensorsScreen(
                     val zoneDeviceId = selectedZone?.deviceId
 
                     val zoneReading = state.readings
-                        .filter { it.deviceId == zoneDeviceId }
-                        .maxByOrNull { it.recordedAt }
+                        .filter {
+                            it.deviceId == zoneDeviceId
+                        }
+                        .maxByOrNull {
+                            it.recordedAt
+                        }
 
                     item {
+
                         if (
                             zoneDeviceId != null &&
                             state.deviceId != zoneDeviceId
                         ) {
+
                             FarmCard {
                                 Text(
-                                    "Selecciona el sensor asociado " +
+                                    text = "Selecciona el sensor asociado " +
                                         "a esta zona para consultar sus alertas.",
                                     color = Muted
                                 )
                             }
+
                         } else {
+
                             FertilityThresholdAlertsCard(
                                 reading = zoneReading,
                                 thresholds = thresholds,
@@ -214,7 +322,9 @@ fun SensorsScreen(
                 }
             }
 
+            // US13: mostrar error al consultar zonas
             state.fertilityZonesError?.let { error ->
+
                 item {
                     Text(
                         text = "Error loading fertility zones: $error",
@@ -223,20 +333,23 @@ fun SensorsScreen(
                 }
             }
 
+            // Datos generales de la parcela
             item {
                 Text(
-                    areaNumber(field.sizeM2 / 10000) +
+                    text = areaNumber(field.sizeM2 / 10000) +
                         " ha · " +
                         field.cropName.orEmpty(),
                     color = Muted
                 )
             }
 
+            // US13: estado general de fertilidad
             item {
                 FertilityStatusCard(state)
             }
         }
 
+        // Registro de sensores
         item {
             PrimaryButton(
                 stringResource(R.string.associate),
@@ -246,27 +359,32 @@ fun SensorsScreen(
         }
 
         if (state.fieldSensors.isEmpty()) {
+
             item {
                 EmptyCard(
                     stringResource(R.string.no_sensors),
                     stringResource(R.string.field_sensor_empty_help)
                 )
             }
+
         }
 
+        // Lista de sensores asociados a la parcela
         items(
-            state.fieldSensors,
+            items = state.fieldSensors,
             key = { it.id }
         ) { sensor ->
+
             FarmCard {
+
                 Text(
-                    sensor.name
+                    text = sensor.name
                         ?: stringResource(R.string.sensor),
                     style = MaterialTheme.typography.titleLarge
                 )
 
                 Text(
-                    sensor.sensorCode ?: sensor.macAddress,
+                    text = sensor.sensorCode ?: sensor.macAddress,
                     color = Muted
                 )
 

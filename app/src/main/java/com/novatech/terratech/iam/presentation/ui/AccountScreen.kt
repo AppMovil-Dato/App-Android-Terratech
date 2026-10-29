@@ -15,6 +15,7 @@ fun AccountScreen(
     onLogin: (String, String) -> Unit,
     onRegister: (String, String, String, String) -> Unit,
     onClear: () -> Unit,
+    onLogout: (() -> Unit)? = null,
     reauth: Boolean = false,
 ) {
     var registering by rememberSaveable { mutableStateOf(false) }
@@ -27,14 +28,14 @@ fun AccountScreen(
         if (state.error == "ACCOUNT_CREATED_LOGIN_REQUIRED") registering = false
     }
     AccountContent(
-        state,
-        registering,
-        name,
-        email,
-        password,
-        confirmation,
-        visible,
-        reauth,
+        state = state,
+        registering = registering,
+        name = name,
+        email = email,
+        password = password,
+        confirmation = confirmation,
+        visible = visible,
+        reauth = reauth,
         onNameChange = {
             name = it
             onClear()
@@ -60,5 +61,6 @@ fun AccountScreen(
         },
         onLogin = onLogin,
         onRegister = onRegister,
+        onLogout = onLogout,
     )
 }

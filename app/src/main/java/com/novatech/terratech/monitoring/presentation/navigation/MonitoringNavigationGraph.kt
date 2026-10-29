@@ -16,6 +16,7 @@ fun NavGraphBuilder.monitoringGraph(
         fieldsDestination(navigator, state, profileState)
         createFieldDestination(navigator, state, profileState, actions)
         fieldSensorsDestination(navigator, state, actions)
+        vegetationComparisonDestination(navigator, state, actions)
         registerSensorDestination(navigator, state, actions)
         sensorDestination(navigator, state, actions)
         historyDestination(navigator, state, actions)
