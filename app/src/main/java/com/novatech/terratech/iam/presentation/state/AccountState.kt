@@ -8,5 +8,5 @@ data class AccountState(
     val busy: Boolean = false,
     val error: String? = null,
     val registered: Boolean = false,
-    val message: String? = null,
+    val message: AccountMessage? = null,
 )

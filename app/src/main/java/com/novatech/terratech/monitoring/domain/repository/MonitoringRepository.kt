@@ -28,24 +28,20 @@ interface MonitoringRepository {
 
     suspend fun refreshSensors(user: Int, field: Int)
 
-    // US13: consultar zonas de fertilidad
     suspend fun fertilityZones(user: Int, field: Int): List<FertilityZone>
 
-    // US18: consultar umbrales de una zona
     suspend fun fertilityZoneThresholds(
         user: Int,
         field: Int,
         zone: Int
     ): FertilityZoneThresholds
 
-    // US18: guardar umbrales personalizados
     suspend fun updateFertilityZoneThresholds(
         user: Int,
         field: Int,
         thresholds: FertilityZoneThresholds
     ): FertilityZoneThresholds
 
-    // US18: restablecer umbrales
     suspend fun resetFertilityZoneThresholds(
         user: Int,
         field: Int,

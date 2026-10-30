@@ -62,7 +62,6 @@ class FakeMonitoringRepository : MonitoringRepository {
     var occupied = false
     var selected: Pair<Int?, Int?> = null to null
 
-    // US18: valores iniciales para las pruebas
     private val initialThresholds = FertilityZoneThresholds(
         zoneId = 1,
         moistureMin = 25.0,
@@ -128,7 +127,6 @@ class FakeMonitoringRepository : MonitoringRepository {
         connected()
     }
 
-    // US13: zonas de fertilidad
     override suspend fun fertilityZones(
         user: Int,
         field: Int
@@ -137,7 +135,6 @@ class FakeMonitoringRepository : MonitoringRepository {
         return emptyList()
     }
 
-    // US18: consultar umbrales guardados
     override suspend fun fertilityZoneThresholds(
         user: Int,
         field: Int,
@@ -152,7 +149,6 @@ class FakeMonitoringRepository : MonitoringRepository {
         return savedThresholds
     }
 
-    // US18: guardar nuevos umbrales
     override suspend fun updateFertilityZoneThresholds(
         user: Int,
         field: Int,
@@ -190,7 +186,6 @@ class FakeMonitoringRepository : MonitoringRepository {
         return savedThresholds
     }
 
-    // US18: restablecer valores
     override suspend fun resetFertilityZoneThresholds(
         user: Int,
         field: Int,

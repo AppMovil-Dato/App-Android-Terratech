@@ -18,11 +18,9 @@ data class MonitoringState(
     val sensors: List<Sensor> = emptyList(),
     val readings: List<Reading> = emptyList(),
 
-    // US13: zonas obtenidas del backend
     val fertilityZones: List<FertilityZone> = emptyList(),
     val fertilityZonesError: String? = null,
 
-    // US18: configuracion de umbrales de la zona seleccionada
     val thresholdZoneId: Int? = null,
     val zoneThresholds: FertilityZoneThresholds? = null,
     val thresholdsBusy: Boolean = false,
@@ -69,5 +67,13 @@ data class MonitoringState(
             .sortedBy { it.recordedAt }
 
     val deviceRecommendations
-        get() = recommendations.filter { it.deviceId == deviceId }.sortedByDescending { it.createdAt }
+        get(): List<Recommendation> {
+            val currentReading = latest ?: return emptyList()
+            if (currentReading.deviceId != deviceId || currentReading.isStale(now) || currentReading.recordedAt.isAfter(now)) {
+                return emptyList()
+            }
+            return recommendations.filter {
+                it.deviceId == deviceId && it.readingId == currentReading.id
+            }.sortedBy { it.type.ordinal }
+        }
 }

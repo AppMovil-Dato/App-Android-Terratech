@@ -68,7 +68,6 @@ class MonitoringRepositoryImpl(
         }
     }
 
-    // US13: consultar las zonas de fertilidad
     override suspend fun fertilityZones(
         user: Int,
         field: Int
@@ -89,7 +88,6 @@ class MonitoringRepositoryImpl(
         }
     }
 
-    // US18: obtener umbrales del backend
     override suspend fun fertilityZoneThresholds(
         user: Int,
         field: Int,
@@ -102,7 +100,6 @@ class MonitoringRepositoryImpl(
         return response.toDomain()
     }
 
-    // US18: guardar umbrales en MySQL mediante la API
     override suspend fun updateFertilityZoneThresholds(
         user: Int,
         field: Int,
@@ -130,7 +127,6 @@ class MonitoringRepositoryImpl(
         return response.toDomain()
     }
 
-    // US18: recuperar los valores predeterminados
     override suspend fun resetFertilityZoneThresholds(
         user: Int,
         field: Int,

@@ -6,10 +6,12 @@ import com.novatech.terratech.monitoring.domain.valueobject.RecommendationSeveri
 import com.novatech.terratech.monitoring.domain.valueobject.RecommendationType
 
 object RecommendationEngine {
-    fun evaluate(reading: Reading,
-                 zoneName: String,
-                 minimumMoisture: Double = 30.0,
-                 maximumMoisture: Double = 80.0): List<Recommendation> {
+    fun evaluate(
+        reading: Reading,
+        zoneName: String,
+        minimumMoisture: Double = 30.0,
+        maximumMoisture: Double = 80.0,
+    ): List<Recommendation> {
         val recommendations = mutableListOf<Recommendation>()
 
         evaluateWatering(reading, zoneName, minimumMoisture, maximumMoisture)?.let {
@@ -24,10 +26,12 @@ object RecommendationEngine {
     }
 }
 
-private fun evaluateWatering(reading: Reading,
-                             zoneName: String,
-                             minThreshold: Double,
-                             maxThreshold: Double): Recommendation? {
+private fun evaluateWatering(
+    reading: Reading,
+    zoneName: String,
+    minThreshold: Double,
+    maxThreshold: Double,
+): Recommendation? {
     val moisture = reading.moisturePercent
 
     return when {
@@ -70,8 +74,10 @@ private fun evaluateWatering(reading: Reading,
     }
 }
 
-private fun evaluateFertilizer(reading: Reading,
-                               zoneName: String): Recommendation? {
+private fun evaluateFertilizer(
+    reading: Reading,
+    zoneName: String,
+): Recommendation? {
     val n = reading.nitrogenPpm
     val p = reading.phosphorusPpm
     val k = reading.potassiumPpm

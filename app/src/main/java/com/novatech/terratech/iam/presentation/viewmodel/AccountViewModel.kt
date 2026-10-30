@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.novatech.terratech.core.domain.Failure
 import com.novatech.terratech.iam.application.usecase.AccountActions
 import com.novatech.terratech.iam.domain.repository.AccountRepository
+import com.novatech.terratech.iam.presentation.state.AccountMessage
 import com.novatech.terratech.iam.presentation.state.AccountState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -38,19 +39,19 @@ constructor(private val actions: AccountActions, repository: AccountRepository) 
 
     fun register(name: String, email: String, password: String, confirmation: String) = run {
         actions.register(name, email, password, confirmation)
-        mutable.update { it.copy(registered = true, message = "VERIFICATION_SENT") }
+        mutable.update { it.copy(registered = true, message = AccountMessage.VERIFICATION_SENT) }
     }
 
     fun login(email: String, password: String) = run { actions.login(email, password) }
 
     fun requestVerification(email: String) = run {
         actions.requestVerification(email)
-        mutable.update { it.copy(message = "VERIFICATION_SENT") }
+        mutable.update { it.copy(message = AccountMessage.VERIFICATION_SENT) }
     }
 
     fun requestPasswordReset(email: String) = run {
         actions.requestPasswordReset(email)
-        mutable.update { it.copy(message = "RESET_REQUESTED") }
+        mutable.update { it.copy(message = AccountMessage.RESET_REQUESTED) }
     }
 
     fun logout() = run { actions.logout() }

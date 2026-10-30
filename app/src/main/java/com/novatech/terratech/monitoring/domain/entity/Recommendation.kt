@@ -5,7 +5,6 @@ import com.novatech.terratech.monitoring.domain.valueobject.RecommendationType
 import java.time.Instant
 
 data class Recommendation(
-    val id: Int = 0,
     val deviceId: Int,
     val readingId: Int,
     val type: RecommendationType,

@@ -34,6 +34,7 @@ import com.novatech.terratech.iam.presentation.component.AccountField
 import com.novatech.terratech.iam.presentation.component.AccountPasswordField
 import com.novatech.terratech.iam.presentation.component.AuthModeSelector
 import com.novatech.terratech.iam.presentation.state.AccountFormErrors
+import com.novatech.terratech.iam.presentation.state.AccountMessage
 import com.novatech.terratech.iam.presentation.state.AccountState
 import com.novatech.terratech.ui.theme.Muted
 
@@ -154,7 +155,7 @@ internal fun AccountContent(
                 )
                 AccountEmailActions(
                     enabled = !state.busy,
-                    showVerification = state.registered || state.error == "EMAIL_NOT_VERIFIED" || state.error == "EMAIL_EXISTS" || state.message == "VERIFICATION_SENT",
+                    showVerification = state.registered || state.error == "EMAIL_NOT_VERIFIED" || state.error == "EMAIL_EXISTS" || state.message == AccountMessage.VERIFICATION_SENT,
                     onRequestVerification = onRequestVerification,
                     onRequestPasswordReset = onRequestPasswordReset,
                 )
