@@ -7,12 +7,6 @@ enum class FertilityLevel {
     OPTIMAL,
 }
 
-enum class NutrientLevel {
-    LOW,
-    MEDIUM,
-    OPTIMAL,
-}
-
 fun classifyFertility(
     moisturePercent: Double,
     nitrogen: NutrientLevel?,

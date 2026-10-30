@@ -23,7 +23,7 @@ import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
             SatelliteImageRow::class,
             RecommendationRow::class,
         ],
-    version = 4,
+    version = 5,
     exportSchema = true,
 )
 abstract class TerraDatabase : RoomDatabase() {

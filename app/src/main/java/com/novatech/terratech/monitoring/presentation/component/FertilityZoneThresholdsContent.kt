@@ -232,24 +232,6 @@ fun FertilityZoneThresholdsContent(
     }
 }
 
-@Composable
-private fun ThresholdNumberField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(
-            keyboardType = KeyboardType.Decimal
-        ),
-        modifier = Modifier.fillMaxWidth()
-    )
-}
-
 private fun validRange(
     minimum: Double,
     maximum: Double,

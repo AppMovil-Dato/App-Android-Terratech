@@ -52,6 +52,9 @@ interface MonitoringDao {
     @Query("SELECT * FROM recommendations WHERE userId=:user AND deviceId=:device ORDER BY datetime(createdAt) DESC")
     fun recommendations(user: Int, device: Int): Flow<List<RecommendationRow>>
 
+    @Query("DELETE FROM recommendations")
+    suspend fun clearAllRecommendations()
+
     @Upsert
     suspend fun putRecommendations(rows: List<RecommendationRow>)
 

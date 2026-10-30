@@ -86,6 +86,7 @@ internal fun ProfileContent(
                 style = MaterialTheme.typography.headlineMedium,
             )
             Text(session.email, color = Muted)
+            Text(stringResource(R.string.registered_at, profile?.registeredAt?.take(10) ?: stringResource(R.string.date_unavailable)), color = Muted)
             profile?.location?.let { Text(it, color = Muted) }
         }
         if (editing || (profile == null && state.checked && state.error == null)) {

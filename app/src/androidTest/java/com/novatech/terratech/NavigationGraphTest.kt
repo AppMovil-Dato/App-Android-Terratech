@@ -13,6 +13,9 @@ import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.hasScrollToIndexAction
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import androidx.navigation.NavDestination.Companion.hasRoute
@@ -72,6 +75,10 @@ class NavigationGraphTest {
                 readDetail = {},
                 refresh = {},
                 clearMessage = {},
+                loadZoneThresholds = {},
+                saveZoneThresholds = {},
+                resetZoneThresholds = {},
+                closeZoneThresholds = {},
             )
         val profileActions = ProfileNavigationActions({ _, _, _, _, _ -> }, {}, {})
         compose.setContent {
@@ -141,7 +148,8 @@ class NavigationGraphTest {
                 controller.currentBackStackEntry!!.toRoute<FieldSensorsDestination>().fieldId,
             )
         }
-        compose.onNodeWithText("View readings").performScrollTo().performClick()
+        compose.onNode(hasScrollToIndexAction()).performScrollToNode(hasText("View readings"))
+        compose.onNodeWithText("View readings").performClick()
         compose.runOnIdle {
             assertEquals(
                 11,

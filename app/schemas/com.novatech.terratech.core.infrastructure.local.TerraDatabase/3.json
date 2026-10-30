@@ -2,9 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
+    "identityHash": "0481292c8374e2968c9cc1848ebae69a",
     "entities": [
       {
         "tableName": "profiles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `fullName` TEXT NOT NULL, `email` TEXT NOT NULL, `fundoName` TEXT NOT NULL, `contactPhone` TEXT NOT NULL, `location` TEXT NOT NULL, `sizeM2` REAL, `minimumMoisture` REAL NOT NULL, `temperatureThreshold` REAL NOT NULL, PRIMARY KEY(`userId`))",
         "fields": [
           {
             "fieldPath": "userId",
@@ -56,6 +58,12 @@
           {
             "fieldPath": "minimumMoisture",
             "columnName": "minimumMoisture",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "temperatureThreshold",
+            "columnName": "temperatureThreshold",
             "affinity": "REAL",
             "notNull": true
           }
@@ -348,6 +356,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0481292c8374e2968c9cc1848ebae69a')"
     ]
   }
 }

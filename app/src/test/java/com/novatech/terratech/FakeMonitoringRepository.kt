@@ -7,6 +7,7 @@ import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.Recommendation
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
@@ -15,6 +16,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 
 class FakeMonitoringRepository : MonitoringRepository {
+    override fun recommendations(user: Int, device: Int) = flowOf(emptyList<Recommendation>())
+
 
     val plots =
         MutableStateFlow(

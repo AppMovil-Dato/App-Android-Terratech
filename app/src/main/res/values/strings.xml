@@ -238,4 +238,6 @@
     <string name="ndvi_variation">NDVI variation: %1$.2f (%2$.1f%%)</string>
     <string name="earlier_capture">Earlier period</string>
     <string name="later_capture">Later period</string>
+    <string name="registered_at">Registered: %1$s</string>
+    <string name="date_unavailable">Not available</string>
 </resources>

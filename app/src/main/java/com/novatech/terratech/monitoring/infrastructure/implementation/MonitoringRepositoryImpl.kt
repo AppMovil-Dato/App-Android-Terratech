@@ -9,6 +9,7 @@ import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Sensor
+import com.novatech.terratech.monitoring.domain.service.RecommendationEngine
 import com.novatech.terratech.monitoring.domain.repository.MonitoringRepository
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
@@ -229,7 +230,7 @@ class MonitoringRepositoryImpl(
 
         val recommendations = rows.flatMap { readingRow ->
             val reading = readingRow.domain()
-            com.novatech.terratech.monitoring.domain.service.RecommendationEngine.evaluate(
+            RecommendationEngine.evaluate(
                 reading = reading,
                 zoneName = fieldName,
                 minimumMoisture = minMoisture

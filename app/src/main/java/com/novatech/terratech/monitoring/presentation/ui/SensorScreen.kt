@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.style.Style
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.novatech.terratech.R
@@ -44,7 +42,7 @@ fun SensorScreen(state: MonitoringState, onHistory: () -> Unit) {
                         style = MaterialTheme.typography.titleMedium,
                     )
                 }
-                items(recommendations, key = { it.id }) { recommendation ->
+                items(recommendations, key = { "${it.deviceId}:${it.readingId}:${it.type}" }) { recommendation ->
                     RecommendationCard(recommendation)
                 }
             }
