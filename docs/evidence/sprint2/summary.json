@@ -19,5 +19,7 @@
   "executedAt": "2026-10-31T04:14:23.644674+00:00",
   "device": "Pixel_4 emulator Android 10",
   "physicalDeviceTested": false,
-  "roomVersion": 5
+  "roomVersion": 5,
+  "mapsConfiguredInLocalDebugApk": true,
+  "visualReview": "Login screen reviewed on emulator"
 }

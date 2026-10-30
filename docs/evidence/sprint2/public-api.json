@@ -1,0 +1,41 @@
+{
+  "checkedAt": "2026-10-31T04:25:59.088747+00:00",
+  "baseUrl": "https://terratech-api.lucemz.com",
+  "checks": [
+    {
+      "path": "/health/live",
+      "status": 200
+    },
+    {
+      "path": "/health/ready",
+      "status": 200
+    },
+    {
+      "path": "/account/verify-email",
+      "status": 200
+    },
+    {
+      "path": "/account/reset-password",
+      "status": 200
+    },
+    {
+      "path": "/account/account.css?v=sprint2-1",
+      "status": 200
+    },
+    {
+      "path": "/account/account.js?v=sprint2-1",
+      "status": 200
+    },
+    {
+      "path": "verification-invalid-token",
+      "status": 400
+    }
+  ],
+  "missingPaths": [],
+  "registrationStatus": 409,
+  "newTestAccountCreated": false,
+  "existingAccountUnchanged": true,
+  "recoveryRequestStatus": 202,
+  "inboxReceiptConfirmed": true,
+  "confirmedMessage": "Recovery email; recipient confirmed receipt in chat"
+}
