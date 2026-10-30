@@ -5,4 +5,3 @@ enum class NutrientLevel {
     MEDIUM,
     OPTIMAL,
 }
-

@@ -12,4 +12,3 @@ data class FertilityZoneThresholdsDto(
     val potassiumMin: Double,
     val potassiumMax: Double
 )
-
