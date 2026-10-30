@@ -6,6 +6,7 @@ import com.novatech.terratech.monitoring.domain.entity.FertilityZone
 import com.novatech.terratech.monitoring.domain.entity.FertilityZoneThresholds
 import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.Reading
+import com.novatech.terratech.monitoring.domain.entity.Recommendation
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.valueobject.Coordinates
 import kotlinx.coroutines.flow.Flow
@@ -73,4 +74,6 @@ interface MonitoringRepository {
     suspend fun refreshReadings(user: Int, device: Int, days: Int)
 
     suspend fun refreshDetail(user: Int, device: Int, reading: Int)
+
+    fun recommendations(user: Int, deviceId: Int): Flow<List<Recommendation>>
 }

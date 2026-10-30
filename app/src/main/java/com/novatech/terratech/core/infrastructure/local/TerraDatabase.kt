@@ -6,6 +6,7 @@ import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldWeatherRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.ReadingRow
+import com.novatech.terratech.monitoring.infrastructure.local.entity.RecommendationRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.SatelliteImageRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.SensorRow
 import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
@@ -20,6 +21,7 @@ import com.novatech.terratech.profile.infrastructure.local.entity.ProfileRow
             DownloadRow::class,
             FieldWeatherRow::class,
             SatelliteImageRow::class,
+            RecommendationRow::class,
         ],
     version = 4,
     exportSchema = true,

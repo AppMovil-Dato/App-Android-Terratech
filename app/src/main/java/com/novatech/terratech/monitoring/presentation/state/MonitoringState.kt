@@ -1,4 +1,3 @@
-
 package com.novatech.terratech.monitoring.presentation.state
 
 import com.novatech.terratech.monitoring.domain.entity.DownloadState
@@ -8,6 +7,7 @@ import com.novatech.terratech.monitoring.domain.entity.Field
 import com.novatech.terratech.monitoring.domain.entity.FieldWeather
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import com.novatech.terratech.monitoring.domain.entity.SatelliteImage
+import com.novatech.terratech.monitoring.domain.entity.Recommendation
 import com.novatech.terratech.monitoring.domain.entity.Sensor
 import com.novatech.terratech.monitoring.domain.entity.VegetationComparison
 import java.time.Instant
@@ -29,6 +29,7 @@ data class MonitoringState(
     val thresholdsError: String? = null,
     val thresholdsSaved: Boolean = false,
 
+    val recommendations: List<Recommendation> = emptyList(),
     val fieldId: Int? = null,
     val deviceId: Int? = null,
     val days: Int = 7,
@@ -66,4 +67,7 @@ data class MonitoringState(
     val history
         get() = readings.filter { it.inRange(days, now) }
             .sortedBy { it.recordedAt }
+
+    val deviceRecommendations
+        get() = recommendations.filter { it.deviceId == deviceId }.sortedByDescending { it.createdAt }
 }

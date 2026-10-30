@@ -1,4 +1,3 @@
-
 package com.novatech.terratech.monitoring.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
@@ -18,11 +17,15 @@ import java.time.Instant
 import javax.inject.Inject
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.none
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
@@ -41,6 +44,7 @@ constructor(
     val state = mutable.asStateFlow()
 
     private var pendingRefresh = false
+    private var recommendationsJob: Job? = null
     private var savedSelection: Pair<Int?, Int?> = null to null
 
     private var sessionJob: Job? = null
@@ -63,13 +67,13 @@ constructor(
                 }
             }
         }
-
         viewModelScope.launch {
             account.session.collect { s ->
                 sessionJob?.cancel()
                 readingsJob?.cancel()
                 downloadJob?.cancel()
                 requestJob?.cancel()
+                recommendationsJob?.cancel()
                 fertilityZonesJob?.cancel()
                 thresholdsJob?.cancel()
 
@@ -101,7 +105,6 @@ constructor(
                                     }
                                 }
                             }
-
                             launch {
                                 actions.sensors(s.userId).collect { sensors ->
                                     mutable.update {
@@ -149,7 +152,6 @@ constructor(
 
     fun selectField(id: Int) {
         if (mutable.value.fields.none { it.id == id }) return
-
         readingsJob?.cancel()
         downloadJob?.cancel()
         fertilityZonesJob?.cancel()
@@ -200,6 +202,7 @@ constructor(
 
         persistSelection()
         observeReadings()
+        observeRecommendations()
         refresh()
     }
 
@@ -567,6 +570,18 @@ constructor(
                 thresholdsSaved = false
             )
         }
+    }
+
+    private fun observeRecommendations() {
+        recommendationsJob?.cancel()
+        val user = account.session.value?.userId ?: return
+        val device = mutable.value.deviceId ?: return
+        recommendationsJob =
+            viewModelScope.launch {
+                actions.recommendations(user, device).collect { rows ->
+                    mutable.update { it.copy(recommendations = rows) }
+                }
+            }
     }
 
     fun refresh() {
