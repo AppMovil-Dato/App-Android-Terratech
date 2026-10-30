@@ -1,0 +1,27 @@
+{
+  "variant": "Debug",
+  "recordedAt": "2026-10-31T19:15:19.433670+00:00",
+  "baseline": {
+    "unitTests": 80
+  },
+  "physicalDeviceTested": false,
+  "published": false,
+  "deployed": false,
+  "commentsInReviewedCode": 0,
+  "unit": {
+    "tests": 83,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "instrumented": {
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 43
+  }
+}

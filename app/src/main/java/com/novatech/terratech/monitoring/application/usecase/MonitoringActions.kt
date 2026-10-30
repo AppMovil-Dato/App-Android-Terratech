@@ -33,14 +33,12 @@ class MonitoringActions(private val repository: MonitoringRepository) {
     suspend fun refreshSensors(user: Int, field: Int) =
         repository.refreshSensors(user, field)
 
-    // US13: consultar zonas de fertilidad
     suspend fun fertilityZones(
         user: Int,
         field: Int
     ): List<FertilityZone> =
         repository.fertilityZones(user, field)
 
-    // US18: consultar umbrales
     suspend fun fertilityZoneThresholds(
         user: Int,
         field: Int,
@@ -48,7 +46,6 @@ class MonitoringActions(private val repository: MonitoringRepository) {
     ): FertilityZoneThresholds =
         repository.fertilityZoneThresholds(user, field, zone)
 
-    // US18: actualizar umbrales
     suspend fun updateFertilityZoneThresholds(
         user: Int,
         field: Int,
@@ -60,7 +57,6 @@ class MonitoringActions(private val repository: MonitoringRepository) {
             thresholds
         )
 
-    // US18: restablecer umbrales
     suspend fun resetFertilityZoneThresholds(
         user: Int,
         field: Int,

@@ -52,10 +52,8 @@ constructor(
     private var downloadJob: Job? = null
     private var requestJob: Job? = null
 
-    // US13: consulta de zonas de fertilidad
     private var fertilityZonesJob: Job? = null
 
-    // US18: operaciones de umbrales
     private var thresholdsJob: Job? = null
 
     init {
@@ -298,7 +296,6 @@ constructor(
             }
     }
 
-    // US13: obtener las zonas desde el backend
     private fun refreshFertilityZones() {
         fertilityZonesJob?.cancel()
 
@@ -348,7 +345,6 @@ constructor(
             }
     }
 
-    // US18: consultar umbrales de una zona
     fun loadZoneThresholds(zoneId: Int) {
         val user = account.session.value?.userId ?: return
         val field = mutable.value.fieldId ?: return
@@ -419,7 +415,6 @@ constructor(
         }
     }
 
-    // US18: guardar los umbrales editados
     fun saveZoneThresholds(thresholds: FertilityZoneThresholds) {
         val user = account.session.value?.userId ?: return
         val field = mutable.value.fieldId ?: return
@@ -486,7 +481,6 @@ constructor(
         }
     }
 
-    // US18: restablecer los valores predeterminados
     fun resetZoneThresholds() {
         val user = account.session.value?.userId ?: return
         val field = mutable.value.fieldId ?: return
@@ -557,7 +551,6 @@ constructor(
         }
     }
 
-    // US18: cerrar la configuracion de la zona
     fun closeZoneThresholds() {
         thresholdsJob?.cancel()
 
@@ -585,7 +578,6 @@ constructor(
     }
 
     fun refresh() {
-        // US13: actualizar las zonas de la parcela
         refreshFertilityZones()
 
         if (mutable.value.busy) {
