@@ -22,7 +22,7 @@ The pre-change unit baseline had 79 passing tests. Existing instrumented fixture
 
 The default API URL remains https://terratech-api.lucemz.com/. Resend keys exist only in the backend. Maps requires the developer's local key; it is not included in Git. The locally validated Debug APK has Maps configured using the existing ignored local key; CI builds omit that key and display the existing unconfigured-map notice.
 
-The temporary backend sender is onboarding@resend.dev and is restricted by Resend to its account owner's address. A verified custom sender is needed for other recipients. The recipient confirmed receipt of the recovery email from the published backend. No group video, user interview, Flutter implementation or real satellite-image integration is implied by the automated tests.
+The temporary backend sender is onboarding@resend.dev and is restricted by Resend to its account owner's address. A verified custom sender is needed for other recipients. The recipient confirmed receipt of both recovery and verification emails from the published backend. No group video, user interview, Flutter implementation or real satellite-image integration is implied by the automated tests.
 
 For the report: include these actual tasks, source commits and test results under Rubens's contribution; do not infer hours from commit dates or substitute an emulator for a phone. Coordinate the shared Sprint 2 report, videos and validation with the team.
 
