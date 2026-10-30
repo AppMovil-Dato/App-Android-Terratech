@@ -62,6 +62,8 @@ internal fun SignedInApp(
             accountViewModel::login,
             accountViewModel::clearMessage,
             onLogout = accountViewModel::logout,
+            onRequestVerification = accountViewModel::requestVerification,
+            onRequestPasswordReset = accountViewModel::requestPasswordReset,
         ) {
             reauth = false
         }

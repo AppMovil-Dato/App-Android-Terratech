@@ -25,6 +25,10 @@ class FakeAccountRepository : AccountRepository {
         last = listOf(email, password)
     }
 
+    override suspend fun requestVerification(email: String) {}
+
+    override suspend fun requestPasswordReset(email: String) {}
+
     override suspend fun logout() {
         session.value = null
     }

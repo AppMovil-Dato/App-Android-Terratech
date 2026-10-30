@@ -38,6 +38,8 @@ fun TerraTechApp(
             accountViewModel::login,
             accountViewModel::register,
             accountViewModel::clearMessage,
+            onRequestVerification = accountViewModel::requestVerification,
+            onRequestPasswordReset = accountViewModel::requestPasswordReset,
         )
         return
     }

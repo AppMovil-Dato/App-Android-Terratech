@@ -8,6 +8,9 @@ import com.novatech.terratech.R
 fun errorText(code: String): String =
     stringResource(
         when (code) {
+            "EMAIL_NOT_VERIFIED" -> R.string.email_not_verified
+            "EMAIL_UNAVAILABLE" -> R.string.email_unavailable
+            "RATE_LIMITED" -> R.string.email_rate_limited
             "ACCOUNT_CREATED_LOGIN_REQUIRED" -> R.string.account_created_login_required
             "INVALID_BOUNDARY" -> R.string.map_invalid_boundary
             "INVALID_EMAIL" -> R.string.error_email

@@ -11,5 +11,9 @@ interface AccountRepository {
 
     suspend fun login(email: String, password: String)
 
+    suspend fun requestVerification(email: String)
+
+    suspend fun requestPasswordReset(email: String)
+
     suspend fun logout()
 }

@@ -240,4 +240,11 @@
     <string name="later_capture">Later period</string>
     <string name="registered_at">Registered: %1$s</string>
     <string name="date_unavailable">Not available</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="resend_verification">Resend verification email</string>
+    <string name="verification_sent">If verification is required, we will send an email. Check your inbox and spam folder, then sign in.</string>
+    <string name="reset_requested">If this account exists, we will send a recovery link. Check your email to set a new password.</string>
+    <string name="email_not_verified">Verify your email before signing in. You can request another link below.</string>
+    <string name="email_unavailable">Email delivery is unavailable. Please try again later.</string>
+    <string name="email_rate_limited">Too many attempts. Wait a minute before trying again.</string>
 </resources>

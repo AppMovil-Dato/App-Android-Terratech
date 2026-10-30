@@ -240,4 +240,11 @@
     <string name="later_capture">Periodo posterior</string>
     <string name="registered_at">Fecha de registro: %1$s</string>
     <string name="date_unavailable">No disponible</string>
+    <string name="forgot_password">¿Olvidaste tu contraseña?</string>
+    <string name="resend_verification">Reenviar correo de verificación</string>
+    <string name="verification_sent">Si tu cuenta necesita verificación, enviaremos un correo. Revisa tu bandeja y spam; luego inicia sesión.</string>
+    <string name="reset_requested">Si la cuenta existe, enviaremos un enlace de recuperación. Revisa tu correo para cambiar la contraseña.</string>
+    <string name="email_not_verified">Verifica tu correo antes de iniciar sesión. Puedes solicitar otro enlace abajo.</string>
+    <string name="email_unavailable">El envío de correo no está disponible. Inténtalo más tarde.</string>
+    <string name="email_rate_limited">Demasiados intentos. Espera un minuto antes de volver a intentar.</string>
 </resources>
