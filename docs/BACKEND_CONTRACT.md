@@ -54,7 +54,7 @@ El detalle devuelve el mismo recurso que cada elemento de `readings` y que `read
 
 ## Caché Room
 
-Guardar cuenta, perfil, parcelas, dispositivos y lecturas por ID, además de `recordedAt`, `source` y una fecha local de última sincronización. Asociar toda caché al usuario de la sesión y evitar mostrar datos de otra cuenta. Calcular la antigüedad también offline: el `isStale` guardado puede quedar desactualizado. Identificar la vista offline y la fecha de los datos. El servidor no envía confianza de IA, batería ni recomendaciones. La pantalla de detalle offline usa la lectura guardada en Room por `(deviceId, id)`; no necesita conectarse a la ruta de detalle. Para datos locales registrar `downloadedAt` en Android, y recalcular la antigüedad al mostrar la pantalla. A los 30 minutos exactos el dato todavía no se considera antiguo; después sí.
+Guardar cuenta, perfil, parcelas, dispositivos y lecturas por ID, además de `recordedAt`, `source` y una fecha local de última sincronización. Asociar toda caché al usuario de la sesión y evitar mostrar datos de otra cuenta. Calcular la antigüedad también offline: el `isStale` guardado puede quedar desactualizado. Identificar la vista offline y la fecha de los datos. Las recomendaciones locales del móvil se calculan con reglas explícitas; no se presentan como confianza de IA ni batería medida. El pronóstico incluye su recomendación combinada documentada en Swagger. La pantalla de detalle offline usa la lectura guardada en Room por `(deviceId, id)`; no necesita conectarse a la ruta de detalle. Para datos locales registrar `downloadedAt` en Android, y recalcular la antigüedad al mostrar la pantalla. A los 30 minutos exactos el dato todavía no se considera antiguo; después sí.
 
 Un JWT expirado no invalida los datos ya cacheados para lectura local, pero Android debe renovar la sesión antes de volver a consultar la API. No cachear contraseñas; proteger el token por separado.
 
@@ -63,3 +63,11 @@ Un JWT expirado no invalida los datos ya cacheados para lectura local, pero Andr
 Problem Details: `type`, `title`, `status`, `traceId` cuando corresponda y `code` para casos distinguibles. Validación automática puede añadir `errors`. Resolver 401 como sesión inválida; 404 `PROFILE_NOT_FOUND` como perfil pendiente; 404 `NO_READINGS` como sensor sin datos; 409 como conflicto. Los recursos ajenos devuelven 404 para no revelar su existencia.
 
 Sin verificación de correo ni recuperación de contraseña en TB1. Snapshot: `backend-openapi.snapshot.json`, exportado del backend compilado Debug. No confundir cobertura de líneas con el porcentaje funcional de la rúbrica.
+
+## Sprint 2: verificación y recuperación
+
+El registro nuevo requiere verificación de correo y no inicia sesión automáticamente. `EMAIL_NOT_VERIFIED` (403) permite reenviar el enlace desde Android. Los endpoints `POST /authentication/email-verifications` y `POST /authentication/password-reset-requests` reciben `{emailAddress}` y responden 202 con un mensaje genérico. `EMAIL_UNAVAILABLE` (503) indica indisponibilidad real; 429 requiere esperar.
+
+Los enlaces HTTPS abren las páginas `/account/verify-email` y `/account/reset-password`, que confirman mediante POST; los tokens no viajan en query strings. Verificación: 24 horas; recuperación: una hora. Son de un solo uso y se guardan como hash. Restablecer la contraseña invalida JWT anteriores. `/profiles/me` incorpora `registeredAt` nullable; no se inventan fechas faltantes.
+
+El remitente temporal de pruebas Resend `onboarding@resend.dev` solo permite enviar al propietario de la cuenta. Cambiar a un remitente verificado para otros usuarios. Las claves quedan exclusivamente en configuración del backend.
