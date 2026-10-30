@@ -1,0 +1,23 @@
+{
+  "unit": {
+    "tests": 80,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "instrumented": {
+    "tests": 28,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "lint": {
+    "Error": 0,
+    "Warning": 44
+  },
+  "variant": "Debug",
+  "executedAt": "2026-10-31T04:14:23.644674+00:00",
+  "device": "Pixel_4 emulator Android 10",
+  "physicalDeviceTested": false,
+  "roomVersion": 5
+}
