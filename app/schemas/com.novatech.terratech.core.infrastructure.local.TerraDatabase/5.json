@@ -1,0 +1,605 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 5,
+    "identityHash": "5cc95a6b566060f2dd93738cea1ac99f",
+    "entities": [
+      {
+        "tableName": "profiles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `fullName` TEXT NOT NULL, `email` TEXT NOT NULL, `fundoName` TEXT NOT NULL, `contactPhone` TEXT NOT NULL, `location` TEXT NOT NULL, `sizeM2` REAL, `minimumMoisture` REAL NOT NULL, `temperatureThreshold` REAL NOT NULL, `registeredAt` TEXT, PRIMARY KEY(`userId`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fullName",
+            "columnName": "fullName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fundoName",
+            "columnName": "fundoName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "contactPhone",
+            "columnName": "contactPhone",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sizeM2",
+            "columnName": "sizeM2",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "minimumMoisture",
+            "columnName": "minimumMoisture",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "temperatureThreshold",
+            "columnName": "temperatureThreshold",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "registeredAt",
+            "columnName": "registeredAt",
+            "affinity": "TEXT"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId"
+          ]
+        }
+      },
+      {
+        "tableName": "fields",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `profileId` INTEGER NOT NULL, `name` TEXT NOT NULL, `sizeM2` REAL NOT NULL, `soilType` TEXT NOT NULL, `latitude` REAL NOT NULL, `longitude` REAL NOT NULL, `cropName` TEXT, `boundaryJson` TEXT NOT NULL DEFAULT '[]', PRIMARY KEY(`userId`, `id`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "profileId",
+            "columnName": "profileId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sizeM2",
+            "columnName": "sizeM2",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "soilType",
+            "columnName": "soilType",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "latitude",
+            "columnName": "latitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "longitude",
+            "columnName": "longitude",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cropName",
+            "columnName": "cropName",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "boundaryJson",
+            "columnName": "boundaryJson",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'[]'"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId",
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "sensors",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `fieldId` INTEGER NOT NULL, `name` TEXT, `sensorCode` TEXT, `macAddress` TEXT NOT NULL, `status` TEXT NOT NULL, PRIMARY KEY(`userId`, `id`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fieldId",
+            "columnName": "fieldId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sensorCode",
+            "columnName": "sensorCode",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "macAddress",
+            "columnName": "macAddress",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId",
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_sensors_userId_fieldId",
+            "unique": false,
+            "columnNames": [
+              "userId",
+              "fieldId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_sensors_userId_fieldId` ON `${TABLE_NAME}` (`userId`, `fieldId`)"
+          }
+        ]
+      },
+      {
+        "tableName": "readings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `deviceId` INTEGER NOT NULL, `id` INTEGER NOT NULL, `recordedAt` TEXT NOT NULL, `moisturePercent` REAL NOT NULL, `soilTemperatureC` REAL NOT NULL, `nitrogenPpm` REAL NOT NULL, `phosphorusPpm` REAL NOT NULL, `potassiumPpm` REAL NOT NULL, `source` TEXT NOT NULL, PRIMARY KEY(`userId`, `deviceId`, `id`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recordedAt",
+            "columnName": "recordedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "moisturePercent",
+            "columnName": "moisturePercent",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "soilTemperatureC",
+            "columnName": "soilTemperatureC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "nitrogenPpm",
+            "columnName": "nitrogenPpm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "phosphorusPpm",
+            "columnName": "phosphorusPpm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "potassiumPpm",
+            "columnName": "potassiumPpm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "source",
+            "columnName": "source",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId",
+            "deviceId",
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_readings_userId_deviceId_recordedAt",
+            "unique": false,
+            "columnNames": [
+              "userId",
+              "deviceId",
+              "recordedAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_readings_userId_deviceId_recordedAt` ON `${TABLE_NAME}` (`userId`, `deviceId`, `recordedAt`)"
+          }
+        ]
+      },
+      {
+        "tableName": "downloads",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `deviceId` INTEGER NOT NULL, `days` INTEGER NOT NULL, `downloadedAt` TEXT NOT NULL, `fromUtc` TEXT, `toUtc` TEXT, `minimumMoisture` REAL, PRIMARY KEY(`userId`, `deviceId`, `days`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "days",
+            "columnName": "days",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloadedAt",
+            "columnName": "downloadedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fromUtc",
+            "columnName": "fromUtc",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "toUtc",
+            "columnName": "toUtc",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "minimumMoisture",
+            "columnName": "minimumMoisture",
+            "affinity": "REAL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId",
+            "deviceId",
+            "days"
+          ]
+        }
+      },
+      {
+        "tableName": "field_weather",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fieldId` INTEGER NOT NULL, `fieldName` TEXT NOT NULL, `forecastTimestamp` TEXT NOT NULL, `currentTemperatureC` REAL NOT NULL, `relativeHumidityPercent` REAL NOT NULL, `windSpeedKmh` REAL NOT NULL, `precipitationProbability24h` REAL NOT NULL, `expectedPrecipitationMm` REAL NOT NULL, `suspensionRecommended` INTEGER NOT NULL, `estimatedWaterSavingsLiters` INTEGER NOT NULL, `recommendationMessage` TEXT NOT NULL, `downloadedAt` INTEGER NOT NULL, PRIMARY KEY(`fieldId`))",
+        "fields": [
+          {
+            "fieldPath": "fieldId",
+            "columnName": "fieldId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fieldName",
+            "columnName": "fieldName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "forecastTimestamp",
+            "columnName": "forecastTimestamp",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currentTemperatureC",
+            "columnName": "currentTemperatureC",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "relativeHumidityPercent",
+            "columnName": "relativeHumidityPercent",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "windSpeedKmh",
+            "columnName": "windSpeedKmh",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "precipitationProbability24h",
+            "columnName": "precipitationProbability24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expectedPrecipitationMm",
+            "columnName": "expectedPrecipitationMm",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "suspensionRecommended",
+            "columnName": "suspensionRecommended",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "estimatedWaterSavingsLiters",
+            "columnName": "estimatedWaterSavingsLiters",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "recommendationMessage",
+            "columnName": "recommendationMessage",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloadedAt",
+            "columnName": "downloadedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "fieldId"
+          ]
+        }
+      },
+      {
+        "tableName": "satellite_images",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fieldId` INTEGER NOT NULL, `capturedAt` TEXT NOT NULL, `imageUrl` TEXT NOT NULL, `ndviAverage` REAL NOT NULL, `cloudCoveragePercent` REAL NOT NULL, `boundsNorth` REAL NOT NULL, `boundsSouth` REAL NOT NULL, `boundsEast` REAL NOT NULL, `boundsWest` REAL NOT NULL, `downloadedAt` INTEGER NOT NULL, PRIMARY KEY(`fieldId`, `capturedAt`))",
+        "fields": [
+          {
+            "fieldPath": "fieldId",
+            "columnName": "fieldId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "capturedAt",
+            "columnName": "capturedAt",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "ndviAverage",
+            "columnName": "ndviAverage",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cloudCoveragePercent",
+            "columnName": "cloudCoveragePercent",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boundsNorth",
+            "columnName": "boundsNorth",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boundsSouth",
+            "columnName": "boundsSouth",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boundsEast",
+            "columnName": "boundsEast",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boundsWest",
+            "columnName": "boundsWest",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "downloadedAt",
+            "columnName": "downloadedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "fieldId",
+            "capturedAt"
+          ]
+        }
+      },
+      {
+        "tableName": "recommendations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`userId` INTEGER NOT NULL, `deviceId` INTEGER NOT NULL, `readingId` INTEGER NOT NULL, `type` TEXT NOT NULL, `severity` TEXT NOT NULL, `title` TEXT NOT NULL, `message` TEXT NOT NULL, `actionSuggested` TEXT, `createdAt` TEXT NOT NULL, PRIMARY KEY(`userId`, `deviceId`, `readingId`, `type`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "userId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "readingId",
+            "columnName": "readingId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "severity",
+            "columnName": "severity",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "message",
+            "columnName": "message",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actionSuggested",
+            "columnName": "actionSuggested",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "userId",
+            "deviceId",
+            "readingId",
+            "type"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_recommendations_userId_deviceId_createdAt",
+            "unique": false,
+            "columnNames": [
+              "userId",
+              "deviceId",
+              "createdAt"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_recommendations_userId_deviceId_createdAt` ON `${TABLE_NAME}` (`userId`, `deviceId`, `createdAt`)"
+          }
+        ]
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5cc95a6b566060f2dd93738cea1ac99f')"
+    ]
+  }
+}

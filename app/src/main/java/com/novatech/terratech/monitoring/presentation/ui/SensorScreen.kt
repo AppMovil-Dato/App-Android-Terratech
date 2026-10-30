@@ -3,6 +3,9 @@ package com.novatech.terratech.monitoring.presentation.ui
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -12,6 +15,7 @@ import com.novatech.terratech.core.presentation.component.PageTitle
 import com.novatech.terratech.core.presentation.component.PrimaryButton
 import com.novatech.terratech.monitoring.presentation.component.ReadingMetrics
 import com.novatech.terratech.monitoring.presentation.component.ReadingSummary
+import com.novatech.terratech.monitoring.presentation.component.RecommendationCard
 import com.novatech.terratech.monitoring.presentation.state.MonitoringState
 
 @Composable
@@ -29,6 +33,19 @@ fun SensorScreen(state: MonitoringState, onHistory: () -> Unit) {
         state.latest?.let { r ->
             item { ReadingSummary(r, state) }
             item { ReadingMetrics(r) }
+
+            val recommendations = state.deviceRecommendations
+            if (recommendations.isNotEmpty()) {
+                item {
+                    Text(
+                        "Recomendaciones Automáticas",
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                }
+                items(recommendations, key = { "${it.deviceId}:${it.readingId}:${it.type}" }) { recommendation ->
+                    RecommendationCard(recommendation)
+                }
+            }
         }
             ?: item {
                 EmptyCard(

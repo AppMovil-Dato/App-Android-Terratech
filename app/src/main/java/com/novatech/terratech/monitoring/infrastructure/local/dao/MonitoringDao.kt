@@ -6,6 +6,7 @@ import androidx.room.Upsert
 import com.novatech.terratech.monitoring.infrastructure.local.entity.DownloadRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.FieldRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.ReadingRow
+import com.novatech.terratech.monitoring.infrastructure.local.entity.RecommendationRow
 import com.novatech.terratech.monitoring.infrastructure.local.entity.SensorRow
 import kotlinx.coroutines.flow.Flow
 
@@ -47,4 +48,16 @@ interface MonitoringDao {
     @Query("DELETE FROM readings") suspend fun clearReadings()
 
     @Query("DELETE FROM downloads") suspend fun clearDownloads()
+
+    @Query("SELECT * FROM recommendations WHERE userId=:user AND deviceId=:device ORDER BY datetime(createdAt) DESC")
+    fun recommendations(user: Int, device: Int): Flow<List<RecommendationRow>>
+
+    @Query("DELETE FROM recommendations")
+    suspend fun clearAllRecommendations()
+
+    @Upsert
+    suspend fun putRecommendations(rows: List<RecommendationRow>)
+
+    @Query("DELETE FROM recommendations WHERE userId=:user")
+    suspend fun clearRecommendations(user: Int)
 }

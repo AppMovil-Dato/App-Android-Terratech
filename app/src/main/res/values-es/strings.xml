@@ -238,4 +238,6 @@
     <string name="ndvi_variation">Variación NDVI: %1$.2f (%2$.1f%%)</string>
     <string name="earlier_capture">Periodo anterior</string>
     <string name="later_capture">Periodo posterior</string>
+    <string name="registered_at">Fecha de registro: %1$s</string>
+    <string name="date_unavailable">No disponible</string>
 </resources>

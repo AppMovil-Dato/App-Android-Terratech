@@ -16,6 +16,7 @@ fun ProfileDto.row(user: Int) =
         sizeM2,
         moistureThreshold ?: 30.0,
         tempThreshold ?: 35.0,
+        registeredAt,
     )
 
 fun ProfileRow.domain() =
@@ -30,4 +31,5 @@ fun ProfileRow.domain() =
         sizeM2,
         minimumMoisture,
         temperatureThreshold,
+        registeredAt,
     )

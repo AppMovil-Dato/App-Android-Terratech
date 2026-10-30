@@ -16,6 +16,7 @@ interface TerraDao : ProfileDao, MonitoringDao, FieldWeatherDao, SatelliteImageD
         clearSensors()
         clearReadings()
         clearDownloads()
+        clearAllRecommendations()
         clearWeather()
         clearSatelliteImages()
     }

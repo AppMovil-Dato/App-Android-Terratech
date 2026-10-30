@@ -124,4 +124,6 @@ class MonitoringActions(private val repository: MonitoringRepository) {
             sensorName.value
         )
     }
+
+    fun recommendations(user: Int, deviceId: Int) = repository.recommendations(user, deviceId)
 }

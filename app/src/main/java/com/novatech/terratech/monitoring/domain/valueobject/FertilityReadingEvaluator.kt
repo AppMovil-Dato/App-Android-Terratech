@@ -4,12 +4,6 @@ package com.novatech.terratech.monitoring.domain.valueobject
 import com.novatech.terratech.monitoring.domain.entity.Reading
 import java.time.Instant
 
-data class NpkRanges(
-    val nitrogen: NutrientRanges,
-    val phosphorus: NutrientRanges,
-    val potassium: NutrientRanges,
-)
-
 fun evaluateReadingFertility(
     reading: Reading,
     now: Instant,
