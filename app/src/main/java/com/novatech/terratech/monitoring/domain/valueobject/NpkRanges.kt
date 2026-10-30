@@ -5,4 +5,3 @@ data class NpkRanges(
     val phosphorus: NutrientRanges,
     val potassium: NutrientRanges,
 )
-

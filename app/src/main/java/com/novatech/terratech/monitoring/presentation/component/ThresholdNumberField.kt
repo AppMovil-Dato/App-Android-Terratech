@@ -34,4 +34,3 @@ internal fun ThresholdNumberField(
         modifier = Modifier.fillMaxWidth()
     )
 }
-

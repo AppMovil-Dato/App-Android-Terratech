@@ -1,0 +1,24 @@
+{
+  "executedAt": "2026-10-31T19:56:21.338406+00:00",
+  "variant": "Debug",
+  "unitTests": {
+    "passed": 83,
+    "failed": 0
+  },
+  "instrumentedTests": {
+    "passed": 28,
+    "failed": 0,
+    "device": "Pixel_4 emulator Android 10"
+  },
+  "lint": {
+    "errors": 0,
+    "warnings": 43
+  },
+  "assemble": "passed",
+  "modularity": "passed",
+  "style": "passed",
+  "whitespace": "passed",
+  "physicalDeviceTested": false,
+  "realEmailRetested": false,
+  "publication": "authorized after local validation; see GitHub Actions for remote results"
+}
