@@ -28,6 +28,8 @@ import com.novatech.terratech.core.presentation.component.BrandMark
 import com.novatech.terratech.core.presentation.component.FarmCard
 import com.novatech.terratech.core.presentation.component.Notice
 import com.novatech.terratech.core.presentation.component.PrimaryButton
+import com.novatech.terratech.iam.presentation.component.AccountEmailActions
+import com.novatech.terratech.iam.presentation.component.AccountEmailNotice
 import com.novatech.terratech.iam.presentation.component.AccountField
 import com.novatech.terratech.iam.presentation.component.AccountPasswordField
 import com.novatech.terratech.iam.presentation.component.AuthModeSelector
@@ -54,6 +56,8 @@ internal fun AccountContent(
     onLogin: (String, String) -> Unit,
     onRegister: (String, String, String, String) -> Unit,
     onLogout: (() -> Unit)? = null,
+    onRequestVerification: () -> Unit = {},
+    onRequestPasswordReset: () -> Unit = {},
 ) {
     var attempted by rememberSaveable(registering) { mutableStateOf(false) }
     val validation = AccountFormErrors.validate(name, email, password, confirmation, registering)
@@ -139,6 +143,7 @@ internal fun AccountContent(
                         submit,
                     )
                 if (state.error != "EMAIL_EXISTS") Notice(state.error)
+                AccountEmailNotice(state.message)
                 PrimaryButton(
                     stringResource(
                         if (state.busy) R.string.loading
@@ -146,6 +151,12 @@ internal fun AccountContent(
                     ),
                     !state.busy,
                     submit,
+                )
+                AccountEmailActions(
+                    enabled = !state.busy,
+                    showVerification = state.registered || state.error == "EMAIL_NOT_VERIFIED" || state.error == "EMAIL_EXISTS" || state.message == "VERIFICATION_SENT",
+                    onRequestVerification = onRequestVerification,
+                    onRequestPasswordReset = onRequestPasswordReset,
                 )
                 if (!reauth) {
                     TextButton(

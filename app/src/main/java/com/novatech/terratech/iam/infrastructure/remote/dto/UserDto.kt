@@ -6,4 +6,5 @@ data class UserDto(
     val fullName: String?,
     val token: String? = null,
     val expiresAt: String? = null,
+    val emailVerificationRequired: Boolean = false,
 )

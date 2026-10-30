@@ -7,6 +7,7 @@ import com.novatech.terratech.iam.domain.entity.Session
 import com.novatech.terratech.iam.domain.repository.AccountRepository
 import com.novatech.terratech.iam.infrastructure.local.SessionStore
 import com.novatech.terratech.iam.infrastructure.remote.AccountApi
+import com.novatech.terratech.iam.infrastructure.remote.dto.AccountEmailRequestDto
 import com.novatech.terratech.iam.infrastructure.remote.dto.LoginDto
 import com.novatech.terratech.iam.infrastructure.remote.dto.RegisterDto
 import java.time.Instant
@@ -44,6 +45,7 @@ class AccountRepositoryImpl(
         confirmation: String,
     ) {
         val result = apiCall { api.register(RegisterDto(name, email, password, confirmation)) }
+        if (result.emailVerificationRequired) return
         if (!result.token.isNullOrBlank() && !result.expiresAt.isNullOrBlank()) {
             persistSession(
                 Session(
@@ -87,6 +89,14 @@ class AccountRepositoryImpl(
         }
         store.save(session)
         current.value = session
+    }
+
+    override suspend fun requestVerification(email: String) {
+        apiCall { api.requestVerification(AccountEmailRequestDto(email)) }
+    }
+
+    override suspend fun requestPasswordReset(email: String) {
+        apiCall { api.requestPasswordReset(AccountEmailRequestDto(email)) }
     }
 
     override suspend fun logout() {

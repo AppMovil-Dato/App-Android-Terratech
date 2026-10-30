@@ -18,7 +18,7 @@ suspend fun <T> apiCall(block: suspend () -> T): T =
                 }
                 .getOrNull()
         throw Failure(
-            code ?: if (exception.code() == 401) "UNAUTHENTICATED" else "HTTP_ERROR",
+            code ?: if (exception.code() == 429) "RATE_LIMITED" else if (exception.code() == 401) "UNAUTHENTICATED" else "HTTP_ERROR",
             exception.code(),
         )
     } catch (exception: IOException) {

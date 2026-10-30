@@ -33,21 +33,31 @@ constructor(private val actions: AccountActions, repository: AccountRepository) 
     }
 
     fun clearMessage() {
-        mutable.update { it.copy(error = null, registered = false) }
+        mutable.update { it.copy(error = null, registered = false, message = null) }
     }
 
     fun register(name: String, email: String, password: String, confirmation: String) = run {
         actions.register(name, email, password, confirmation)
-        mutable.update { it.copy(registered = true) }
+        mutable.update { it.copy(registered = true, message = "VERIFICATION_SENT") }
     }
 
     fun login(email: String, password: String) = run { actions.login(email, password) }
+
+    fun requestVerification(email: String) = run {
+        actions.requestVerification(email)
+        mutable.update { it.copy(message = "VERIFICATION_SENT") }
+    }
+
+    fun requestPasswordReset(email: String) = run {
+        actions.requestPasswordReset(email)
+        mutable.update { it.copy(message = "RESET_REQUESTED") }
+    }
 
     fun logout() = run { actions.logout() }
 
     private fun run(block: suspend () -> Unit) {
         if (mutable.value.busy) return
-        mutable.update { it.copy(busy = true, error = null, registered = false) }
+        mutable.update { it.copy(busy = true, error = null, registered = false, message = null) }
         viewModelScope.launch {
             try {
                 block()

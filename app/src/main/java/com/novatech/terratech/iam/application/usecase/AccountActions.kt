@@ -19,5 +19,11 @@ class AccountActions(private val repository: AccountRepository) {
         repository.login(Email.of(email).value, Password.of(password).value)
     }
 
+    suspend fun requestVerification(email: String) =
+        repository.requestVerification(Email.of(email).value)
+
+    suspend fun requestPasswordReset(email: String) =
+        repository.requestPasswordReset(Email.of(email).value)
+
     suspend fun logout() = repository.logout()
 }
